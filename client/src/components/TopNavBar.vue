@@ -1,5 +1,5 @@
 <template>
-  <div class="row mb-5 shadow" id="top_nav_bar">
+  <div class="row mb-4 shadow" id="top_nav_bar">
     <div class="col-12">
       <nav class="navbar navbar-expand-md navbar-light bg-warning">
         <span class="navbar-brand">
@@ -10,34 +10,34 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
+            <li class="nav-item cursor-pointer">
               <span class="nav-link" @click="navigate('home')">
                 <i class="fas fa-home"></i>&nbsp;主页
               </span>
             </li>
-            <li class="nav-item">
-              <span class="nav-link" @click="navigate('task')">
+            <li class="nav-item cursor-pointer">
+              <span class="nav-link" @click="navigate('tasks')">
                 <i class="fas fa-tasks"></i>&nbsp;任务
               </span>
             </li>
-            <li class="nav-item" v-if="showProjectLink">
-              <span class="nav-link" @click="navigate('project')">
+            <li class="nav-item cursor-pointer">
+              <span class="nav-link" @click="navigate('projects')">
                 <i class="fas fa-capsules"></i>&nbsp;项目
               </span>
             </li>
-            <li class="nav-item" v-if="showScheduleLink">
-              <span class="nav-link" @click="navigate('schedule')">
+            <li class="nav-item cursor-pointer" v-if="isAdmin">
+              <span class="nav-link" @click="navigate('schedules')">
                 <i class="fas fa-clipboard-list"></i>&nbsp;进度
               </span>
             </li>
-            <li class="nav-item" v-if="showUserLink">
-              <span class="nav-link" @click="navigate('user')">
+            <li class="nav-item cursor-pointer" v-if="isAdmin">
+              <span class="nav-link" @click="navigate('users')">
                 <i class="fas fa-users-cog"></i>&nbsp;用户
               </span>
             </li>
           </ul>
           <ul class="navbar-nav">
-            <li class="nav-item">
+            <li class="nav-item cursor-pointer">
               <span class="nav-link" @click="navigate('me')">
                 <i class="fas fa-address-card"></i>&nbsp;我
               </span>
@@ -47,9 +47,8 @@
                 用户切换
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <span class="dropdown-item" @click="lp">LP</span>
-                <span class="dropdown-item" @click="wsy">WSY</span>
-                <span class="dropdown-item" @click="fy">FY</span>
+                <span class="dropdown-item" @click="admin">admin</span>
+                <span class="dropdown-item" @click="user">user</span>
               </div>
             </li>
           </ul>
@@ -64,37 +63,39 @@
     name: 'top_nav_bar',
     data: () => {
       return {
-        showProjectLink: true,
-        showScheduleLink: true,
-        showUserLink: true,
+
       }
+    },
+    computed: {
+      isAdmin: function () {
+        return this.$store.state.indicators.isAdmin;
+      },
     },
     methods: {
       navigate: function (targetPage) {
         const routeMap = new Map()
             .set('home', 'home')
-            .set('task', 'task')
-            .set('project', 'project')
-            .set('schedule', 'schedule')
-            .set('user', 'user')
+            .set('tasks', 'tasks')
+            .set('projects', 'projects')
+            .set('schedules', 'schedules')
+            .set('users', 'users')
             .set('me', 'me');
         const destinationName = routeMap.get(targetPage);
         this.$router.push({ name: destinationName});
       },
-      lp: function () {
-        this.showProjectLink = true;
-        this.showScheduleLink = true;
-        this.showUserLink = true;
+      admin: function () {
+        localStorage.setItem('indicators', JSON.stringify({
+          isAdmin: true,
+        }));
+        const payload = JSON.parse(localStorage.getItem('indicators'));
+        this.$store.dispatch('setIndicatorsAction', payload);
       },
-      wsy: function () {
-        this.showProjectLink = true;
-        this.showScheduleLink = true;
-        this.showUserLink = true;
-      },
-      fy: function () {
-        this.showProjectLink = false;
-        this.showScheduleLink = false;
-        this.showUserLink = false;
+      user: function () {
+        localStorage.setItem('indicators', JSON.stringify({
+          isAdmin: false,
+        }));
+        const payload = JSON.parse(localStorage.getItem('indicators'));
+        this.$store.dispatch('setIndicatorsAction', payload);
       },
     },
   }
@@ -103,6 +104,9 @@
 <style scoped>
   .shadow {
     box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,.1);
+  }
+  .cursor-pointer {
+    cursor: pointer;
   }
 </style>
 

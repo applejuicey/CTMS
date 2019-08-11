@@ -13,7 +13,7 @@
 
 <script>
   export default {
-    name: 'schedule',
+    name: 'schedules',
   }
 </script>
 

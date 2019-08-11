@@ -1,18 +1,17 @@
 <template>
   <div>
     <h1>
-      试验项目
+      管理所有用户
     </h1>
     <div>
-      检查登录状态
-      列出本账户能够管理的所有试验项目及其详细资料
+      在这里管理所有用户
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'project',
+    name: 'users',
   }
 </script>
 

@@ -18,24 +18,29 @@ export default new Router({
       component: () => import('./views/Home.vue')
     },
     {
-      path: '/task',
+      path: '/tasks',
+      name: 'tasks',
+      component: () => import('./views/Tasks.vue')
+    },
+    {
+      path: '/task/:id',
       name: 'task',
       component: () => import('./views/Task.vue')
     },
     {
-      path: '/project',
-      name: 'project',
-      component: () => import('./views/Project.vue')
+      path: '/projects',
+      name: 'projects',
+      component: () => import('./views/Projects.vue')
     },
     {
-      path: '/schedule',
-      name: 'schedule',
-      component: () => import('./views/Schedule.vue')
+      path: '/schedules',
+      name: 'schedules',
+      component: () => import('./views/Schedules.vue')
     },
     {
-      path: '/user',
-      name: 'user',
-      component: () => import('./views/User.vue')
+      path: '/users',
+      name: 'users',
+      component: () => import('./views/Users.vue')
     },
     {
       path: '/me',
