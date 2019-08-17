@@ -5,34 +5,44 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    indicators: {
-      isAdmin: false,
-    },
+    // indicators: {
+    //   isAdmin: true,
+    // },
     messages: {
       taskFilterDescription: '',
     },
-    // userInfo: {},
+    taskFilterQueryObject: {},
+    taskFilterQueryResult: {
+      tasksInfoArray: [],
+      statusObject4Tasks: {},
+    },
   },
   mutations: {
-    setIndicators: (state, payload) => {
-      state.indicators.isAdmin = payload.isAdmin;
-    },
+    // setIndicators: (state, payload) => {
+    //   state.indicators.isAdmin = payload.isAdmin;
+    // },
     setTaskFilterDescription: (state, payload) => {
       state.messages.taskFilterDescription = payload.taskFilterDescription;
     },
-    // getUserInfo: (state) => {
-    //  state.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    // },
+    setTaskFilterQueryObject: (state, payload) => {
+      state.taskFilterQueryObject = payload;
+    },
+    setTaskFilterQueryResult: (state, payload) => {
+      state.taskFilterQueryResult = payload;
+    },
   },
   actions: {
-    // getUserInfo: ({commit}) => {
-    //   commit('getUserInfo');
+    // setIndicatorsAction: ({ commit }, payload) => {
+    //   commit('setIndicators', payload);
     // },
-    setIndicatorsAction: ({ commit }, payload) => {
-      commit('setIndicators', payload);
-    },
     setTaskFilterDescriptionAction: ({ commit }, payload) => {
       commit('setTaskFilterDescription', payload);
+    },
+    setTaskFilterQueryObjectAction: ({ commit }, payload) => {
+      commit('setTaskFilterQueryObject', payload);
+    },
+    setTaskFilterQueryResultAction: ({ commit }, payload) => {
+      commit('setTaskFilterQueryResult', payload);
     },
   }
 })

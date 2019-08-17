@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
-          <h1>{{currentFunction}}任务：{{$route.params.id}}</h1>
+          <h1>{{ currentFunction }}任务：{{ $route.params.taskID }}</h1>
         </div>
       </div>
       <div class="row">
@@ -11,9 +11,15 @@
           <bottom-card :cardHeaderText="actionSelectBoxHeaderText" :cardTooltipText="actionSelectBoxTooltipText">
             <template v-slot:card-body>
               <div class="list-group list-group-flush" id="list-tab">
-                <a class="list-group-item list-group-item-action" data-toggle="list" href="#view">查看</a>
-                <a class="list-group-item list-group-item-action" data-toggle="list" href="#edit" v-show="isAdmin">编辑</a>
-                <a class="list-group-item list-group-item-action" data-toggle="list" href="#delete" v-show="isAdmin">删除</a>
+                <a class="list-group-item list-group-item-action text-primary" data-toggle="list" href="#view">
+                  <i class="fas fa-search"></i>&nbsp;查看
+                </a>
+                <a class="list-group-item list-group-item-action text-success" data-toggle="list" href="#edit" v-show="isAdmin || currentUserID === taskInfoObject.taskCreatorID">
+                  <i class="fas fa-edit"></i>&nbsp;编辑
+                </a>
+                <a class="list-group-item list-group-item-action text-danger" data-toggle="list" href="#delete" v-show="isAdmin || currentUserID === taskInfoObject.taskCreatorID">
+                  <i class="fas fa-trash"></i>&nbsp;删除
+                </a>
               </div>
             </template>
           </bottom-card>
@@ -23,13 +29,26 @@
             <template v-slot:card-body>
               <div class="tab-content">
                 <div class="tab-pane fade" id="view">
-                  <vertical-header-table :tableData="taskInfo"></vertical-header-table>
-                  <file-manage-table :taskID="'TASK001'"></file-manage-table>
+                  <task-info-table :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-info-table>
+                  <file-manage-table :taskFiles="taskFiles" :statusObject="statusObject4TaskFiles"></file-manage-table>
                 </div>
-                <div class="tab-pane fade" id="edit" v-show="isAdmin">
-                  <task-edit-form :taskID="'TASK001'"></task-edit-form>
+                <div class="tab-pane fade" id="edit" v-show="isAdmin || currentUserID === taskInfoObject.taskCreatorID">
+                  <task-form :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-form>
                 </div>
-                <div class="tab-pane fade" id="delete" v-show="isAdmin">.3..</div>
+                <div class="tab-pane fade" id="delete" v-show="isAdmin || currentUserID === taskInfoObject.taskCreatorID">
+
+                  <div class="row">
+                    <div class="col-xl-6 offset-xl-3">
+                      <div class="alert alert-danger">
+                        <h4 class="alert-heading">请确认您的操作！</h4>
+                        <p>当您再三确认后，点击下方的按钮以删除该任务！</p>
+                        <hr>
+                        <button class="btn btn-danger">删除任务</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </template>
           </bottom-card>
@@ -41,87 +60,51 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import VerticalHeaderTable from '@/components/VerticalHeaderTable.vue';
+  import TaskInfoTable from '@/components/TaskInfoTable.vue';
   import FileManageTable from '@/components/FileManageTable.vue';
-  import TaskEditForm from '@/components/TaskEditForm.vue';
+  import TaskForm from '@/components/TaskForm.vue';
   export default {
     name: 'task',
     components: {
       BottomCard,
-      VerticalHeaderTable,
+      TaskInfoTable,
       FileManageTable,
-      TaskEditForm,
+      TaskForm,
     },
     data: () => {
       return {
+        taskInfoObject: {},
+        statusObject4Task: {},
+        taskFiles: [],
+        statusObject4TaskFiles: {},
         currentFunction: '查看',
         actionSelectBoxHeaderText: '操作',
         actionSelectBoxTooltipText: '请在这里选择一种操作。',
         actionBoxHeaderText: '详细信息',
         actionBoxTooltipText: '请在这里完成具体操作。',
-        // TODO: 根据taskID，从服务器获取详细信息
-        taskInfo: [
-          {
-            leftCellData: '任务名称',
-            rightCellData: '写DMP',
-          },
-          {
-            leftCellData: '隶属于',
-            rightCellData: 'EV71-II期',
-          },
-          {
-            leftCellData: '创建者',
-            rightCellData: '刘沛',
-          },
-          {
-            leftCellData: '创建时间',
-            rightCellData: '2019-08-08',
-          },
-          {
-            leftCellData: '任务描述',
-            rightCellData: 'This event fires on tab show, but before the new tab has been shown. Use event.target and event.relatedTarget to target the active tab and the previous active tab (if available) respectively.',
-          },
-          {
-            leftCellData: '接受者',
-            rightCellData: '范扬',
-          },
-          {
-            leftCellData: '接受状态',
-            rightCellData: '否',
-          },
-          {
-            leftCellData: '截止时间',
-            rightCellData: '2019-09-01',
-          },
-          {
-            leftCellData: '任务进度',
-            rightCellData: '0',
-          },
-          {
-            leftCellData: '完成状态',
-            rightCellData: '否',
-          },
-          {
-            leftCellData: '实际完成时间',
-            rightCellData: '',
-          },
-        ],
       };
     },
     computed: {
       isAdmin: function () {
-        return this.$store.state.indicators.isAdmin;
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
       },
+      currentUserID: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+    },
+    created: function () {
+      this.getTaskInfo();
+      this.getTaskFilesInfo();
     },
     mounted: function () {
       this.$nextTick(() => {
         $('#list-tab a').on('click', function (e) {
           e.preventDefault();
         });
-        if (this.$route.params.function === 'edit') {
+        if (this.$route.params.functionName === 'edit') {
           $('#list-tab a[href="#edit"]').tab('show');
           this.currentFunction = '编辑';
-        } else if (this.$route.params.function === 'delete') {
+        } else if (this.$route.params.functionName === 'delete') {
           $('#list-tab a[href="#delete"]').tab('show');
           this.currentFunction = '删除';
         } else {
@@ -139,12 +122,74 @@
             $('#list-tab a[href="#view"]').tab('show');
             this.currentFunction = '查看';
           }
-        })
+        });
       });
+    },
+    methods: {
+      // 根据传入的taskID和currentUserID从服务器获取该任务的信息
+      getTaskInfo: function () {
+        this.statusObject4Task = {
+          statusIndicator: 'loading',
+          alertHeader: '加载中',
+          feedbackMessage: '正在从服务器获取数据，请稍后......',
+        };
+        this.$axios.get('/taskInfo', {
+          params: {
+            taskID: this.$route.params.taskID,
+            userID: this.currentUserID,
+          }
+        }).then((response) => {
+          // console.log('Task获取任务信息成功', response);
+          this.taskInfoObject = response.data.taskInfo;
+          this.statusObject4Task = {
+            statusIndicator: 'loaded',
+          };
+        }).catch((error) => {
+          console.error('Task获取任务信息失败，错误：', error);
+          this.statusObject4Task = {
+            statusIndicator: 'error',
+            alertHeader: '有错误发生',
+            feedbackMessage: `从服务器获取任务信息失败，错误原因：${error}`,
+          };
+        });
+      },
+      // 根据传入的taskID和currentUserID从服务器获取该任务有关文件的信息
+      getTaskFilesInfo: function () {
+        this.statusObject4TaskFiles = {
+          statusIndicator: 'loading',
+          alertHeader: '加载中',
+          feedbackMessage: '正在从服务器获取数据，请稍后......',
+        };
+        this.$axios.get('/taskFilesInfo', {
+          params: {
+            taskID: this.$route.params.taskID,
+            userID: this.currentUserID,
+          }
+        }).then((response) => {
+          // console.log('Task获取任务文件信息成功', response);
+          this.taskFiles = response.data.taskFiles;
+          this.statusObject4TaskFiles = {
+            statusIndicator: 'loaded',
+          };
+        }).catch((error) => {
+          console.error('Task获取任务文件信息失败，错误：', error);
+          this.statusObject4TaskFiles = {
+            statusIndicator: 'error',
+            alertHeader: '有错误发生',
+            feedbackMessage: `从服务器获取任务文件信息失败，错误原因：${error}`,
+          };
+        });
+      },
     },
   }
 </script>
 
 <style scoped>
-
+  .list-group-item.active {
+    background-color: #FFC864;
+    border-color: #FFC864;
+  }
+  .list-group-item-action:hover {
+    background-color: #ffeac3;
+  }
 </style>

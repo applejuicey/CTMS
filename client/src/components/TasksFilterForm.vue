@@ -65,6 +65,11 @@
         completeStatusTooltipText: '请在这里选择任务的完成状态。',
       };
     },
+    computed: {
+      currentUserID: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+    },
     methods: {
       processFormData: function () {
         const receivedStatusMap = new Map()
@@ -89,17 +94,17 @@
           taskFilterDescription: filterDescription
         });
         return {
+          userID: this.currentUserID,
           taskNameKeyword: this.taskNameKeyword,
           trialNameKeyword: this.trialNameKeyword,
           receivedStatus: receivedStatusMap.get(this.receivedStatus)[0],
           completeStatus: completeStatusMap.get(this.completeStatus)[0],
         };
       },
-      // TODO: 从VUEX中取出用户ID
-      // TODO: 生成一个对象，包括用户ID与一些检索条件，将该对象POST至服务端，获取与该用户有关的（ADMIN为create，USER为assign）、符合检索条件的所有任务
-      // TODO: 待返回检索结果后将结果整理并保存至vuex
+      // 生成一个对象，包括用户ID与一些检索条件，将该对象保存至vuex
       query: function () {
-        this.processFormData();
+        const queryObject = this.processFormData();
+        this.$store.dispatch('setTaskFilterQueryObjectAction', queryObject);
       },
     },
   }

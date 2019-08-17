@@ -10,6 +10,7 @@
         <div class="col-xl-3 mb-2">
           <bottom-card :cardHeaderText="taskInboxHeaderText" :cardTooltipText="taskInboxTooltipText">
             <template v-slot:card-body>
+<!--              TODO:组件化-->
               <template v-for="(task, index) in unreceivedTasks">
                 <div class="card mb-2 shadow">
                   <div class="card-header bg-transparent d-flex">
@@ -73,33 +74,28 @@
         <div class="col-xl-9 mb-2">
           <bottom-card :cardHeaderText="involvedTrialsHeaderText" :cardTooltipText="involvedTrialsTooltipText">
             <template v-slot:card-body>
-              <template v-for="(trial, index) in involvedTrials">
-                <div class="card mb-2 shadow">
-                  <div class="card-header bg-transparent d-flex">
-                    <b class="cursor-pointer text-success" @click="toggleCollapse(trial.trialID)" data-toggle="tooltip" data-placement="top" :title="trialNameTipText">
-                      <i class="fas fa-capsules"></i>&nbsp;
-                      {{trial.trialName}}&nbsp;
-                      <i class="fas fa-hand-point-left"></i>&nbsp;
-                    </b>
-                    <span class="ml-auto">
-                      <span class="cursor-pointer text-primary">
-                        <i class="fas fa-search"></i>&nbsp;查看项目信息
-                      </span>
-                    </span>
-                  </div>
-                  <div :id="`collapse${trial.trialID}`" class="collapse card-body">
-                    <div class="text-left">
-                      <i class="fas fa-caret-right"></i>&nbsp;
-                      <b>试验信息：</b>
-                    </div>
-                    <vertical-header-table :tableData="trial.trialInfoForVerticalHeaderTable"></vertical-header-table>
-                    <div class="text-left mb-3">
-                      <i class="fas fa-caret-right"></i>&nbsp;
-                      <b>试验内任务：</b>
-                    </div>
-                    <task-brief-info-table :allTasks="trial.involvedTasks"></task-brief-info-table>
+              <div class="row" v-if="statusIndicator === 'loading'">
+                <div class="col-xl-6 offset-xl-3">
+                  <div class="alert alert-primary text-center mb-0">
+                    <h4 class="alert-heading">{{ alertHeader }}</h4>
+                    <p>
+                      <span class="spinner-border spinner-border-sm text-primary"></span>&nbsp;{{ feedbackMessage }}
+                    </p>
                   </div>
                 </div>
+              </div>
+              <div class="row" v-if="statusIndicator === 'error'">
+                <div class="col-xl-6 offset-xl-3">
+                  <div class="alert alert-danger text-center mb-0">
+                    <h4 class="alert-heading">{{ alertHeader }}</h4>
+                    <p>
+                      {{ feedbackMessage }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <template v-for="(trial, index) in involvedTrials" v-if="statusIndicator === 'loaded'">
+                <trial-card :trialID="trial.trialID" :currentUserID="currentUserID" :trialName="trial.trialName"></trial-card>
               </template>
             </template>
           </bottom-card>
@@ -111,22 +107,25 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import TaskBriefInfoTable from '@/components/TasksBriefInfoTable.vue';
-  import VerticalHeaderTable from '@/components/VerticalHeaderTable.vue';
+  import TrialCard from '@/components/TrialCard.vue';
   export default {
     name: 'home',
     components: {
       BottomCard,
-      TaskBriefInfoTable,
-      VerticalHeaderTable,
+      TrialCard,
     },
-    data: () => {
+    data: function () {
       return {
         taskInboxHeaderText: '尚未接受的任务',
         taskInboxTooltipText: '这里列出所有尚未接受的任务。',
         involvedTrialsHeaderText: '参与的临床试验项目及项目内任务',
         involvedTrialsTooltipText: '这里列出您当前参加的所有临床试验项目及项目内任务。',
-        trialNameTipText: '点击项目名称可以展示或隐藏项目内容。',
+        involvedTrials: null,
+        statusIndicator: 'loading',
+        alertHeader: '加载中',
+        feedbackMessage: '加载中，请稍后......',
+
+
         // TODO: 提供用户ID，获取与该用户有关的（ADMIN为create，USER为assign）所有未接的（receiveStatus）任务
         unreceivedTasks: [
           {
@@ -156,179 +155,15 @@
             progressPercentage: 0,
           },
         ],
-        // TODO: 提供用户ID，获取与该用户有关的（ADMIN为create，USER为involve）所有项目
-        involvedTrials: [
-          {
-            trialID: 'TRIAL001',
-            trialName: 'EV71-II期',
-            trialInfoForVerticalHeaderTable: [
-              {
-                leftCellData: '试验名称',
-                rightCellData: 'EV71-II期',
-              },
-              {
-                leftCellData: '当前试验阶段',
-                rightCellData: '准备阶段',
-              },
-              {
-                leftCellData: '试验简介',
-                rightCellData: '本研究为单中心、随机双盲、阳性对照设计临床试验，用于评价深圳康泰生物制品股份有限公司和北京民海生物科技有限公司联合研制的重组肠道病毒71型疫苗（汉逊酵母）在中国2月龄至71月龄健康人群中的免疫程序、剂量和安全性剂量、免疫原性和安全性。',
-              },
-              {
-                leftCellData: '创建时间',
-                rightCellData: '2019-08-08',
-              },
-              {
-                leftCellData: '预计开始时间',
-                rightCellData: '2020-09-01',
-              },
-              {
-                leftCellData: '实际开始时间',
-                rightCellData: '',
-              },
-              {
-                leftCellData: '预计结束时间',
-                rightCellData: '2021-01-01',
-              },
-              {
-                leftCellData: '实际结束时间',
-                rightCellData: '',
-              },
-              {
-                leftCellData: '申办方',
-                rightCellData: '北京民海生物科技有限公司',
-              },
-              {
-                leftCellData: '研究方',
-                rightCellData: '江苏省疾病预防控制中心',
-              },
-              {
-                leftCellData: '监查方',
-                rightCellData: '南京桑瑞斯',
-              },
-              {
-                leftCellData: '统计方',
-                rightCellData: '东南大学公共卫生学院卫生统计教研室',
-              },
-            ],
-            involvedTasks: [
-              {
-                taskID: 'TASK001',
-                taskName: '写DMP',
-                belongedToTrialName: 'EV71-II期',
-                taskCreator: '刘沛',
-                taskCreatedTime: '2019-08-08',
-                taskExecutor: '范扬',
-                taskReceivedStatus: '否',
-                taskDueTime: '2019-09-01',
-                taskProgress: '0',
-                taskCompletedStatus: '否',
-                taskActualCompletedTime: '',
-              },
-              {
-                taskID: 'TASK002',
-                taskName: 'EDC建库',
-                belongedToTrialName: 'EV71-II期',
-                taskCreator: '刘沛',
-                taskCreatedTime: '2019-08-09',
-                taskExecutor: '范扬',
-                taskReceivedStatus: '否',
-                taskDueTime: '2019-10-01',
-                taskProgress: '0',
-                taskCompletedStatus: '否',
-                taskActualCompletedTime: '',
-              },
-            ],
-          },
-          {
-            trialID: 'TRIAL002',
-            trialName: '狂犬疫苗5针',
-            trialInfoForVerticalHeaderTable: [
-              {
-                leftCellData: '试验名称',
-                rightCellData: '狂犬疫苗5针',
-              },
-              {
-                leftCellData: '当前试验阶段',
-                rightCellData: '准备阶段',
-              },
-              {
-                leftCellData: '试验简介',
-                rightCellData: '北京民海生物科技有限公司研制的冻干人用狂犬病疫苗（人二倍体细胞），用于预防狂犬病，申请药品注册。经国家食品药品监督管理局审查，符合药品注册的有关规定，以2017L00332号《药物临床试验批件》批准对该制品进行临床试验。受临床试验申报者委托，江苏省疾病预防控制中心为临床试验研究负责单位，对该制品进行临床试验，以评价其应用于10～60岁健康人群的安全性和免疫原性。',
-              },
-              {
-                leftCellData: '创建时间',
-                rightCellData: '2019-08-08',
-              },
-              {
-                leftCellData: '预计开始时间',
-                rightCellData: '2019-08-09',
-              },
-              {
-                leftCellData: '实际开始时间',
-                rightCellData: '2019-08-09',
-              },
-              {
-                leftCellData: '预计结束时间',
-                rightCellData: '2020-01-01',
-              },
-              {
-                leftCellData: '实际结束时间',
-                rightCellData: '',
-              },
-              {
-                leftCellData: '申办方',
-                rightCellData: '北京民海生物科技有限公司',
-              },
-              {
-                leftCellData: '研究方',
-                rightCellData: '江苏省疾病预防控制中心',
-              },
-              {
-                leftCellData: '监查方',
-                rightCellData: '南京桑瑞斯',
-              },
-              {
-                leftCellData: '统计方',
-                rightCellData: '东南大学公共卫生学院卫生统计教研室',
-              },
-            ],
-            involvedTasks: [
-              {
-                taskID: 'TASK003',
-                taskName: '盲底材料准备',
-                belongedToTrialName: '狂犬疫苗5针',
-                taskCreator: '刘沛',
-                taskCreatedTime: '2019-08-07',
-                taskExecutor: '范扬',
-                taskReceivedStatus: '否',
-                taskDueTime: '2020-01-01',
-                taskProgress: '0',
-                taskCompletedStatus: '否',
-                taskActualCompletedTime: '',
-              },
-              {
-                taskID: 'TASK004',
-                taskName: '现场编盲',
-                belongedToTrialName: '狂犬疫苗5针',
-                taskCreator: '刘沛',
-                taskCreatedTime: '2019-08-07',
-                taskExecutor: '范扬',
-                taskReceivedStatus: '否',
-                taskDueTime: '2020-01-10',
-                taskProgress: '0',
-                taskCompletedStatus: '否',
-                taskActualCompletedTime: '',
-              },
-            ],
-          },
-        ],
       }
     },
     computed: {
-      isAdmin: function () {
-        return this.$store.state.indicators.isAdmin;
+      currentUserID: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).userID;
       },
+    },
+    created: function () {
+      this.getUserInvolvedTrials();
     },
     mounted: function () {
       this.$nextTick(function () {
@@ -338,9 +173,22 @@
       });
     },
     methods: {
-      toggleCollapse: function (trialID) {
-        const clickedCollapseID = `#collapse${trialID}`;
-        $(clickedCollapseID).collapse('toggle');
+      // 从localStorage中取出currentUserID，去服务器获取该用户参加的所有试验
+      getUserInvolvedTrials: function () {
+        this.$axios.get('/involvedTrials', {
+          params: {
+            userID: this.currentUserID,
+          }
+        }).then((response) => {
+          // console.log('获取该用户参加的所有试验成功', response);
+          this.involvedTrials = response.data.involvedTrials;
+          this.statusIndicator = 'loaded';
+        }).catch((error) => {
+          console.error('获取该用户参加的所有试验失败，错误：', error);
+          this.statusIndicator = 'error';
+          this.alertHeader = '有错误发生';
+          this.feedbackMessage = `从服务器获取试验信息失败，错误原因：${error}`;
+        });
       },
     },
   }
@@ -349,8 +197,5 @@
 <style scoped>
   /*.shadow {*/
   /*  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,.1);*/
-  /*}*/
-  /*.cursor-pointer {*/
-  /*  cursor: pointer;*/
   /*}*/
 </style>

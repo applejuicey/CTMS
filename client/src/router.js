@@ -23,7 +23,7 @@ export default new Router({
       component: () => import('./views/Tasks.vue')
     },
     {
-      path: '/task/:id',
+      path: '/task/:taskID',
       name: 'task',
       component: () => import('./views/Task.vue')
     },

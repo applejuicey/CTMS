@@ -17,8 +17,18 @@
         <div class="col-xl-9 mb-2">
           <bottom-card :cardHeaderText="resultCardHeaderText" :cardTooltipText="resultCardTooltipText">
             <template v-slot:card-body>
-              <p class="text-left">{{resultDescription || '"请执行查询"'}}的查询结果如下所示：</p>
-              <tasks-brief-info-table :allTasks="queryResultTasks"></tasks-brief-info-table>
+              <div class="row" v-if="resultDescription === ''">
+                <div class="col-xl-6 offset-xl-3">
+                  <div class="alert alert-info text-center mb-0">
+                    <h4 class="alert-heading">请提供检索条件</h4>
+                    <p>请在"任务筛选器"中提供检索条件，然后点击"按上述条件筛选"。</p>
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                <p class="text-left">{{ resultDescription }}的查询结果如下所示：</p>
+                <tasks-info-table :tasksInfoArray="tasksInfoArray" :statusObject="statusObject4Tasks"></tasks-info-table>
+              </div>
             </template>
           </bottom-card>
         </div>
@@ -29,88 +39,86 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import TasksBriefInfoTable from '@/components/TasksBriefInfoTable.vue';
+  import TasksInfoTable from '@/components/TasksInfoTable.vue';
   import TasksFilterForm from '@/components/TasksFilterForm.vue';
   export default {
     name: 'tasks',
     components: {
       BottomCard,
-      TasksBriefInfoTable,
+      TasksInfoTable,
       TasksFilterForm,
     },
     data: () => {
       return {
+        // tasksInfoArray: [],
+        // statusObject4Tasks: {},
         filterToolboxHeaderText: '任务筛选器',
         filterToolboxTooltipText: '请在这里设定筛选内容，然后点击"筛选"按钮获得命中条目。',
         resultCardHeaderText: '任务查询结果',
         resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击"放大镜"按钮以查看任务详细资料。',
-        // TODO: 从VUEX中取出整理后的检索结果
-        queryResultTasks: [
-          {
-            taskID: 'TASK001',
-            taskName: '写DMP',
-            belongedToTrialName: 'EV71-II期',
-            taskCreator: '刘沛',
-            taskCreatedTime: '2019-08-08',
-            taskExecutor: '范扬',
-            taskReceivedStatus: '否',
-            taskDueTime: '2019-09-01',
-            taskProgress: '0',
-            taskCompletedStatus: '否',
-            taskActualCompletedTime: '',
-          },
-          {
-            taskID: 'TASK002',
-            taskName: 'EDC建库',
-            belongedToTrialName: 'EV71-II期',
-            taskCreator: '刘沛',
-            taskCreatedTime: '2019-08-09',
-            taskExecutor: '范扬',
-            taskReceivedStatus: '否',
-            taskDueTime: '2019-10-01',
-            taskProgress: '0',
-            taskCompletedStatus: '否',
-            taskActualCompletedTime: '',
-          },
-          {
-            taskID: 'TASK003',
-            taskName: '盲底材料准备',
-            belongedToTrialName: '狂犬疫苗5针',
-            taskCreator: '刘沛',
-            taskCreatedTime: '2019-08-07',
-            taskExecutor: '范扬',
-            taskReceivedStatus: '否',
-            taskDueTime: '2020-01-01',
-            taskProgress: '0',
-            taskCompletedStatus: '否',
-            taskActualCompletedTime: '',
-          },
-          {
-            taskID: 'TASK004',
-            taskName: '现场编盲',
-            belongedToTrialName: '狂犬疫苗5针',
-            taskCreator: '刘沛',
-            taskCreatedTime: '2019-08-07',
-            taskExecutor: '范扬',
-            taskReceivedStatus: '否',
-            taskDueTime: '2020-01-10',
-            taskProgress: '0',
-            taskCompletedStatus: '否',
-            taskActualCompletedTime: '',
-          },
-        ],
       };
     },
     computed: {
+      // 从VUEX中取出整理后的检索描述字符串
       resultDescription: function () {
         return this.$store.state.messages.taskFilterDescription;
       },
-      // TODO: 从VUEX中取出整理后的检索结果
-      // queryResultTasks: function () {
-      //
-      // },
+      tasksInfoArray: function () {
+        return this.$store.state.taskFilterQueryResult.tasksInfoArray;
+      },
+      statusObject4Tasks: function () {
+        return this.$store.state.taskFilterQueryResult.statusObject4Tasks;
+      },
     },
-
+    watch: {
+      // watch VUEX中的taskFilterQueryObject，有变化时从服务器获取数据
+      '$store.state.taskFilterQueryObject': {
+        handler: function (newVal, oldVal) {
+          // console.log(newVal);
+          this.getTasksInfo(newVal);
+        },
+        deep: true
+      },
+    },
+    methods: {
+      // 根据userID\taskNameKeyword\trialNameKeyword\receivedStatus\completeStatus从服务器获取与该用户有关的、符合检索条件的所有任务信息
+      getTasksInfo: function (queryParamsObject) {
+        this.$store.dispatch('setTaskFilterQueryResultAction', {
+          statusObject4Tasks: {
+            statusIndicator: 'loading',
+            alertHeader: '加载中',
+            feedbackMessage: '正在从服务器获取数据，请稍后......',
+          },
+          tasksInfoArray: [],
+        });
+        this.$axios.get('/tasksInfo', {
+          params: {
+            userID: queryParamsObject.userID,
+            taskNameKeyword: queryParamsObject.taskNameKeyword,
+            trialNameKeyword: queryParamsObject.trialNameKeyword,
+            receivedStatus: queryParamsObject.receivedStatus,
+            completeStatus: queryParamsObject.completeStatus,
+          }
+        }).then((response) => {
+          this.$store.dispatch('setTaskFilterQueryResultAction', {
+            statusObject4Tasks: {
+              statusIndicator: 'loaded',
+            },
+            tasksInfoArray: response.data.tasksInfo,
+          });
+        }).catch((error) => {
+          console.error('Tasks获取任务信息失败，错误：', error);
+          this.$store.dispatch('setTaskFilterQueryResultAction', {
+            statusObject4Tasks: {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${error}`,
+            },
+            tasksInfoArray: [],
+          });
+        });
+      },
+    },
   }
 </script>
 

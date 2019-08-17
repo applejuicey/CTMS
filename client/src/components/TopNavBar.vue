@@ -47,8 +47,9 @@
                 用户切换
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <span class="dropdown-item" @click="admin">admin</span>
-                <span class="dropdown-item" @click="user">user</span>
+                <span class="dropdown-item" @click="user001">刘沛</span>
+                <span class="dropdown-item" @click="user002">王诗远</span>
+                <span class="dropdown-item" @click="user003">范扬</span>
               </div>
             </li>
           </ul>
@@ -68,7 +69,7 @@
     },
     computed: {
       isAdmin: function () {
-        return this.$store.state.indicators.isAdmin;
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
       },
     },
     methods: {
@@ -83,19 +84,25 @@
         const destinationName = routeMap.get(targetPage);
         this.$router.push({ name: destinationName});
       },
-      admin: function () {
-        localStorage.setItem('indicators', JSON.stringify({
+      user001: function () {
+        localStorage.setItem('userInfo', JSON.stringify({
+          userID: 'USER001',
           isAdmin: true,
         }));
-        const payload = JSON.parse(localStorage.getItem('indicators'));
-        this.$store.dispatch('setIndicatorsAction', payload);
+        // const payload = JSON.parse(localStorage.getItem('userInfo'));
+        // this.$store.dispatch('setIndicatorsAction', payload);
       },
-      user: function () {
-        localStorage.setItem('indicators', JSON.stringify({
+      user002: function () {
+        localStorage.setItem('userInfo', JSON.stringify({
+          userID: 'USER002',
           isAdmin: false,
         }));
-        const payload = JSON.parse(localStorage.getItem('indicators'));
-        this.$store.dispatch('setIndicatorsAction', payload);
+      },
+      user003: function () {
+        localStorage.setItem('userInfo', JSON.stringify({
+          userID: 'USER003',
+          isAdmin: false,
+        }));
       },
     },
   }
