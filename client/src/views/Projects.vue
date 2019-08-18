@@ -1,18 +1,121 @@
 <template>
-  <div>
-    <h1>
-      试验项目
-    </h1>
-    <div>
-      检查登录状态
-      列出本账户能够管理的所有试验项目及其详细资料
+  <div class="row" id="projects">
+    <div class="col-12">
+      <div class="row mb-2">
+        <div class="col-12">
+          <h1>与我有关的项目</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-3 mb-2">
+          <bottom-card :cardHeaderText="filterToolboxHeaderText" :cardTooltipText="filterToolboxTooltipText">
+            <template v-slot:card-body>
+              <projects-filter-form></projects-filter-form>
+            </template>
+          </bottom-card>
+        </div>
+        <div class="col-xl-9 mb-2">
+          <bottom-card :cardHeaderText="resultCardHeaderText" :cardTooltipText="resultCardTooltipText">
+            <template v-slot:card-body>
+              <div class="row" v-if="resultDescription === ''">
+                <div class="col-xl-6 offset-xl-3">
+                  <div class="alert alert-info text-center mb-0">
+                    <h4 class="alert-heading">请提供检索条件</h4>
+                    <p>请在"项目筛选器"中提供检索条件，然后点击"按上述条件筛选"。</p>
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                <p class="text-left">{{ resultDescription }}的查询结果如下所示：</p>
+                <projects-info-table :projectsInfoArray="projectsInfoArray" :statusObject="statusObject4Projects"></projects-info-table>
+              </div>
+            </template>
+          </bottom-card>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import BottomCard from '@/components/BottomCard.vue';
+  import ProjectsFilterForm from '@/components/ProjectsFilterForm.vue';
+  import ProjectsInfoTable from '@/components/ProjectsInfoTable.vue';
   export default {
     name: 'projects',
+    components: {
+      BottomCard,
+      ProjectsFilterForm,
+      ProjectsInfoTable,
+    },
+    data: function () {
+      return {
+        filterToolboxHeaderText: '项目筛选器',
+        filterToolboxTooltipText: '请在这里设定筛选内容，然后点击"筛选"按钮获得命中条目。',
+        resultCardHeaderText: '项目查询结果',
+        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击项目名称以查看项目详细资料。',
+      };
+    },
+    computed: {
+      // 从VUEX中取出整理后的检索描述字符串
+      resultDescription: function () {
+        return this.$store.state.messages.projectFilterDescription;
+      },
+      // 从VUEX中取出检索结果
+      projectsInfoArray: function () {
+        return this.$store.state.projectFilterQueryResult.projectsInfoArray;
+      },
+      statusObject4Projects: function () {
+        return this.$store.state.projectFilterQueryResult.statusObject4Projects;
+      },
+    },
+    watch: {
+      // watch VUEX中的projectFilterQueryObject，有变化时从服务器获取数据
+      '$store.state.projectFilterQueryObject': {
+        handler: function (newVal, oldVal) {
+          // console.log(newVal);
+          this.getProjectsInfo(newVal);
+        },
+        deep: true
+      },
+    },
+    methods: {
+      // 根据userID\projectNameKeyword\projectStage从服务器获取与该用户有关的、符合检索条件的所有项目信息
+      getProjectsInfo: function (queryParamsObject) {
+        this.$store.dispatch('setProjectFilterQueryResultAction', {
+          statusObject4Projects: {
+            statusIndicator: 'loading',
+            alertHeader: '加载中',
+            feedbackMessage: '正在从服务器获取数据，请稍后......',
+          },
+          projectsInfoArray: [],
+        });
+        this.$axios.get('/projectsInfo', {
+          params: {
+            userID: queryParamsObject.userID,
+            projectNameKeyword: queryParamsObject.projectNameKeyword,
+            projectStage: queryParamsObject.projectStage,
+          }
+        }).then((response) => {
+          this.$store.dispatch('setProjectFilterQueryResultAction', {
+            statusObject4Projects: {
+              statusIndicator: 'loaded',
+            },
+            projectsInfoArray: response.data.projectsInfo,
+          });
+        }).catch((error) => {
+          console.error('Projects获取任务信息失败，错误：', error);
+          this.$store.dispatch('setProjectFilterQueryResultAction', {
+            statusObject4Projects: {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${error}`,
+            },
+            projectsInfoArray: [],
+          });
+        });
+      },
+    },
   }
 </script>
 

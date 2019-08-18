@@ -33,6 +33,11 @@ export default new Router({
       component: () => import('./views/Projects.vue')
     },
     {
+      path: '/project/:projectID',
+      name: 'project',
+      component: () => import('./views/Project.vue')
+    },
+    {
       path: '/schedules',
       name: 'schedules',
       component: () => import('./views/Schedules.vue')

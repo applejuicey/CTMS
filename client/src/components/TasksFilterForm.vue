@@ -45,7 +45,7 @@
           <option value="-1">全部</option>
         </select>
       </div>
-      <button type="button" class="btn btn-outline-primary" @click="query">按上述条件筛选</button>
+      <button type="button" class="btn btn-success" @click="query">按上述条件筛选</button>
     </form>
   </div>
 </template>

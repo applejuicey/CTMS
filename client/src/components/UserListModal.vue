@@ -32,14 +32,22 @@
             </div>
             <div class="row" v-else-if="statusObject.statusIndicator === 'loaded'">
               <div class="col-12">
-                <template v-for="(user, index) in userList">
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" :id="user.userID" :value="user.userID" v-model="selectedUserID">
-                    <label class="form-check-label" :for="user.userID">
-                      {{ user.username }}
-                    </label>
-                  </div>
-                </template>
+                <div class="table-responsive">
+                  <table class="table table-borderless table-sm text-nowrap">
+                    <template v-for="(user, index) in userList">
+                      <tr>
+                        <td>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" :id="user.userID" :value="user.userID" v-model="selectedUserID">
+                            <label class="form-check-label" :for="user.userID">
+                              {{ user.username }}
+                            </label>
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
+                  </table>
+                </div>
               </div>
             </div>
             <div class="row" v-else>

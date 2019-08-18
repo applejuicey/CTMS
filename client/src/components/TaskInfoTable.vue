@@ -20,8 +20,9 @@
         </div>
       </div>
     </div>
-    <table class="table table-borderless table-sm mb-0" v-else-if="statusObject.statusIndicator === 'loaded'">
-      <tbody>
+    <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
+      <table class="table table-borderless table-sm text-nowrap mb-0">
+        <tbody>
         <tr>
           <td class="table-left-column">任务名称：</td>
           <td class="table-right-column">{{ taskInfoObject.taskName }}</td>
@@ -66,8 +67,10 @@
           <td class="table-left-column">实际完成时间：</td>
           <td class="table-right-column">{{ taskInfoObject.taskActualCompletedTime }}</td>
         </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
+
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
         <div class="alert alert-info text-center mb-0">
@@ -113,29 +116,5 @@
   }
   .table-right-column {
     text-align: left;
-  }
-  @media screen and (max-width: 540px) {
-    .table-left-column {
-      width: 55%;
-    }
-    .table-right-column {
-      width: 40%;
-    }
-  }
-  @media screen and (min-width: 540px) and (max-width: 1140px) {
-    .table-left-column {
-      width: 25%;
-    }
-    .table-right-column {
-      width: 75%;
-    }
-  }
-  @media screen and (min-width: 1140px) {
-    .table-left-column {
-      width: 20%;
-    }
-    .table-right-column {
-      width: 80%;
-    }
   }
 </style>

@@ -23,10 +23,10 @@
     <div v-else-if="statusObject.statusIndicator === 'loaded'">
       <div class="d-flex mb-2">
         <span class="font-weight-normal">任务附属文件：</span>
-        <button class="btn btn-outline-success ml-auto">上传文件</button>
+        <button class="btn btn-success ml-auto">上传文件</button>
       </div>
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered text-nowrap">
           <tr>
             <td>文件名</td>
             <td>创建日期</td>

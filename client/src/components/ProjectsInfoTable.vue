@@ -23,44 +23,46 @@
     <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
       <table class="table table-bordered text-nowrap">
         <tbody>
-          <tr>
-            <td>操作</td>
-            <td>任务名称</td>
-            <td>隶属于</td>
-            <td>创建者</td>
-            <td>创建时间</td>
-            <td>接受者</td>
-            <td>接受状态</td>
-            <td>截止时间</td>
-            <td>任务进度</td>
-            <td>完成状态</td>
-            <td>实际完成时间</td>
-          </tr>
-          <template v-for="(taskInfo, index) in tasksInfoArray">
-            <tr>
-              <td>
-                <span class="cursor-pointer text-primary" @click="toTaskPage(taskInfo.taskID, 'view')">
+        <tr>
+          <td>操作</td>
+          <td>项目名称</td>
+          <td>项目当前阶段</td>
+          <td>创建时间</td>
+          <td>预计开始时间</td>
+          <td>实际开始时间</td>
+          <td>预计结束时间</td>
+          <td>实际结束时间</td>
+          <td>申办方</td>
+          <td>研究方</td>
+          <td>监查方</td>
+          <td>统计方</td>
+        </tr>
+        <template v-for="(projectInfo, index) in projectsInfoArray">
+          <tr >
+            <td>
+                <span class="cursor-pointer text-primary" @click="toProjectPage(projectInfo.projectID, 'view')">
                   <i class="fas fa-search"></i>&nbsp;
                 </span>
-                <span class="cursor-pointer text-success" @click="toTaskPage(taskInfo.taskID, 'edit')" v-if="isAdmin || taskInfo.taskCreatorID === currentUserID">
+              <span class="cursor-pointer text-success" @click="toProjectPage(projectInfo.projectID, 'edit')" v-if="isAdmin">
                   <i class="fas fa-edit"></i>&nbsp;
                 </span>
-                <span class="cursor-pointer text-danger" @click="toTaskPage(taskInfo.taskID, 'delete')" v-if="isAdmin || taskInfo.taskCreatorID === currentUserID">
+              <span class="cursor-pointer text-danger" @click="toProjectPage(projectInfo.projectID, 'delete')" v-if="isAdmin">
                   <i class="fas fa-trash"></i>&nbsp;
                 </span>
-              </td>
-              <td>{{taskInfo.taskName}}</td>
-              <td>{{taskInfo.belongedToTrialName}}</td>
-              <td>{{taskInfo.taskCreatorName}}</td>
-              <td>{{taskInfo.taskCreatedTime}}</td>
-              <td>{{taskInfo.taskExecutorName}}</td>
-              <td>{{taskInfo.taskReceivedStatus}}</td>
-              <td>{{taskInfo.taskDueTime}}</td>
-              <td>{{taskInfo.taskProgress}}</td>
-              <td>{{taskInfo.taskCompletedStatus}}</td>
-              <td>{{taskInfo.taskActualCompletedTime}}</td>
-            </tr>
-          </template>
+            </td>
+            <td>{{projectInfo.projectName}}</td>
+            <td>{{projectInfo.projectStage}}</td>
+            <td>{{projectInfo.projectCreatedTime}}</td>
+            <td>{{projectInfo.projectExpectedStartTime}}</td>
+            <td>{{projectInfo.projectActualStartTime}}</td>
+            <td>{{projectInfo.projectExpectedEndTime}}</td>
+            <td>{{projectInfo.projectActualEndTime}}</td>
+            <td>{{projectInfo.projectSponsor}}</td>
+            <td>{{projectInfo.projectInvestigator}}</td>
+            <td>{{projectInfo.projectMonitor}}</td>
+            <td>{{projectInfo.projectStatistician}}</td>
+          </tr>
+        </template>
         </tbody>
       </table>
     </div>
@@ -79,9 +81,9 @@
 
 <script>
   export default {
-    name: 'tasks_info_table',
+    name: 'projects_info_table',
     props: {
-      tasksInfoArray: {
+      projectsInfoArray: {
         type: Array,
         required: true,
       },
@@ -99,11 +101,11 @@
       },
     },
     methods: {
-      toTaskPage: function (taskID, identifier) {
+      toProjectPage: function (projectID, identifier) {
         this.$router.push({
-          name: 'task',
+          name: 'project',
           params: {
-            taskID: taskID,
+            projectID: projectID,
             functionName: identifier,
           },
         });

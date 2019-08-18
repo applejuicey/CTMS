@@ -24,52 +24,56 @@
       <table class="table table-borderless table-sm text-nowrap mb-0">
         <tbody>
         <tr>
-          <td class="table-left-column">试验名称：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialName }}</td>
+          <td class="table-left-column">项目名称：</td>
+          <td class="table-right-column">{{ projectInfoObject.projectName }}</td>
         </tr>
         <tr>
-          <td class="table-left-column">当前试验阶段：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialStage }}</td>
+          <td class="table-left-column">项目描述：</td>
+          <td class="table-right-column">{{ projectInfoObject.projectBriefIntroduction }}</td>
         </tr>
         <tr>
-          <td class="table-left-column">试验简介：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialBriefIntroduction }}</td>
+          <td class="table-left-column">项目当前阶段：</td>
+          <td class="table-right-column">{{ projectInfoObject.projectStage }}</td>
+        </tr>
+        <tr>
+          <td class="table-left-column">项目经理：</td>
+          <td class="table-right-column">{{ projectInfoObject.projectManagerName }}</td>
         </tr>
         <tr>
           <td class="table-left-column">创建时间：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialCreatedTime }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectCreatedTime }}</td>
         </tr>
         <tr>
           <td class="table-left-column">预计开始时间：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialExpectedStartTime }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectExpectedStartTime }}</td>
         </tr>
         <tr>
           <td class="table-left-column">实际开始时间：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialActualStartTime }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectActualStartTime }}</td>
         </tr>
         <tr>
           <td class="table-left-column">预计结束时间：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialExpectedEndTime }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectExpectedEndTime }}</td>
         </tr>
         <tr>
           <td class="table-left-column">实际结束时间：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialActualEndTime }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectActualEndTime }}</td>
         </tr>
         <tr>
           <td class="table-left-column">申办方：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialSponsor }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectSponsor }}</td>
         </tr>
         <tr>
           <td class="table-left-column">研究方：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialInvestigator }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectInvestigator }}</td>
         </tr>
         <tr>
           <td class="table-left-column">监查方：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialMonitor }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectMonitor }}</td>
         </tr>
         <tr>
           <td class="table-left-column">统计方：</td>
-          <td class="table-right-column">{{ trialInfoObject.trialStatistician }}</td>
+          <td class="table-right-column">{{ projectInfoObject.projectStatistician }}</td>
         </tr>
         </tbody>
       </table>
@@ -89,9 +93,9 @@
 
 <script>
   export default {
-    name: 'trial_info_table',
+    name: 'project_info_table',
     props: {
-      trialInfoObject: {
+      projectInfoObject: {
         type: Object,
         required: true,
       },

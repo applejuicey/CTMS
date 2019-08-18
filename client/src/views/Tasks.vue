@@ -50,8 +50,6 @@
     },
     data: () => {
       return {
-        // tasksInfoArray: [],
-        // statusObject4Tasks: {},
         filterToolboxHeaderText: '任务筛选器',
         filterToolboxTooltipText: '请在这里设定筛选内容，然后点击"筛选"按钮获得命中条目。',
         resultCardHeaderText: '任务查询结果',
@@ -63,6 +61,7 @@
       resultDescription: function () {
         return this.$store.state.messages.taskFilterDescription;
       },
+      // 从VUEX中取出检索结果
       tasksInfoArray: function () {
         return this.$store.state.taskFilterQueryResult.tasksInfoArray;
       },

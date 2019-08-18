@@ -45,7 +45,7 @@
         </label>
         <div class="input-group">
           <div class="input-group-prepend">
-            <button class="btn btn-outline-primary" type="button" @click="openModal">点击选择任务接受者</button>
+            <button class="btn btn-outline-success" type="button" @click="openModal">点击选择任务接受者</button>
             <user-list-modal :userList="userList" :statusObject="statusObject4UserListModal" @mountedComplete="setModalID" @selectionMade="changeExecutor"></user-list-modal>
           </div>
           <input v-model="formValues.taskExecutorName" type="text" class="form-control" id="taskExecutorName" placeholder="接受者" disabled>
@@ -57,7 +57,7 @@
         </label>
         <input v-model="formValues.taskDueTime" type="date" class="form-control" id="taskDueTime" placeholder="截止时间">
       </div>
-      <button type="button" class="btn btn-outline-success" @click="updateTask">更新任务信息</button>
+      <button type="button" class="btn btn-success" @click="updateTask">更新任务信息</button>
     </form>
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
