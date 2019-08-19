@@ -14,10 +14,10 @@
                 <a class="list-group-item list-group-item-action text-primary" data-toggle="list" href="#view">
                   <i class="fas fa-search"></i>&nbsp;查看
                 </a>
-                <a class="list-group-item list-group-item-action text-success" data-toggle="list" href="#edit" v-show="isAdmin || currentUserID === projectInfoObject.projectManagerID">
+                <a class="list-group-item list-group-item-action text-success" data-toggle="list" href="#edit" v-if="isAdmin || currentUserID === projectInfoObject.projectManagerID">
                   <i class="fas fa-edit"></i>&nbsp;编辑
                 </a>
-                <a class="list-group-item list-group-item-action text-danger" data-toggle="list" href="#delete" v-show="isAdmin || currentUserID === projectInfoObject.projectManagerID">
+                <a class="list-group-item list-group-item-action text-danger" data-toggle="list" href="#delete" v-if="isAdmin || currentUserID === projectInfoObject.projectManagerID">
                   <i class="fas fa-trash"></i>&nbsp;删除
                 </a>
               </div>
@@ -30,12 +30,12 @@
               <div class="tab-content">
                 <div class="tab-pane fade" id="view">
                   <project-info-table :projectInfoObject="projectInfoObject" :statusObject="statusObject4Project"></project-info-table>
-<!--                  <file-manage-table :taskFiles="taskFiles" :statusObject="statusObject4TaskFiles"></file-manage-table>-->
+                  <task-info-table :tasksInfoArray="projectTasksInfoArray" :statusObject="statusObject4ProjectTasks"></task-info-table>
                 </div>
-                <div class="tab-pane fade" id="edit" v-show="isAdmin || currentUserID === taskInfoObject.taskCreatorID">
-<!--                  <task-form :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-form>-->
+                <div class="tab-pane fade" id="edit" v-if="isAdmin || currentUserID === projectInfoObject.projectManagerID">
+                  <project-edit-form :projectInfoObject="projectInfoObject" :statusObject="statusObject4Project"></project-edit-form>
                 </div>
-                <div class="tab-pane fade" id="delete" v-show="isAdmin || currentUserID === taskInfoObject.taskCreatorID">
+                <div class="tab-pane fade" id="delete" v-if="isAdmin || currentUserID === projectInfoObject.projectManagerID">
 
                   <div class="row">
                     <div class="col-xl-6 offset-xl-3">
@@ -61,22 +61,22 @@
 <script>
   import BottomCard from '@/components/BottomCard.vue';
   import ProjectInfoTable from '@/components/ProjectInfoTable.vue';
-  import FileManageTable from '@/components/FileManageTable.vue';
-  import TaskForm from '@/components/TaskForm.vue';
+  import TaskInfoTable from '@/components/TasksInfoTable.vue';
+  import ProjectEditForm from '@/components/ProjectEditForm.vue';
   export default {
     name: 'project',
     components: {
       BottomCard,
       ProjectInfoTable,
-      FileManageTable,
-      TaskForm,
+      TaskInfoTable,
+      ProjectEditForm,
     },
     data: () => {
       return {
         projectInfoObject: {},
         statusObject4Project: {},
-        projectFiles: [],
-        statusObject4ProjectFiles: {},
+        projectTasksInfoArray: [],
+        statusObject4ProjectTasks: {},
         currentFunction: '查看',
         actionSelectBoxHeaderText: '操作',
         actionSelectBoxTooltipText: '请在这里选择一种操作。',
@@ -94,7 +94,7 @@
     },
     created: function () {
       this.getProjectInfo();
-      this.getProjectFilesInfo();
+      this.getProjectTasksInfo();
     },
     mounted: function () {
       this.$nextTick(() => {
@@ -153,27 +153,27 @@
           };
         });
       },
-      // 根据传入的projectID和currentUserID从服务器获取该项目有关文件的信息
-      getProjectFilesInfo: function () {
-        this.statusObject4TaskFiles = {
+      // 根据传入的projectID和currentUserID从服务器获取该项目所有任务的信息
+      getProjectTasksInfo: function () {
+        this.statusObject4ProjectTasks = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/taskFilesInfo', {
+        this.$axios.get('/tasksInfo', {
           params: {
-            taskID: this.$route.params.taskID,
+            projectID: this.$route.params.projectID,
             userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('Task获取任务文件信息成功', response);
-          this.taskFiles = response.data.taskFiles;
-          this.statusObject4TaskFiles = {
+          // console.log('Project获取任务信息成功', response);
+          this.projectTasksInfoArray = response.data.tasksInfo;
+          this.statusObject4ProjectTasks = {
             statusIndicator: 'loaded',
           };
         }).catch((error) => {
-          console.error('Task获取任务文件信息失败，错误：', error);
-          this.statusObject4TaskFiles = {
+          console.error('Project获取任务信息失败，错误：', error);
+          this.statusObject4ProjectTasks = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
             feedbackMessage: `从服务器获取任务文件信息失败，错误原因：${error}`,

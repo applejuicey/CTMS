@@ -33,7 +33,7 @@
                   <file-manage-table :taskFiles="taskFiles" :statusObject="statusObject4TaskFiles"></file-manage-table>
                 </div>
                 <div class="tab-pane fade" id="edit" v-show="isAdmin || currentUserID === taskInfoObject.taskCreatorID">
-                  <task-form :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-form>
+                  <task-edit-form :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-edit-form>
                 </div>
                 <div class="tab-pane fade" id="delete" v-show="isAdmin || currentUserID === taskInfoObject.taskCreatorID">
 
@@ -62,14 +62,14 @@
   import BottomCard from '@/components/BottomCard.vue';
   import TaskInfoTable from '@/components/TaskInfoTable.vue';
   import FileManageTable from '@/components/FileManageTable.vue';
-  import TaskForm from '@/components/TaskForm.vue';
+  import TaskEditForm from '@/components/TaskEditForm.vue';
   export default {
     name: 'task',
     components: {
       BottomCard,
       TaskInfoTable,
       FileManageTable,
-      TaskForm,
+      TaskEditForm,
     },
     data: () => {
       return {

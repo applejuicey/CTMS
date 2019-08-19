@@ -8,9 +8,20 @@
       </div>
       <div class="row">
         <div class="col-xl-3 mb-2">
-          <bottom-card :cardHeaderText="taskInboxHeaderText" :cardTooltipText="taskInboxTooltipText">
+          <!--TODO:组件化+admin显示控制面板：新增项目、任务、用户-->
+          <bottom-card :cardHeaderText="controlPanelHeaderText" :cardTooltipText="controlPanelTooltipText" v-if="isAdmin">
             <template v-slot:card-body>
-<!--              TODO:组件化-->
+              <div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-outline-success">新增项目</button>
+                  <button type="button" class="btn btn-outline-success">新增任务</button>
+                  <button type="button" class="btn btn-outline-success">新增用户</button>
+                </div>
+              </div>
+            </template>
+          </bottom-card>
+          <bottom-card :cardHeaderText="taskInboxHeaderText" :cardTooltipText="taskInboxTooltipText" v-if="!isAdmin">
+            <template v-slot:card-body>
               <template v-for="(task, index) in unreceivedTasks">
                 <div class="card mb-2 shadow">
                   <div class="card-header bg-transparent d-flex">
@@ -22,7 +33,7 @@
                       <span class="cursor-pointer text-primary">
                          <i class="fas fa-search"></i>&nbsp;查看
                       </span>
-                      <span class="cursor-pointer text-success" v-if="!isAdmin">
+                      <span class="cursor-pointer text-success">
                          &nbsp;&nbsp;<i class="fas fa-check"></i>&nbsp;接受
                       </span>
                     </span>
@@ -116,6 +127,8 @@
     },
     data: function () {
       return {
+        controlPanelHeaderText: '管理员控制台',
+        controlPanelTooltipText: '作为管理员，您可以在这里新增项目、任务、用户等。',
         taskInboxHeaderText: '尚未接受的任务',
         taskInboxTooltipText: '这里列出所有尚未接受的任务。',
         involvedTrialsHeaderText: '参与的临床试验项目及项目内任务',
@@ -160,6 +173,9 @@
     computed: {
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+      isAdmin: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
       },
     },
     created: function () {

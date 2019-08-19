@@ -25,11 +25,11 @@
                 <i class="fas fa-capsules"></i>&nbsp;项目
               </span>
             </li>
-            <li class="nav-item cursor-pointer" v-if="isAdmin">
-              <span class="nav-link" @click="navigate('schedules')">
-                <i class="fas fa-clipboard-list"></i>&nbsp;进度
-              </span>
-            </li>
+<!--            <li class="nav-item cursor-pointer" v-if="isAdmin">-->
+<!--              <span class="nav-link" @click="navigate('schedules')">-->
+<!--                <i class="fas fa-clipboard-list"></i>&nbsp;进度-->
+<!--              </span>-->
+<!--            </li>-->
             <li class="nav-item cursor-pointer" v-if="isAdmin">
               <span class="nav-link" @click="navigate('users')">
                 <i class="fas fa-users-cog"></i>&nbsp;用户

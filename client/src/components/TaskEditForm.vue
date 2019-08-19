@@ -75,7 +75,7 @@
 <script>
   import UserListModal from '@/components/UserListModal.vue';
   export default {
-    name: 'task_form',
+    name: 'task_edit_form',
     components: {
       UserListModal,
     },
@@ -147,13 +147,13 @@
             userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('TaskForm获取用户列表成功', response);
+          // console.log('TaskEditForm获取用户列表成功', response);
           this.userList = response.data.userList;
           this.statusObject4UserListModal = {
             statusIndicator: 'loaded',
           };
         }).catch((error) => {
-          console.error('TaskForm获取用户列表失败，错误：', error);
+          console.error('TaskEditForm获取用户列表失败，错误：', error);
           this.statusObject4UserListModal = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',

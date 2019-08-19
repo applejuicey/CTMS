@@ -1,5 +1,5 @@
 用户账户  USER001
-试验项目  TRIAL001
+试验项目  PROJECT001
 任务     TASK001
 文件     FILE001
 
@@ -359,3 +359,110 @@
     }
   ]
 }
+
+--------------------------------------------------
+Project模块
+1.请求路径  /projectsInfo
+  请求参数  userID、projectNameKeyword、projectStage
+  参数说明  projectNameKeyword为字符串，取''代表所有名称均可；projectStage为字符串，取'1'代表准备阶段、取'2'代表进行备阶段、取'3'代表收尾阶段、取'4'代表补发阶段、取'-1'代表所有阶段均可
+  参数举例  {
+            userID: 'USER001',
+            projectNameKeyword: '',
+            projectStage: '-1',
+           }
+  请求描述  返回与该userID有关的、符合检索条件的所有项目的详细信息（数组）
+  响应举例  {
+            "projectsInfo": [
+              {
+                "projectID": "TRIAL001",
+                "projectName": "狂犬1针",
+                "projectStage": "要红交民",
+                "projectBriefIntroduction": "复离一战太动通难格青给革道度受样统改以使会传气路命东教在在事细向采日院划况次百东周手技精色计指容样需管区东权人水院为养非党传何验始思管华红。",
+                "projectCreatedTime": "1996-08-19",
+                "projectExpectedStartTime": "2015-07-25",
+                "projectActualStartTime": "2007-01-16",
+                "projectExpectedEndTime": "1993-02-27",
+                "projectActualEndTime": "1973-05-03",
+                "projectSponsor": "委究备加马走历三具华我天五",
+                "projectInvestigator": "并问很问济程之地而只定世制",
+                "projectMonitor": "军运林打花系反难他他克亲需",
+                "projectStatistician": "议基属近会容着精"
+              },
+            ]
+          }
+
+2.请求路径  /projectInfo
+  请求参数  userID、projectID
+  参数说明
+  参数举例  {
+            userID: 'USER001',
+            projectID: 'PROJECT001',
+           }
+  请求描述  检查userID的权限，足够则返回projectID对应的项目的详细信息（对象）
+  响应举例  {
+            "projectInfo": {
+                "projectID": "PROJECT001",
+                "projectName": "狂犬1针",
+                "projectManagerID": "USER002",
+                "projectManagerName": "王诗远",
+                "projectStage": "农切力价",
+                "projectBriefIntroduction": "问人其决说战为资华共议进将声值毛建及军型会方化许严给那号出结定带能做取将他联划直重话造千容支难件分学质及意儿六老身结实马号明至说处别根酸。",
+                "projectCreatedTime": "2016-01-22",
+                "projectExpectedStartTime": "1999-11-14",
+                "projectActualStartTime": "1994-12-24",
+                "projectExpectedEndTime": "2013-05-31",
+                "projectActualEndTime": "1986-03-14",
+                "projectSponsor": "商提太领无完门按土及形",
+                "projectInvestigator": "生住清入属今直元第期群题里",
+                "projectMonitor": "为总子六军计红油工海家内月",
+                "projectStatistician": "红素市府圆完果历该从",
+                "projectInvolvedUsersID": [
+                  "USER003"
+                ],
+                "projectInvolvedUsersName": [
+                  "范扬"
+                ]
+            }
+          }
+
+3.请求路径  /tasksInfo
+  请求参数  userID、projectID
+  参数说明
+  参数举例  {
+            userID: 'USER001',
+            projectID: 'PROJECT001',
+           }
+  请求描述  检查userID的权限，足够则返回projectID对应的项目内所有任务的详细信息（数组）
+  响应举例  {
+              "tasksInfo": [
+                  {
+                    "taskID": "TASK001",
+                    "taskName": "写DMP",
+                    "belongedToTrialID": "PROJECT001",
+                    "belongedToTrialName": "狂犬1针",
+                    "taskCreatorID": "USER001",
+                    "taskCreatorName": "刘沛",
+                    "taskCreatedTime": "1995-07-22 22:23:58",
+                    "taskExecutorID": "USER003",
+                    "taskExecutorName": "范扬",
+                    "taskReceivedStatus": false,
+                    "taskDueTime": "1975-09-04 12:35:21",
+                    "taskProgress": 95,
+                    "taskCompletedStatus": true,
+                    "taskActualCompletedTime": "1999-06-22 09:29:48"
+                  },
+               ]
+           }
+
+4.请求路径  /userList
+  请求参数  userID、projectManagerID
+  参数说明
+  参数举例  {
+            userID: 'USER002',
+            projectManagerID: 'USER002',
+           }
+  请求描述  返回除了该userID和管理员projectManagerID外（没错误的话这两个ID应该一样的），所有其他用户的信息（数组）
+  响应举例  {
+
+           }
+--------------------------------------------------

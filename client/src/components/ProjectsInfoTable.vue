@@ -43,10 +43,10 @@
                 <span class="cursor-pointer text-primary" @click="toProjectPage(projectInfo.projectID, 'view')">
                   <i class="fas fa-search"></i>&nbsp;
                 </span>
-              <span class="cursor-pointer text-success" @click="toProjectPage(projectInfo.projectID, 'edit')" v-if="isAdmin">
+              <span class="cursor-pointer text-success" @click="toProjectPage(projectInfo.projectID, 'edit')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
                   <i class="fas fa-edit"></i>&nbsp;
                 </span>
-              <span class="cursor-pointer text-danger" @click="toProjectPage(projectInfo.projectID, 'delete')" v-if="isAdmin">
+              <span class="cursor-pointer text-danger" @click="toProjectPage(projectInfo.projectID, 'delete')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
                   <i class="fas fa-trash"></i>&nbsp;
                 </span>
             </td>
