@@ -20,63 +20,79 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
-      <table class="table table-borderless table-sm text-nowrap mb-0">
-        <tbody>
-        <tr>
-          <td class="table-left-column">项目名称：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectName }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">项目描述：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectBriefIntroduction }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">项目当前阶段：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectStage }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">项目经理：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectManagerName }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">创建时间：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectCreatedTime }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">预计开始时间：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectExpectedStartTime }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">实际开始时间：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectActualStartTime }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">预计结束时间：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectExpectedEndTime }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">实际结束时间：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectActualEndTime }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">申办方：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectSponsor }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">研究方：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectInvestigator }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">监查方：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectMonitor }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">统计方：</td>
-          <td class="table-right-column">{{ projectInfoObject.projectStatistician }}</td>
-        </tr>
-        </tbody>
-      </table>
+    <div v-else-if="statusObject.statusIndicator === 'loaded'">
+      <div class="d-flex mb-2">
+        <span class="font-weight-normal">
+          <i class="fas fa-caret-right"></i>&nbsp;
+          项目资料：
+        </span>
+        <div class="btn-group ml-auto">
+          <button type="button" class="btn btn-success" @click="changeRoute(projectInfoObject.projectID, 'edit')" v-if="isAdmin || projectInfoObject.projectManagerID === currentUserID">
+            <i class="fas fa-pen"></i>&nbsp;编辑项目
+          </button>
+          <button type="button" class="btn btn-success" @click="createTask(projectInfoObject.projectID)" v-if="isAdmin || projectInfoObject.projectManagerID === currentUserID">
+            <i class="fas fa-plus"></i>&nbsp;新建任务
+          </button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-borderless table-sm text-nowrap mb-0">
+          <tbody>
+          <tr>
+            <td class="table-left-column">项目名称：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">项目描述：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectBriefIntroduction }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">项目当前阶段：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectStage }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">项目经理：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectManagerName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">创建时间：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectCreatedTime }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">预计开始时间：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectExpectedStartTime }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">实际开始时间：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectActualStartTime }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">预计结束时间：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectExpectedEndTime }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">实际结束时间：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectActualEndTime }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">申办方：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectSponsor }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">研究方：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectInvestigator }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">监查方：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectMonitor }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">统计方：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectStatistician }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
@@ -102,6 +118,32 @@
       statusObject: {
         type: Object,
         required: true,
+      },
+    },
+    computed: {
+      currentUserID: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+      isAdmin: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
+      },
+    },
+    methods: {
+      changeRoute: function (projectID, identifier) {
+        this.$router.push({
+          name: `project_${identifier}`,
+          params: {
+            projectID: projectID,
+          },
+        });
+      },
+      createTask: function (projectID) {
+        this.$router.push({
+          name: 'task_create',
+          params: {
+            projectID: projectID,
+          },
+        });
       },
     },
   }

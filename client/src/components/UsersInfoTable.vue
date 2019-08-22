@@ -1,5 +1,5 @@
 <template>
-  <div class="text-left list-card">
+  <div class="list-card">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
       <div class="col-xl-6 offset-xl-3">
         <div class="alert alert-primary text-center mb-0">
@@ -20,52 +20,56 @@
         </div>
       </div>
     </div>
-    <div v-else-if="statusObject.statusIndicator === 'loaded'">
-      <div class="d-flex mb-2">
+    <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
+      <div class="d-flex mb-2" v-if="$route.path.split('/')[1] !== 'users'">
         <span class="font-weight-normal">
           <i class="fas fa-caret-right"></i>&nbsp;
-          任务附属文件：
+          用户：
         </span>
-        <button class="btn btn-success ml-auto">上传文件</button>
       </div>
       <div class="table-responsive">
         <table class="table table-bordered text-nowrap">
-          <tr>
-            <td>文件名</td>
-            <td>创建日期</td>
-            <td>创建者</td>
-            <td>简介</td>
-            <td>删除日期</td>
-            <td>删除者</td>
-            <td>操作</td>
-          </tr>
-          <template v-for="(file, index) in taskFiles">
+          <tbody>
             <tr>
-              <td>{{file.fileName}}</td>
-              <td>{{file.createDate}}</td>
-              <td>{{file.creatorName}}</td>
-              <td>{{file.description}}</td>
-              <td>{{file.deleteDate}}</td>
-              <td>{{file.deleteExecutorName}}</td>
-              <td>
-            <span class="cursor-pointer text-primary" @click="downloadFile(file.fileID, 'view')">
-              <i class="fas fa-download"></i>&nbsp;
-            </span>
-                <span class="cursor-pointer text-danger" @click="deleteFile(file.fileID, 'delete')" v-if="isAdmin || currentUserID === file.creatorID">
-              <i class="fas fa-trash"></i>&nbsp;
-            </span>
-              </td>
+              <td>操作</td>
+              <td>ID</td>
+              <td>账户名称</td>
+              <td>真实姓名</td>
+              <td>邮箱</td>
+              <td>账户状态</td>
+              <td>上次登录时间</td>
             </tr>
-          </template>
+            <template v-for="(user, index) in usersInfoArray">
+              <tr>
+                <td>
+                  <span class="cursor-pointer text-primary" @click="changeRoute(user.userID, 'view')">
+                    <i class="fas fa-search"></i>&nbsp;
+                  </span>
+                  <span class="cursor-pointer text-success" @click="changeRoute(user.userID, 'edit')">
+                    <i class="fas fa-edit"></i>&nbsp;
+                  </span>
+                  <span class="cursor-pointer text-danger" @click="changeRoute(user.userID, 'delete')">
+                    <i class="fas fa-trash"></i>&nbsp;
+                  </span>
+                </td>
+                <td>{{ user.userID }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.realName }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.accountStatus }}</td>
+                <td>{{ user.lastLoginTime }}</td>
+              </tr>
+            </template>
+          </tbody>
         </table>
       </div>
     </div>
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
         <div class="alert alert-info text-center mb-0">
-          <h4 class="alert-heading">查询结果为空</h4>
+          <h4 class="alert-heading">等待初始化</h4>
           <p>
-            您执行的查询结果为空，请确认。
+            正在等待初始化流程执行......
           </p>
         </div>
       </div>
@@ -75,9 +79,9 @@
 
 <script>
   export default {
-    name: 'file_manage_table',
+    name: 'users_info_table',
     props: {
-      taskFiles: {
+      usersInfoArray: {
         type: Array,
         required: true,
       },
@@ -85,11 +89,6 @@
         type: Object,
         required: true,
       },
-    },
-    data: () => {
-      return {
-
-      };
     },
     computed: {
       isAdmin: function () {
@@ -100,11 +99,13 @@
       },
     },
     methods: {
-      downloadFile: function (fileID) {
-
-      },
-      deleteFile: function (fileID) {
-
+      changeRoute: function (userID, identifier) {
+        this.$router.push({
+          name: `user_${identifier}`,
+          params: {
+            userID: userID,
+          },
+        });
       },
     },
   }

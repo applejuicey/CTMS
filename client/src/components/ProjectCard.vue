@@ -1,67 +1,58 @@
 <template>
   <div class="card mb-2 shadow">
     <div class="card-header bg-transparent d-flex">
-      <b class="cursor-pointer text-primary" @click="toggleCollapse(trialID)" data-toggle="tooltip" data-placement="top" :title="trialNameTipText">
+      <b class="cursor-pointer text-primary" @click="toggleCollapse(projectID)" data-toggle="tooltip" data-placement="top" :title="projectNameTipText">
         <i class="fas fa-capsules"></i>&nbsp;
-        {{ trialName }}&nbsp;
+        {{ projectName }}&nbsp;
         <i class="fas fa-hand-point-left"></i>&nbsp;
       </b>
       <span class="ml-auto">
-        <span class="cursor-pointer text-primary">
+        <span class="cursor-pointer text-primary" @click="changeRoute(projectID, 'view')">
           <i class="fas fa-search"></i>&nbsp;查看项目信息
         </span>
       </span>
     </div>
-    <div :id="`collapse${trialID}`" class="card-body collapse">
-      <div class="text-left">
-        <i class="fas fa-caret-right"></i>&nbsp;
-        <b>试验信息：</b>
-      </div>
-      <trial-info-table :trialInfoObject="trialInfoObject" :statusObject="statusObject4Trial"></trial-info-table>
-      <div class="text-left mb-3">
-        <i class="fas fa-caret-right"></i>&nbsp;
-        <b>试验内任务：</b>
-      </div>
-      <task-info-table :tasksInfoArray="tasksInfoArray" :statusObject="statusObject4Tasks"></task-info-table>
+    <div :id="`collapse${projectID}`" class="card-body collapse">
+      <project-info-table :projectInfoObject="projectInfoObject" :statusObject="statusObject4Project"></project-info-table>
+      <tasks-info-table :tasksInfoArray="tasksInfoArray" :statusObject="statusObject4Tasks"></tasks-info-table>
     </div>
   </div>
 </template>
 
 <script>
-  import TrialInfoTable from '@/components/TrialInfoTable.vue';
-  import TaskInfoTable from '@/components/TasksInfoTable.vue';
+  import ProjectInfoTable from '@/components/ProjectInfoTable.vue';
+  import TasksInfoTable from '@/components/TasksInfoTable.vue';
   export default {
-    name: 'trial_card',
+    name: 'project_card',
     components: {
-      TrialInfoTable,
-      TaskInfoTable,
+      ProjectInfoTable,
+      TasksInfoTable,
     },
     props: {
-      trialID: {
+      projectID: {
         type: String,
         required: true,
       },
-      currentUserID: {
-        type: String,
-        required: true,
-      },
-      trialName: {
+      projectName: {
         type: String,
         required: true,
       },
     },
     data: function () {
       return {
-        trialNameTipText: '点击项目名称可以展示或隐藏项目内容。',
-        trialInfoObject: {},
-        statusObject4Trial: {},
+        projectNameTipText: '点击项目名称可以展示或隐藏项目内容。',
+        projectInfoObject: {},
+        statusObject4Project: {},
         tasksInfoArray: [],
         statusObject4Tasks: {},
       };
     },
     computed: {
       collapseID: function () {
-        return `#collapse${ this.trialID }`;
+        return `#collapse${ this.projectID }`;
+      },
+      currentUserID: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).userID;
       },
     },
     mounted: function () {
@@ -69,43 +60,43 @@
         $(function () {
           $('[data-toggle="tooltip"]').tooltip();
         });
-        // 绑定事件：展开时从服务器获取试验信息，传入子组件TrialInfoTable
-        // 绑定事件：展开时改变tasksQueryObject，然后子组件watch变化，从服务器获取数据
+        // 绑定事件：展开时从服务器获取项目信息，传入子组件ProjectInfoTable
+        // 绑定事件：展开时从服务器获取任务信息，传入子组件TaskInfoTable
         $(this.collapseID).on('shown.bs.collapse', () => {
-          this.getTrialInfo();
+          this.getProjectInfo();
           this.getTasksInfo();
         })
       })
     },
     methods: {
-      toggleCollapse: function (trialID) {
-        const clickedCollapseID = `#collapse${trialID}`;
+      toggleCollapse: function (projectID) {
+        const clickedCollapseID = `#collapse${projectID}`;
         $(clickedCollapseID).collapse('toggle');
       },
-      // 根据传入的trialID和currentUserID从服务器获取试验信息
-      getTrialInfo: function () {
-        this.statusObject4Trial = {
+      // 根据传入的projectID和currentUserID从服务器获取试验信息
+      getProjectInfo: function () {
+        this.statusObject4Project = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/trialInfo', {
+        this.$axios.get('/projectInfo', {
           params: {
-            trialID: this.trialID,
+            projectID: this.projectID,
             userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('TrialCard获取试验信息成功', response);
-          this.trialInfoObject = response.data.trialInfo;
-          this.statusObject4Trial = {
+          // console.log('ProjectCard获取项目信息成功', response);
+          this.projectInfoObject = response.data.projectInfo;
+          this.statusObject4Project = {
             statusIndicator: 'loaded',
           };
         }).catch((error) => {
-          console.error('TrialCard获取试验信息失败，错误：', error);
-          this.statusObject4Trial = {
+          console.error('ProjectCard获取项目信息失败，错误：', error);
+          this.statusObject4Project = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
-            feedbackMessage: `从服务器获取试验信息失败，错误原因：${error}`,
+            feedbackMessage: `从服务器获取项目信息失败，错误原因：${error}`,
           };
         });
       },
@@ -122,18 +113,26 @@
             userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('TrialCard获取任务信息成功', response);
+          // console.log('ProjectCard获取任务信息成功', response);
           this.tasksInfoArray = response.data.tasksInfo;
           this.statusObject4Tasks = {
             statusIndicator: 'loaded',
           };
         }).catch((error) => {
-          console.error('TrialCard获取任务信息失败，错误：', error);
+          console.error('ProjectCard获取任务信息失败，错误：', error);
           this.statusObject4Tasks = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
             feedbackMessage: `从服务器获取任务信息失败，错误原因：${error}`,
           };
+        });
+      },
+      changeRoute: function (projectID, identifier) {
+        this.$router.push({
+          name: `project_${identifier}`,
+          params: {
+            projectID: projectID,
+          },
         });
       },
     },

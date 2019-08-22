@@ -3,7 +3,9 @@
     <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
-          <h1>与我有关的任务</h1>
+          <h1>
+            <i class="fas fa-tasks"></i>&nbsp;任务查询
+          </h1>
         </div>
       </div>
       <div class="row">
@@ -26,7 +28,10 @@
                 </div>
               </div>
               <div v-else>
-                <p class="text-left">{{ resultDescription }}的查询结果如下所示：</p>
+                <p class="text-left">
+                  <mark>{{ resultDescription }}</mark>
+                  的查询结果如下所示：
+                </p>
                 <tasks-info-table :tasksInfoArray="tasksInfoArray" :statusObject="statusObject4Tasks"></tasks-info-table>
               </div>
             </template>
@@ -53,7 +58,7 @@
         filterToolboxHeaderText: '任务筛选器',
         filterToolboxTooltipText: '请在这里设定筛选内容，然后点击"筛选"按钮获得命中条目。',
         resultCardHeaderText: '任务查询结果',
-        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击"放大镜"按钮以查看任务详细资料。',
+        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击"放大镜"按钮以查看任务详细资料；点击"铅笔"按钮以编辑任务信息；点击"对号"按钮以接受任务；点击"双对号"按钮将标记任务完成。',
       };
     },
     computed: {
@@ -78,6 +83,13 @@
         },
         deep: true
       },
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+        })
+      });
     },
     methods: {
       // 根据userID\taskNameKeyword\trialNameKeyword\receivedStatus\completeStatus从服务器获取与该用户有关的、符合检索条件的所有任务信息

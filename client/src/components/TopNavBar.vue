@@ -25,11 +25,6 @@
                 <i class="fas fa-capsules"></i>&nbsp;项目
               </span>
             </li>
-<!--            <li class="nav-item cursor-pointer" v-if="isAdmin">-->
-<!--              <span class="nav-link" @click="navigate('schedules')">-->
-<!--                <i class="fas fa-clipboard-list"></i>&nbsp;进度-->
-<!--              </span>-->
-<!--            </li>-->
             <li class="nav-item cursor-pointer" v-if="isAdmin">
               <span class="nav-link" @click="navigate('users')">
                 <i class="fas fa-users-cog"></i>&nbsp;用户
@@ -78,7 +73,6 @@
             .set('home', 'home')
             .set('tasks', 'tasks')
             .set('projects', 'projects')
-            .set('schedules', 'schedules')
             .set('users', 'users')
             .set('me', 'me');
         const destinationName = routeMap.get(targetPage);
@@ -87,6 +81,7 @@
       user001: function () {
         localStorage.setItem('userInfo', JSON.stringify({
           userID: 'USER001',
+          username: '刘沛',
           isAdmin: true,
         }));
         // const payload = JSON.parse(localStorage.getItem('userInfo'));
@@ -95,12 +90,14 @@
       user002: function () {
         localStorage.setItem('userInfo', JSON.stringify({
           userID: 'USER002',
+          username: '王诗远',
           isAdmin: false,
         }));
       },
       user003: function () {
         localStorage.setItem('userInfo', JSON.stringify({
           userID: 'USER003',
+          username: '范扬',
           isAdmin: false,
         }));
       },

@@ -20,32 +20,77 @@ export default new Router({
     {
       path: '/tasks',
       name: 'tasks',
-      component: () => import('./views/Tasks.vue')
+      component: () => import('./views/task/Tasks.vue')
     },
     {
-      path: '/task/:taskID',
-      name: 'task',
-      component: () => import('./views/Task.vue')
+      path: '/task/view/:taskID',
+      name: 'task_view',
+      component: () => import('./views/task/TaskView.vue'),
+    },
+    {
+      path: '/task/edit/:taskID',
+      name: 'task_edit',
+      component: () => import('./views/task/TaskEdit.vue'),
+    },
+    {
+      path: '/task/delete/:taskID',
+      name: 'task_delete',
+      component: () => import('./views/task/TaskDelete.vue'),
+    },
+    {
+      path: '/task/create',
+      name: 'task_create',
+      component: () => import('./views/task/TaskCreate.vue'),
     },
     {
       path: '/projects',
       name: 'projects',
-      component: () => import('./views/Projects.vue')
+      component: () => import('./views/project/Projects.vue')
     },
     {
-      path: '/project/:projectID',
-      name: 'project',
-      component: () => import('./views/Project.vue')
+      path: '/project/view/:projectID',
+      name: 'project_view',
+      component: () => import('./views/project/ProjectView.vue'),
     },
     {
-      path: '/schedules',
-      name: 'schedules',
-      component: () => import('./views/Schedules.vue')
+      path: '/project/edit/:projectID',
+      name: 'project_edit',
+      component: () => import('./views/project/ProjectEdit.vue'),
+    },
+    {
+      path: '/project/delete/:projectID',
+      name: 'project_delete',
+      component: () => import('./views/project/ProjectDelete.vue'),
+    },
+    {
+      path: '/project/create',
+      name: 'project_create',
+      component: () => import('./views/project/ProjectCreate.vue'),
     },
     {
       path: '/users',
       name: 'users',
-      component: () => import('./views/Users.vue')
+      component: () => import('./views/user/Users.vue'),
+    },
+    {
+      path: '/user/view/:userID',
+      name: 'user_view',
+      component: () => import('./views/user/UserView.vue'),
+    },
+    {
+      path: '/user/edit/:userID',
+      name: 'user_edit',
+      component: () => import('./views/user/UserEdit.vue'),
+    },
+    {
+      path: '/user/delete/:userID',
+      name: 'user_delete',
+      component: () => import('./views/user/UserDelete.vue'),
+    },
+    {
+      path: '/user/create',
+      name: 'user_create',
+      component: () => import('./views/user/UserCreate.vue'),
     },
     {
       path: '/me',

@@ -20,57 +20,72 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
-      <table class="table table-borderless table-sm text-nowrap mb-0">
-        <tbody>
-        <tr>
-          <td class="table-left-column">任务名称：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskName }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">任务描述：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskDescription }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">隶属于：</td>
-          <td class="table-right-column">{{ taskInfoObject.belongedToTrialName }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">创建者：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskCreatorName }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">创建时间：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskCreatedTime }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">接受者：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskExecutorName }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">接受状态：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskReceivedStatus }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">截止时间：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskDueTime }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">任务进度：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskProgress }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">完成状态：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskCompletedStatus }}</td>
-        </tr>
-        <tr>
-          <td class="table-left-column">实际完成时间：</td>
-          <td class="table-right-column">{{ taskInfoObject.taskActualCompletedTime }}</td>
-        </tr>
-        </tbody>
-      </table>
+    <div v-else-if="statusObject.statusIndicator === 'loaded'">
+      <div class="d-flex mb-2">
+        <span class="font-weight-normal">
+          <i class="fas fa-caret-right"></i>&nbsp;
+          任务资料：
+        </span>
+        <div class="btn-group ml-auto">
+          <button type="button" class="btn btn-success" @click="receiveTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === false">
+            <i class="fas fa-check"></i>&nbsp;接受任务
+          </button>
+          <button type="button" class="btn btn-success" @click="completeTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === true && taskInfoObject.taskCompletedStatus === false">
+            <i class="fas fa-check-double"></i>&nbsp;完成任务
+          </button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-borderless table-sm text-nowrap mb-0">
+          <tbody>
+          <tr>
+            <td class="table-left-column">任务名称：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">任务描述：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskDescription }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">隶属于：</td>
+            <td class="table-right-column">{{ taskInfoObject.belongedToTrialName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">创建者：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskCreatorName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">创建时间：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskCreatedTime }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">接受者：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskExecutorName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">接受状态：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskReceivedStatus }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">截止时间：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskDueTime }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">任务进度：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskProgress }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">完成状态：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskCompletedStatus }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">实际完成时间：</td>
+            <td class="table-right-column">{{ taskInfoObject.taskActualCompletedTime }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
         <div class="alert alert-info text-center mb-0">
@@ -95,6 +110,21 @@
       statusObject: {
         type: Object,
         required: true,
+      },
+    },
+    computed: {
+      currentUserID: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+    },
+    methods: {
+      receiveTask: function (taskID) {
+        alert(`received${taskID}`)
+        // TODO:提供taskID和userID，标记receivedStatus为true
+      },
+      completeTask: function (taskID) {
+        alert(`completed${taskID}`)
+        // TODO:提供taskID和userID，标记taskCompletedStatus为true
       },
     },
   }

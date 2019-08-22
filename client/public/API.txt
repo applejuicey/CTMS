@@ -3,226 +3,123 @@
 任务     TASK001
 文件     FILE001
 
+--------------------------------------------------
+Home模块
+1.请求路径  /involvedProjects
+  请求参数  userID
+  参数说明
+  参数举例  {
+            userID: 'USER001',
+           }
+  请求描述  返回与该userID参加的所有项目的简要信息（数组）
+  响应举例  {
+          "involvedTrials": [
+            {
+              "trialID": "TRIAL001",
+              "trialName": "狂犬1针"
+            },
+            {
+              "trialID": "TRIAL004",
+              "trialName": "狂犬4针"
+            },
+            {
+              "trialID": "TRIAL005",
+              "trialName": "狂犬5针"
+            }
+          ]
+        }
 
-路径  /involvedTrials
-参数  userID
-描述  提供userID，返回当前userID参与的所有试验项目
-{
-  "involvedTrials": [
-    {
-      "trialID": "TRIAL001",
-      "trialName": "狂犬1针"
-    },
-    {
-      "trialID": "TRIAL004",
-      "trialName": "狂犬4针"
-    },
-    {
-      "trialID": "TRIAL005",
-      "trialName": "狂犬5针"
-    }
-  ]
-}
+2.请求路径  /projectInfo
+  请求参数  userID、projectID
+  参数说明
+  参数举例  {
+            userID: 'USER001',
+            projectID: 'PROJECT001',
+           }
+  请求描述  检查userID的权限，足够则返回projectID对应的项目的详细信息（对象）
+  响应举例  {
+            "projectInfo": {
+                "projectID": "PROJECT001",
+                "projectName": "狂犬1针",
+                "projectManagerID": "USER002",
+                "projectManagerName": "王诗远",
+                "projectStage": "农切力价",
+                "projectBriefIntroduction": "问人其决说战为资华共议进将声值毛建及军型会方化许严给那号出结定带能做取将他联划直重话造千容支难件分学质及意儿六老身结实马号明至说处别根酸。",
+                "projectCreatedTime": "2016-01-22",
+                "projectExpectedStartTime": "1999-11-14",
+                "projectActualStartTime": "1994-12-24",
+                "projectExpectedEndTime": "2013-05-31",
+                "projectActualEndTime": "1986-03-14",
+                "projectSponsor": "商提太领无完门按土及形",
+                "projectInvestigator": "生住清入属今直元第期群题里",
+                "projectMonitor": "为总子六军计红油工海家内月",
+                "projectStatistician": "红素市府圆完果历该从",
+                "projectInvolvedUsersID": [
+                  "USER003"
+                ],
+                "projectInvolvedUsersName": [
+                  "范扬"
+                ]
+            }
+          }
 
+3.请求路径  /tasksInfo
+  请求参数  userID、projectID
+  参数说明
+  参数举例  {
+            userID: 'USER001',
+            projectID: 'PROJECT001',
+           }
+  请求描述  返回projectID对应的试验项目里所有与userID有关的任务的详细信息（数组）
+  响应举例  {
+            "tasksInfo": [
+                {
+                  "taskID": "TASK001",
+                  "taskName": "写DMP",
+                  "belongedToTrialID": "TRIAL001",
+                  "belongedToTrialName": "狂犬1针",
+                  "taskCreatorID": "USER001",
+                  "taskCreatorName": "刘沛",
+                  "taskCreatedTime": "1975-04-11 22:06:12",
+                  "taskExecutorID": "USER003",
+                  "taskExecutorName": "范扬",
+                  "taskReceivedStatus": true,
+                  "taskDueTime": "1979-02-20 15:50:19",
+                  "taskProgress": 16,
+                  "taskCompletedStatus": false,
+                  "taskActualCompletedTime": "1987-07-30 09:28:56"
+                },
+             ]
+          }
 
-路径  /trialInfo
-参数  userID、trialID
-描述  提供userID与trialID，返回当前trialID对应的试验项目的详细信息
-{
-  "trialInfo": {
-    "trialID": "TRIAL001",
-    "trialName": "狂犬1针",
-    "trialStage": "现眼包些着",
-    "trialBriefIntroduction": "段处子件得特下百技业华日和志存相十长划放定将维如位历段身教命力风天引参头产理单两将近每和京号当性每见酸状员。",
-    "trialCreatedTime": "1986-05-22 17:04:07",
-    "trialExpectedStartTime": "1975-02-11 06:38:09",
-    "trialActualStartTime": "1974-06-04 17:16:06",
-    "trialExpectedEndTime": "2010-02-01 10:41:16",
-    "trialActualEndTime": "2003-10-13 08:24:39",
-    "trialSponsor": "革化解区温利着你别口关听",
-    "trialInvestigator": "东员提步习资质很利",
-    "trialMonitor": "张改省法积社达中包三持给它除",
-    "trialStatistician": "但变我龙动没是江次术年接目事"
-  }
-}
-
-
-路径  /tasksInfo
-参数  userID、trialID
-描述  提供userID与trialID，返回当前trialID对应的试验项目里所有与userID有关的任务的详细信息
-{
-  "tasksInfo": [
-    {
-      "taskID": "TASK001",
-      "taskName": "写DMP",
-      "belongedToTrialID": "TRIAL001",
-      "belongedToTrialName": "狂犬1针",
-      "taskCreatorID": "USER001",
-      "taskCreatorName": "刘沛",
-      "taskCreatedTime": "1975-04-11 22:06:12",
-      "taskExecutorID": "USER003",
-      "taskExecutorName": "范扬",
-      "taskReceivedStatus": true,
-      "taskDueTime": "1979-02-20 15:50:19",
-      "taskProgress": 16,
-      "taskCompletedStatus": false,
-      "taskActualCompletedTime": "1987-07-30 09:28:56"
-    },
-    {
-      "taskID": "TASK002",
-      "taskName": "写SAP",
-      "belongedToTrialID": "TRIAL001",
-      "belongedToTrialName": "狂犬1针",
-      "taskCreatorID": "USER002",
-      "taskCreatorName": "王诗远",
-      "taskCreatedTime": "1984-12-29 17:15:45",
-      "taskExecutorID": "USER003",
-      "taskExecutorName": "范扬",
-      "taskReceivedStatus": false,
-      "taskDueTime": "1985-04-01 17:08:44",
-      "taskProgress": 42,
-      "taskCompletedStatus": false,
-      "taskActualCompletedTime": "1975-02-28 20:35:51"
-    },
-    {
-      "taskID": "TASK003",
-      "taskName": "生成项目，分配任务",
-      "belongedToTrialID": "TRIAL001",
-      "belongedToTrialName": "狂犬1针",
-      "taskCreatorID": "USER001",
-      "taskCreatorName": "刘沛",
-      "taskCreatedTime": "1981-05-25 13:02:25",
-      "taskExecutorID": "USER002",
-      "taskExecutorName": "王诗远",
-      "taskReceivedStatus": false,
-      "taskDueTime": "1982-01-23 22:26:38",
-      "taskProgress": 68,
-      "taskCompletedStatus": false,
-      "taskActualCompletedTime": "2019-08-15 11:35:16"
-    }
-  ]
-}
-
-
-路径  /tasksInfo
-参数  userID
-描述  只提供userID，则返回所有与userID有关的任务的详细信息
-{
-  "tasksInfo": [
-    {
-      "taskID": "TASK001",
-      "taskName": "写DMP",
-      "belongedToTrialID": "TRIAL001",
-      "belongedToTrialName": "狂犬1针",
-      "taskCreatorID": "USER001",
-      "taskCreatorName": "刘沛",
-      "taskCreatedTime": "1998-06-11 23:07:21",
-      "taskExecutorID": "USER003",
-      "taskExecutorName": "范扬",
-      "taskReceivedStatus": false,
-      "taskDueTime": "2013-11-30 13:23:51",
-      "taskProgress": 24,
-      "taskCompletedStatus": false,
-      "taskActualCompletedTime": "2005-06-20 19:12:56"
-    },
-    {
-      "taskID": "TASK002",
-      "taskName": "写SAP",
-      "belongedToTrialID": "TRIAL001",
-      "belongedToTrialName": "狂犬1针",
-      "taskCreatorID": "USER002",
-      "taskCreatorName": "王诗远",
-      "taskCreatedTime": "1970-10-15 12:42:36",
-      "taskExecutorID": "USER003",
-      "taskExecutorName": "范扬",
-      "taskReceivedStatus": true,
-      "taskDueTime": "1997-07-17 00:45:00",
-      "taskProgress": 84,
-      "taskCompletedStatus": true,
-      "taskActualCompletedTime": "2011-12-19 15:56:05"
-    },
-    {
-      "taskID": "TASK003",
-      "taskName": "生成项目，分配任务",
-      "belongedToTrialID": "TRIAL001",
-      "belongedToTrialName": "狂犬1针",
-      "taskCreatorID": "USER001",
-      "taskCreatorName": "刘沛",
-      "taskCreatedTime": "1972-03-29 23:47:48",
-      "taskExecutorID": "USER002",
-      "taskExecutorName": "王诗远",
-      "taskReceivedStatus": false,
-      "taskDueTime": "2001-11-20 10:46:29",
-      "taskProgress": 40,
-      "taskCompletedStatus": true,
-      "taskActualCompletedTime": "2009-07-12 22:06:23"
-    },
-    {
-      "taskID": "TASK006",
-      "taskName": "生成项目，分配任务",
-      "belongedToTrialID": "TRIAL002",
-      "belongedToTrialName": "狂犬2针",
-      "taskCreatorID": "USER001",
-      "taskCreatorName": "刘沛",
-      "taskCreatedTime": "2009-08-05 00:31:18",
-      "taskExecutorID": "USER002",
-      "taskExecutorName": "王诗远",
-      "taskReceivedStatus": false,
-      "taskDueTime": "1976-06-07 06:53:24",
-      "taskProgress": 42,
-      "taskCompletedStatus": true,
-      "taskActualCompletedTime": "1971-09-16 01:03:39"
-    },
-    {
-      "taskID": "TASK009",
-      "taskName": "生成项目，分配任务",
-      "belongedToTrialID": "TRIAL003",
-      "belongedToTrialName": "狂犬3针",
-      "taskCreatorID": "USER001",
-      "taskCreatorName": "刘沛",
-      "taskCreatedTime": "2011-07-11 20:28:38",
-      "taskExecutorID": "USER002",
-      "taskExecutorName": "王诗远",
-      "taskReceivedStatus": true,
-      "taskDueTime": "1971-12-29 17:52:44",
-      "taskProgress": 20,
-      "taskCompletedStatus": true,
-      "taskActualCompletedTime": "1972-10-21 02:58:32"
-    },
-    {
-      "taskID": "TASK0010",
-      "taskName": "写DMP",
-      "belongedToTrialID": "TRIAL004",
-      "belongedToTrialName": "狂犬4针",
-      "taskCreatorID": "USER001",
-      "taskCreatorName": "刘沛",
-      "taskCreatedTime": "1973-01-11 04:45:32",
-      "taskExecutorID": "USER003",
-      "taskExecutorName": "范扬",
-      "taskReceivedStatus": false,
-      "taskDueTime": "2013-10-26 17:28:40",
-      "taskProgress": 91,
-      "taskCompletedStatus": true,
-      "taskActualCompletedTime": "2003-08-01 14:03:01"
-    },
-    {
-      "taskID": "TASK0013",
-      "taskName": "写DMP",
-      "belongedToTrialID": "TRIAL005",
-      "belongedToTrialName": "狂犬5针",
-      "taskCreatorID": "USER001",
-      "taskCreatorName": "刘沛",
-      "taskCreatedTime": "2015-03-04 16:53:40",
-      "taskExecutorID": "USER003",
-      "taskExecutorName": "范扬",
-      "taskReceivedStatus": true,
-      "taskDueTime": "2012-02-14 04:01:53",
-      "taskProgress": 14,
-      "taskCompletedStatus": false,
-      "taskActualCompletedTime": "2011-06-27 16:04:19"
-    }
-  ]
-}
+4.请求路径  /unreceivedTasks
+  请求参数  userID
+  参数说明
+  参数举例  {
+            userID: 'USER001',
+           }
+  请求描述  根据userID返回该用户尚未接受的所有任务（数组）
+  响应举例  {
+            "unreceivedTasks": [
+                {
+                  "taskID": "TASK001",
+                  "taskName": "写DMP",
+                  "belongedToTrialID": "PROJECT001",
+                  "belongedToTrialName": "狂犬1针",
+                  "taskCreatorID": "USER001",
+                  "taskCreatorName": "刘沛",
+                  "taskCreatedTime": "1977-02-27 23:04:41",
+                  "taskExecutorID": "USER003",
+                  "taskExecutorName": "范扬",
+                  "taskReceivedStatus": false,
+                  "taskDueTime": "2013-01-03 14:47:25",
+                  "taskProgress": 71,
+                  "taskCompletedStatus": false,
+                  "taskActualCompletedTime": "1971-02-27 18:28:00"
+                },
+             ]
+          }
+--------------------------------------------------
 
 
 路径  /taskInfo

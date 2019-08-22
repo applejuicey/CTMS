@@ -20,9 +20,16 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
-      <table class="table table-bordered text-nowrap">
-        <tbody>
+    <div v-else-if="statusObject.statusIndicator === 'loaded'">
+      <div class="d-flex mb-2" v-if="$route.path.split('/')[1] !== 'tasks'">
+        <span class="font-weight-normal">
+          <i class="fas fa-caret-right"></i>&nbsp;
+          项目任务：
+        </span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered text-nowrap">
+          <tbody>
           <tr>
             <td>操作</td>
             <td>任务名称</td>
@@ -39,14 +46,20 @@
           <template v-for="(taskInfo, index) in tasksInfoArray">
             <tr>
               <td>
-                <span class="cursor-pointer text-primary" @click="toTaskPage(taskInfo.taskID, 'view')">
+                <span class="cursor-pointer text-primary" @click="changeRoute(taskInfo.taskID, 'view')">
                   <i class="fas fa-search"></i>&nbsp;
                 </span>
-                <span class="cursor-pointer text-success" @click="toTaskPage(taskInfo.taskID, 'edit')" v-if="isAdmin || taskInfo.taskCreatorID === currentUserID">
+                <span class="cursor-pointer text-success" @click="changeRoute(taskInfo.taskID, 'edit')" v-if="isAdmin || taskInfo.taskCreatorID === currentUserID">
                   <i class="fas fa-edit"></i>&nbsp;
                 </span>
-                <span class="cursor-pointer text-danger" @click="toTaskPage(taskInfo.taskID, 'delete')" v-if="isAdmin || taskInfo.taskCreatorID === currentUserID">
+                <span class="cursor-pointer text-danger" @click="changeRoute(taskInfo.taskID, 'delete')" v-if="isAdmin || taskInfo.taskCreatorID === currentUserID">
                   <i class="fas fa-trash"></i>&nbsp;
+                </span>
+                <span class="cursor-pointer text-success" @click="receiveTask(taskInfo.taskID)" v-if="taskInfo.taskExecutorID === currentUserID && taskInfo.taskReceivedStatus === false">
+                  <i class="fas fa-check"></i>&nbsp;
+                </span>
+                <span class="cursor-pointer text-success" @click="completeTask(taskInfo.taskID)" v-if="taskInfo.taskExecutorID === currentUserID && taskInfo.taskReceivedStatus === true && taskInfo.taskCompletedStatus === false">
+                  <i class="fas fa-check-double"></i>&nbsp;
                 </span>
               </td>
               <td>{{taskInfo.taskName}}</td>
@@ -61,8 +74,9 @@
               <td>{{taskInfo.taskActualCompletedTime}}</td>
             </tr>
           </template>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
@@ -99,14 +113,21 @@
       },
     },
     methods: {
-      toTaskPage: function (taskID, identifier) {
+      changeRoute: function (taskID, identifier) {
         this.$router.push({
-          name: 'task',
+          name: `task_${identifier}`,
           params: {
             taskID: taskID,
-            functionName: identifier,
           },
         });
+      },
+      receiveTask: function (taskID) {
+        alert(`received${taskID}`)
+        // TODO:提供taskID和userID，标记receivedStatus为true
+      },
+      completeTask: function (taskID) {
+        alert(`completed${taskID}`)
+        // TODO:提供taskID和userID，标记taskCompletedStatus为true
       },
     },
   }

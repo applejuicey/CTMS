@@ -21,50 +21,58 @@
       </div>
     </div>
     <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
-      <table class="table table-bordered text-nowrap">
-        <tbody>
-        <tr>
-          <td>操作</td>
-          <td>项目名称</td>
-          <td>项目当前阶段</td>
-          <td>创建时间</td>
-          <td>预计开始时间</td>
-          <td>实际开始时间</td>
-          <td>预计结束时间</td>
-          <td>实际结束时间</td>
-          <td>申办方</td>
-          <td>研究方</td>
-          <td>监查方</td>
-          <td>统计方</td>
-        </tr>
-        <template v-for="(projectInfo, index) in projectsInfoArray">
-          <tr >
-            <td>
-                <span class="cursor-pointer text-primary" @click="toProjectPage(projectInfo.projectID, 'view')">
+      <div class="d-flex mb-2" v-if="$route.path.split('/')[1] !== 'projects'">
+        <span class="font-weight-normal">
+          <i class="fas fa-caret-right"></i>&nbsp;
+          项目：
+        </span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered text-nowrap">
+          <tbody>
+          <tr>
+            <td>操作</td>
+            <td>项目名称</td>
+            <td>项目当前阶段</td>
+            <td>创建时间</td>
+            <td>预计开始时间</td>
+            <td>实际开始时间</td>
+            <td>预计结束时间</td>
+            <td>实际结束时间</td>
+            <td>申办方</td>
+            <td>研究方</td>
+            <td>监查方</td>
+            <td>统计方</td>
+          </tr>
+          <template v-for="(projectInfo, index) in projectsInfoArray">
+            <tr >
+              <td>
+                <span class="cursor-pointer text-primary" @click="changeRoute(projectInfo.projectID, 'view')">
                   <i class="fas fa-search"></i>&nbsp;
                 </span>
-              <span class="cursor-pointer text-success" @click="toProjectPage(projectInfo.projectID, 'edit')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
+                <span class="cursor-pointer text-success" @click="changeRoute(projectInfo.projectID, 'edit')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
                   <i class="fas fa-edit"></i>&nbsp;
                 </span>
-              <span class="cursor-pointer text-danger" @click="toProjectPage(projectInfo.projectID, 'delete')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
+                <span class="cursor-pointer text-danger" @click="changeRoute(projectInfo.projectID, 'delete')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
                   <i class="fas fa-trash"></i>&nbsp;
                 </span>
-            </td>
-            <td>{{projectInfo.projectName}}</td>
-            <td>{{projectInfo.projectStage}}</td>
-            <td>{{projectInfo.projectCreatedTime}}</td>
-            <td>{{projectInfo.projectExpectedStartTime}}</td>
-            <td>{{projectInfo.projectActualStartTime}}</td>
-            <td>{{projectInfo.projectExpectedEndTime}}</td>
-            <td>{{projectInfo.projectActualEndTime}}</td>
-            <td>{{projectInfo.projectSponsor}}</td>
-            <td>{{projectInfo.projectInvestigator}}</td>
-            <td>{{projectInfo.projectMonitor}}</td>
-            <td>{{projectInfo.projectStatistician}}</td>
-          </tr>
-        </template>
-        </tbody>
-      </table>
+              </td>
+              <td>{{projectInfo.projectName}}</td>
+              <td>{{projectInfo.projectStage}}</td>
+              <td>{{projectInfo.projectCreatedTime}}</td>
+              <td>{{projectInfo.projectExpectedStartTime}}</td>
+              <td>{{projectInfo.projectActualStartTime}}</td>
+              <td>{{projectInfo.projectExpectedEndTime}}</td>
+              <td>{{projectInfo.projectActualEndTime}}</td>
+              <td>{{projectInfo.projectSponsor}}</td>
+              <td>{{projectInfo.projectInvestigator}}</td>
+              <td>{{projectInfo.projectMonitor}}</td>
+              <td>{{projectInfo.projectStatistician}}</td>
+            </tr>
+          </template>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
@@ -101,12 +109,11 @@
       },
     },
     methods: {
-      toProjectPage: function (projectID, identifier) {
+      changeRoute: function (projectID, identifier) {
         this.$router.push({
-          name: 'project',
+          name: `project_${identifier}`,
           params: {
             projectID: projectID,
-            functionName: identifier,
           },
         });
       },

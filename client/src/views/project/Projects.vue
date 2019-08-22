@@ -3,7 +3,9 @@
     <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
-          <h1>与我有关的项目</h1>
+          <h1>
+            <i class="fas fa-capsules"></i>&nbsp;项目查询
+          </h1>
         </div>
       </div>
       <div class="row">
@@ -26,7 +28,10 @@
                 </div>
               </div>
               <div v-else>
-                <p class="text-left">{{ resultDescription }}的查询结果如下所示：</p>
+                <p class="text-left">
+                  <mark>{{ resultDescription }}</mark>
+                  的查询结果如下所示：
+                </p>
                 <projects-info-table :projectsInfoArray="projectsInfoArray" :statusObject="statusObject4Projects"></projects-info-table>
               </div>
             </template>
@@ -53,7 +58,7 @@
         filterToolboxHeaderText: '项目筛选器',
         filterToolboxTooltipText: '请在这里设定筛选内容，然后点击"筛选"按钮获得命中条目。',
         resultCardHeaderText: '项目查询结果',
-        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击项目名称以查看项目详细资料。',
+        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击"放大镜"按钮以查看项目详细资料；点击"铅笔"按钮以编辑项目信息。',
       };
     },
     computed: {
@@ -78,6 +83,13 @@
         },
         deep: true
       },
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+        })
+      });
     },
     methods: {
       // 根据userID\projectNameKeyword\projectStage从服务器获取与该用户有关的、符合检索条件的所有项目信息
