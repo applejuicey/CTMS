@@ -16,9 +16,20 @@ PUT /task
 DELETE /task
 参数里面带taskID
 
+所有请求的header的Authorization字段带有token
+
+任何请求如果成功，返回
+{
+  "statusCode": "1",
+  "XXXXXX": 数组或对象
+}
+
 任何请求如果出错，返回
 {
+  "statusCode": "0",
   "error": {
+    "message": "权限不足",
+    "errorCode": "403",
     .........
   }
 }
@@ -35,7 +46,8 @@ Login模块
            }
   请求描述  成功则返回该用户信息userInfo+token（对象）
   响应举例  {
-            "userInfo": {},
+             "statusCode": "1",
+             "userInfo": {},
              "token": "adsiufhoubsvhdfouigndioruwfh",
            }
 --------------------------------------------------
@@ -45,46 +57,46 @@ Login模块
 Home模块
 1.请求路径  /projects
   请求方法  GET
-  请求参数  userID、projectNameKeyword、projectStage、brief
-  参数说明  userID和brief是必须的；如果提供了projectNameKeyword、projectStage，就看project模块中的那个API
+  请求参数  brief
+  参数说明  brief代表是否返回的是简要的信息
   参数举例  {
-            userID: 'USER001',
             brief: true,
            }
   请求描述  返回与该userID参加的所有项目的简要信息（数组）
   响应举例  {
-          "projects": [
-            {
-              "projectID": "PROJECT001",
-              "projectName": "狂犬1针"
-            },
-            {
-              "projectID": "PROJECT004",
-              "projectName": "狂犬4针"
-            },
-            {
-              "projectID": "PROJECT005",
-              "projectName": "狂犬5针"
-            }
-          ]
-        }
+            "statusCode": "1",
+            "projects": [
+              {
+                "projectID": "PROJECT001",
+                "projectName": "狂犬1针"
+              },
+              {
+                "projectID": "PROJECT004",
+                "projectName": "狂犬4针"
+              },
+              {
+                "projectID": "PROJECT005",
+                "projectName": "狂犬5针"
+              }
+            ]
+           }
 
 2.请求路径  /tasks
   请求方法  GET
-  请求参数  userID
+  请求参数  taskReceivedStatus
   参数说明
   参数举例  {
-            userID: 'USER001',
             taskReceivedStatus: false,
            }
   请求描述  根据userID返回该用户[尚未接受的]所有任务（数组）
   响应举例  {
+            "statusCode": "1",
             "tasks": [
                 {
                   "taskID": "TASK001",
                   "taskName": "写DMP",
-                  "belongedToProjectID": "PROJECT001",
-                  "belongedToProjectName": "狂犬1针",
+                  "taskBelongedToProjectID": "PROJECT001",
+                  "taskBelongedToProjectName": "狂犬1针",
                   "taskCreatorID": "USER001",
                   "taskCreatorName": "刘沛",
                   "taskCreatedTime": "1977-02-27 23:04:41",
@@ -101,14 +113,14 @@ Home模块
 
 3.请求路径  /project
   请求方法  GET
-  请求参数  userID、projectID
+  请求参数  projectID
   参数说明
   参数举例  {
-            userID: 'USER001',
             projectID: 'PROJECT001',
            }
   请求描述  检查userID的权限，足够则返回projectID对应的项目的详细信息（对象）
   响应举例  {
+            "statusCode": "1",
             "project": {
                 "projectID": "PROJECT001",
                 "projectName": "狂犬1针",
@@ -136,20 +148,20 @@ Home模块
 
 4.请求路径  /tasks
   请求方法  GET
-  请求参数  userID、projectID、taskNameKeyword、projectNameKeyword、receivedStatus、completeStatus
-  参数说明  只有userID是必须的；如果提供了projectID，就看这个；如果提供了taskNameKeyword、projectNameKeyword、receivedStatus、completeStatus，就看下面那个
+  请求参数  projectID
+  参数说明
   参数举例  {
-            userID: 'USER001',
             projectID: 'PROJECT001',
            }
-  请求描述  返回projectID对应的试验项目里所有与userID有关的任务的详细信息（数组）
+  请求描述  根据userID返回该用户在项目projectID里的[所有]任务（数组）
   响应举例  {
+            "statusCode": "1",
             "tasks": [
                 {
                   "taskID": "TASK001",
                   "taskName": "写DMP",
-                  "belongedToProjectID": "PROJECT001",
-                  "belongedToProjectName": "狂犬1针",
+                  "taskBelongedToProjectID": "PROJECT001",
+                  "taskBelongedToProjectName": "狂犬1针",
                   "taskCreatorID": "USER001",
                   "taskCreatorName": "刘沛",
                   "taskCreatedTime": "1975-04-11 22:06:12",
@@ -170,24 +182,23 @@ Home模块
 Task模块
 1.请求路径  /tasks
   请求方法  GET
-  请求参数  userID、projectID、taskNameKeyword、projectNameKeyword、receivedStatus、completeStatus
-  参数说明  只有userID是必须的；如果提供了taskNameKeyword、projectNameKeyword、receivedStatus、completeStatus，就看这个；如果提供了projectID，就看上面那个；
-           taskNameKeyword、projectNameKeyword如果留空，代表查询所有；receivedStatus包含received\not_received\all；completeStatus包含completed\not_completed\all
+  请求参数  taskName、taskBelongedToProjectName、taskReceivedStatus、taskCompletedStatus
+  参数说明  taskName、taskBelongedToProjectName，代表查询所有；taskReceivedStatus包含received\not_received\all；taskCompletedStatus包含completed\not_completed\all
   参数举例  {
-            userID: 'USER001',
-            taskNameKeyword: 'ddd',
-            projectNameKeyword: 'PROJECT001',
-            receivedStatus: 'all',
-            completeStatus: 'all',
+            taskName: 'ddd',
+            taskBelongedToProjectName: 'PROJECT001',
+            taskReceivedStatus: 'all',
+            taskCompletedStatus: 'all',
            }
-  请求描述  返回上述参数查询出来的任务的详细信息（数组）
+  请求描述  返回[上述参数查询出来的]任务的详细信息（数组）
   响应举例  {
+            "statusCode": "1",
             "tasks": [
                 {
                   "taskID": "TASK001",
                   "taskName": "写DMP",
-                  "belongedToProjectID": "PROJECT001",
-                  "belongedToProjectName": "狂犬1针",
+                  "taskBelongedToProjectID": "PROJECT001",
+                  "taskBelongedToProjectName": "狂犬1针",
                   "taskCreatorID": "USER001",
                   "taskCreatorName": "刘沛",
                   "taskCreatedTime": "1975-04-11 22:06:12",
@@ -204,19 +215,19 @@ Task模块
 
 2.请求路径  /task
   请求方法  GET
-  请求参数  userID、taskID
+  请求参数  taskID
   参数说明
   参数举例  {
-            userID: 'USER001',
             taskID: 'TASK001',
            }
   请求描述  提供userID与taskID，返回当前taskID对应的任务的详细信息（对象）
   响应举例  {
+            "statusCode": "1",
             "task": {
                 "taskID": "TASK001",
                 "taskName": "写DMP",
-                "belongedToProjectID": "PROJECT001",
-                "belongedToProjectName": "狂犬1针",
+                "taskBelongedToProjectID": "PROJECT001",
+                "taskBelongedToProjectName": "狂犬1针",
                 "taskCreatorID": "USER001",
                 "taskCreatorName": "刘沛",
                 "taskCreatedTime": "2004-01-04 18:53:07",
@@ -246,40 +257,27 @@ TODO:DELETE任务
 File模块
 1.请求路径  /files
   请求方法  GET
-  请求参数  userID、taskID
+  请求参数  taskID
   参数说明
   参数举例  {
-            userID: 'USER001',
             taskID: 'TASK001',
            }
   请求描述  提供userID与taskID，返回当前taskID对应的任务所拥有的所有文件的详细信息（数组）
   响应举例  {
+          "statusCode": "1",
           "files": [
             {
               "fileID": "FILE001",
-              "belongedToTaskID": "TASK001",
+              "fileBelongedToTaskID": "TASK001",
               "fileName": "DMP-SOP-V1.0",
-              "createDate": "2019-08-11",
-              "creatorID": "USER001",
-              "creatorName": "刘沛",
-              "description": "版本已更新，请勿使用！",
-              "deleteDate": "2019-08-11",
-              "deleteExecutorID": "USER001",
-              "deleteExecutorName": "刘沛",
-              "downloadURL": ""
-            },
-            {
-              "fileID": "FILE002",
-              "belongedToTaskID": "TASK001",
-              "fileName": "DMP-SOP-V1.1",
-              "createDate": "2019-08-11",
-              "creatorID": "USER001",
-              "creatorName": "刘沛",
-              "description": "请使用此最新版本！",
-              "deleteDate": "",
-              "deleteExecutorID": "",
-              "deleteExecutorName": "",
-              "downloadURL": ""
+              "fileCreateDate": "2019-08-11",
+              "fileCreatorID": "USER001",
+              "fileCreatorName": "刘沛",
+              "fileDescription": "版本已更新，请勿使用！",
+              "fileDeleteDate": "2019-08-11",
+              "fileDeleteExecutorID": "USER001",
+              "fileDeleteExecutorName": "刘沛",
+              "fileDownloadURL": ""
             },
           ]
 
@@ -289,6 +287,9 @@ TODO:CREATE文件（文件不需要UPDATE方法）
 TODO:DELETE文件
 3.请求路径  /file
   请求方法  DELETE
+TODO:READ文件
+4.请求路径  /file
+  请求方法  GET
 --------------------------------------------------
 
 
@@ -296,47 +297,49 @@ TODO:DELETE文件
 Project模块
 1.请求路径  /projects
   请求方法  GET
-  请求参数  userID、projectNameKeyword、projectStage、brief
-  参数说明  只有userID、brief是必须的；如果提供了taskNameKeyword、projectNameKeyword、receivedStatus、completeStatus，就看这个；
-           projectNameKeyword如果留空，代表查询所有；projectStage包含preparation\ongoing\ending\supplementing\all
+  请求参数  projectName、projectStage、brief
+  参数说明  projectName如果留空，代表查询所有；projectStage包含preparation\ongoing\ending\supplementing\all
   参数举例  {
-            userID: 'USER001',
             brief: 'false',
             projectNameKeyword: 'ddd',
             projectStage: 'all',
            }
-  请求描述  返回上述参数查询出来的任务的详细信息（数组）
+  请求描述  返回[上述参数查询出来的]项目的详细信息（数组）
   响应举例  {
-            "tasks": [
-                {
-                  "taskID": "TASK001",
-                  "taskName": "写DMP",
-                  "belongedToProjectID": "PROJECT001",
-                  "belongedToProjectName": "狂犬1针",
-                  "taskCreatorID": "USER001",
-                  "taskCreatorName": "刘沛",
-                  "taskCreatedTime": "1975-04-11 22:06:12",
-                  "taskExecutorID": "USER003",
-                  "taskExecutorName": "范扬",
-                  "taskReceivedStatus": true,
-                  "taskDueTime": "1979-02-20 15:50:19",
-                  "taskProgress": 16,
-                  "taskCompletedStatus": false,
-                  "taskActualCompletedTime": "1987-07-30 09:28:56"
-                },
-             ]
+            "statusCode": "1",
+            "project": {
+             "projectID": "PROJECT001",
+             "projectName": "狂犬1针",
+             "projectStage": "要红交民",
+             "projectBriefIntroduction": "复离一战太动通难格青给革道度受样统改以使会传气路命东教在在事细向采日院划况次百东周手技精色计指容样需管区东权人水院为养非党传何验始思管华红。",
+             "projectCreatedTime": "1996-08-19",
+             "projectExpectedStartTime": "2015-07-25",
+             "projectActualStartTime": "2007-01-16",
+             "projectExpectedEndTime": "1993-02-27",
+             "projectActualEndTime": "1973-05-03",
+             "projectSponsor": "委究备加马走历三具华我天五",
+             "projectInvestigator": "并问很问济程之地而只定世制",
+             "projectMonitor": "军运林打花系反难他他克亲需",
+             "projectStatistician": "议基属近会容着精",
+             "projectInvolvedUsersID": [
+                "USER003",
+             ],
+             "projectInvolvedUsersName": [
+                "范扬",
+             ],
+            }
           }
 
 2.请求路径  /project
   请求方法  GET
-  请求参数  userID、projectID
+  请求参数  projectID
   参数说明
   参数举例  {
-            userID: 'USER001',
             projectID: 'PROJECT001',
            }
   请求描述  提供userID与projectID，返回当前projectID对应的项目的详细信息（对象）
   响应举例  {
+            "statusCode": "1",
             "project": {
                "projectID": "PROJECT001",
                "projectName": "狂犬1针",
@@ -375,12 +378,11 @@ TODO:DELETE项目
 --------------------------------------------------
 User模块
 1.请求路径  /users
-  请求参数  userID、forTaskExecutor、forProjectInvolvedUsers
-  参数说明  forTaskExecutor、forProjectInvolvedUsers为Boolean
+  请求参数  taskID、forTaskExecutor
+  参数说明  forTaskExecutor（为true时返回除了admin和taskID所属的项目的manager以外的、所有参加该项目的用户）
   参数举例  {
-            userID: 'USER002',
+            taskID: "TASK001",
             forTaskExecutor: true,
-            forProjectInvolvedUsers: false,
            }
   请求描述  判断userID的权限，如果足够则返回对应的用户列表
   响应举例  {
@@ -388,26 +390,49 @@ User模块
                 {
                   "username": "范扬",
                   "userID": "USER003",
-                  "realName": "范扬",
+                  "userRealName": "范扬",
                 },
                 {
                   "username": "陈振明",
                   "userID": "USER004",
-                  "realName": "陈振明",
+                  "userRealName": "陈振明",
+                },
+              ],
+           }
+
+2.请求路径  /users
+  请求参数  projectID、forProjectInvolvedUsers
+  参数说明  forProjectInvolvedUsers（为true时返回除了admin以外的、所有参加该项目的用户）
+  参数举例  {
+            projectID: "PROJECT001",
+            forProjectInvolvedUsers: true,
+           }
+  请求描述  判断userID的权限，如果足够则返回对应的用户列表
+  响应举例  {
+              "users": [
+                {
+                  "username": "范扬",
+                  "userID": "USER003",
+                  "userRealName": "范扬",
+                },
+                {
+                  "username": "陈振明",
+                  "userID": "USER004",
+                  "userRealName": "陈振明",
                 },
               ],
            }
 
 TODO:READ用户
-2.请求路径  /user
+3.请求路径  /user
   请求方法  GET
 TODO:CREATE用户
-3.请求路径  /user
+4.请求路径  /user
   请求方法  POST
 TODO:UPDATE用户
-4.请求路径  /user
+5.请求路径  /user
   请求方法  PUT
 TODO:DELETE用户
-5.请求路径  /user
+6.请求路径  /user
   请求方法  DELETE
 --------------------------------------------------
