@@ -1,5 +1,5 @@
 <template>
-  <div class="list-card">
+  <div class="text-left list-card">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
       <div class="col-xl-6 offset-xl-3">
         <div class="alert alert-primary text-center mb-0">
@@ -20,46 +20,49 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
-      <div class="d-flex mb-2" v-if="$route.path.split('/')[1] !== 'users'">
+    <div v-else-if="statusObject.statusIndicator === 'loaded'">
+      <div class="d-flex mb-2">
         <span class="font-weight-normal">
           <i class="fas fa-caret-right"></i>&nbsp;
-          用户：
+          用户资料：
         </span>
+        <div class="btn-group ml-auto" v-if="this.$route.path.split('/')[1] !== 'me'">
+          <button type="button" class="btn btn-success" @click="changeRoute(userInfoObject.userID, 'edit')" v-if="isAdmin || userInfoObject.userID === currentUserID">
+            <i class="fas fa-pen"></i>&nbsp;编辑用户
+          </button>
+        </div>
       </div>
       <div class="table-responsive">
-        <table class="table table-bordered text-nowrap">
+        <table class="table table-borderless table-sm text-nowrap mb-0">
           <tbody>
             <tr>
-              <td>操作</td>
-              <td>ID</td>
-              <td>账户名称</td>
-              <td>真实姓名</td>
-              <td>邮箱</td>
-              <td>账户状态</td>
-              <td>上次登录时间</td>
+              <td class="table-left-column">用户ID：</td>
+              <td class="table-right-column">{{ userInfoObject.userID }}</td>
             </tr>
-            <template v-for="(user, index) in usersInfoArray">
-              <tr>
-                <td>
-                  <span class="cursor-pointer text-primary" @click="changeRoute(user.userID, 'view')">
-                    <i class="fas fa-search"></i>&nbsp;
-                  </span>
-                  <span class="cursor-pointer text-success" @click="changeRoute(user.userID, 'edit')" v-if="isAdmin || currentUserID === user.userID">
-                    <i class="fas fa-edit"></i>&nbsp;
-                  </span>
-                  <span class="cursor-pointer text-danger" @click="changeRoute(user.userID, 'delete')" v-if="isAdmin">
-                    <i class="fas fa-trash"></i>&nbsp;
-                  </span>
-                </td>
-                <td>{{ user.userID }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.realName }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.accountStatus }}</td>
-                <td>{{ user.lastLoginTime }}</td>
-              </tr>
-            </template>
+            <tr>
+              <td class="table-left-column">用户名称：</td>
+              <td class="table-right-column">{{ userInfoObject.username }}</td>
+            </tr>
+            <tr>
+              <td class="table-left-column">真实姓名：</td>
+              <td class="table-right-column">{{ userInfoObject.realName }}</td>
+            </tr>
+            <tr>
+              <td class="table-left-column">邮箱：</td>
+              <td class="table-right-column">{{ userInfoObject.email }}</td>
+            </tr>
+            <tr>
+              <td class="table-left-column">用户状态：</td>
+              <td class="table-right-column">{{ userInfoObject.accountStatus }}</td>
+            </tr>
+            <tr>
+              <td class="table-left-column">可管理项目：</td>
+              <td class="table-right-column">{{ userInfoObject.canManageProjectsName }}</td>
+            </tr>
+            <tr>
+              <td class="table-left-column">上次登录时间：</td>
+              <td class="table-right-column">{{ userInfoObject.lastLoginTime }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -79,10 +82,10 @@
 
 <script>
   export default {
-    name: 'users_info_table',
+    name: 'user_info_table',
     props: {
-      usersInfoArray: {
-        type: Array,
+      userInfoObject: {
+        type: Object,
         required: true,
       },
       statusObject: {
@@ -91,11 +94,11 @@
       },
     },
     computed: {
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+      isAdmin: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
       },
     },
     methods: {
@@ -112,9 +115,6 @@
 </script>
 
 <style scoped>
-  .cursor-pointer {
-    cursor: pointer;
-  }
   .list-card {
     padding: 1.25rem;
     margin-top: 1.25rem;
@@ -123,5 +123,12 @@
     border-radius: .25rem;
     border-left-width: .25rem;
     /*border-left-color: #28a745;*/
+  }
+  .table-left-column {
+    font-weight: 400;
+    text-align: right;
+  }
+  .table-right-column {
+    text-align: left;
   }
 </style>

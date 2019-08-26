@@ -41,7 +41,7 @@
         </label>
         <select v-model="completeStatus" class="form-control" id="completeStatus">
           <option value="1">已完成</option>
-          <option value="1">未完成</option>
+          <option value="0">未完成</option>
           <option value="-1">全部</option>
         </select>
       </div>

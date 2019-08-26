@@ -55,7 +55,7 @@
       });
     },
     methods: {
-// 根据传入的taskID和currentUserID从服务器获取该任务的信息
+      // 根据传入的projectID和currentUserID从服务器获取该任务的信息
       getTaskInfo: function () {
         this.statusObject4Task = {
           statusIndicator: 'loading',
@@ -68,13 +68,13 @@
             userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('Task获取任务信息成功', response);
+          // console.log('TaskEdit获取任务信息成功', response);
           this.taskInfoObject = response.data.taskInfo;
           this.statusObject4Task = {
             statusIndicator: 'loaded',
           };
         }).catch((error) => {
-          console.error('Task获取任务信息失败，错误：', error);
+          console.error('TaskEdit获取任务信息失败，错误：', error);
           this.statusObject4Task = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',

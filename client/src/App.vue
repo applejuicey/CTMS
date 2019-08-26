@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container-fluid">
-    <top-nav-bar></top-nav-bar>
+    <top-nav-bar v-if="!showTopNavBar"></top-nav-bar>
     <router-view/>
   </div>
 </template>
@@ -11,6 +11,12 @@
     name: 'app',
     components: {
       TopNavBar
+    },
+    computed: {
+      showTopNavBar: function () {
+        const noTopNavBarRoutes = ['login', 'about'];
+        return noTopNavBarRoutes.includes(this.$route.path.split('/')[1]);
+      },
     },
   }
 </script>

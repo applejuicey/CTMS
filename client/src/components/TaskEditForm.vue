@@ -22,10 +22,10 @@
     </div>
     <form v-else-if="statusObject.statusIndicator === 'loaded'">
       <div class="form-group text-left">
-        <label for="belongedToTrialName" class="font-weight-normal">
+        <label for="belongedToProjectName" class="font-weight-normal">
           <span>隶属于项目：</span>
         </label>
-        <input v-model="formValues.belongedToTrialName" type="text" class="form-control" id="belongedToTrialName" placeholder="隶属于项目" disabled>
+          <input v-model="formValues.belongedToProjectName" type="text" class="form-control" id="belongedToProjectName" placeholder="隶属于项目" disabled>
       </div>
       <div class="form-group text-left">
         <label for="taskName" class="font-weight-normal">
@@ -39,18 +39,14 @@
         </label>
         <input v-model="formValues.taskDescription" type="text" class="form-control" id="taskDescription" placeholder="任务描述">
       </div>
+
       <div class="form-group text-left">
-        <label for="taskExecutorName" class="font-weight-normal">
-          <span>接受者：</span>
-        </label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <button class="btn btn-outline-success" type="button" @click="openModal">点击选择任务接受者</button>
-            <user-list-modal :userList="userList" :statusObject="statusObject4UserListModal" @mountedComplete="setModalID" @selectionMade="changeExecutor"></user-list-modal>
-          </div>
-          <input v-model="formValues.taskExecutorName" type="text" class="form-control" id="taskExecutorName" placeholder="接受者" disabled>
-        </div>
+        <label class="font-weight-normal">任务接受者</label>
+        <user-list-radio :userList="userList" :statusObject="statusObject4UserListRadio"
+                            :selectedUserIDOriginal="formValues.taskExecutorID"
+                            @selectionChanged="changeFormTaskExecutorID"></user-list-radio>
       </div>
+
       <div class="form-group text-left">
         <label for="taskDueTime" class="font-weight-normal">
           <span>截止时间：</span>
@@ -73,11 +69,11 @@
 </template>
 
 <script>
-  import UserListModal from '@/components/UserListModal.vue';
+  import UserListRadio from '@/components/UserListRadio.vue';
   export default {
     name: 'task_edit_form',
     components: {
-      UserListModal,
+      UserListRadio,
     },
     props: {
       taskInfoObject: {
@@ -96,9 +92,8 @@
     },
     data: () => {
       return {
-        userListModalID: '',
         userList: [],
-        statusObject4UserListModal: {},
+        statusObject4UserListRadio: {},
         formValues: {},
       };
     },
@@ -106,13 +101,14 @@
       taskInfoObject: {
         handler: function (newVal, oldVal) {
           this.formValues = {
-            belongedToTrialName: newVal.belongedToTrialName,
+            belongedToProjectName: newVal.belongedToProjectName,
             taskName: newVal.taskName,
             taskDescription: newVal.taskDescription,
             taskExecutorID: newVal.taskExecutorID,
             taskExecutorName: newVal.taskExecutorName,
             taskDueTime: this.formatDate(newVal.taskDueTime),
           };
+          this.getUserList();
         },
         deep: true,
       },
@@ -127,43 +123,35 @@
         date = date < 10 ? ('0' + date) : date;
         return `${year}-${month}-${date}`;
       },
-      setModalID: function (modalID) {
-        this.userListModalID = `#${ modalID }`;
-      },
-      openModal: function () {
-        this.getUserList();
-        $(this.userListModalID).modal('show');
-      },
-      // 根据传入的trialID从服务器获取参加该试验的所有用户的信息
+      // 根据传入的projectID从服务器获取参加该试验的所有用户的信息
       getUserList: function () {
-        this.statusObject4UserListModal = {
+        this.statusObject4UserListRadio = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
         this.$axios.get('/userList', {
           params: {
-            trialID: this.taskInfoObject.belongedToTrialID,
+            projectID: this.taskInfoObject.belongedToProjectID,
             userID: this.currentUserID,
           }
         }).then((response) => {
           // console.log('TaskEditForm获取用户列表成功', response);
           this.userList = response.data.userList;
-          this.statusObject4UserListModal = {
+          this.statusObject4UserListRadio = {
             statusIndicator: 'loaded',
           };
         }).catch((error) => {
           console.error('TaskEditForm获取用户列表失败，错误：', error);
-          this.statusObject4UserListModal = {
+          this.statusObject4UserListRadio = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
             feedbackMessage: `从服务器获取用户列表失败，错误原因：${error}`,
           };
         });
       },
-      changeExecutor: function (userID, username) {
-        this.formValues.taskExecutorName = username;
-        this.formValues.taskExecutorID = userID;
+      changeFormTaskExecutorID: function (currentSelection) {
+        this.formValues.taskExecutorID = currentSelection;
       },
       // TODO: 将表格信息POST至服务器
       updateTask: function () {

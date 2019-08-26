@@ -144,10 +144,8 @@
     data: () => {
       return {
         userList: [],
-        formValues: {},
-        getUserListIconTooltipText: '点击以获取参与该项目的所有用户。',
-        showGetUserListIcon: true,
         statusObject4UserListCheckbox: {},
+        formValues: {},
       };
     },
     watch: {
@@ -173,9 +171,7 @@
     },
     mounted: function () {
       this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
+
       })
     },
     methods: {
@@ -204,7 +200,6 @@
         }).then((response) => {
           console.log('ProjectEditForm获取用户列表成功', response);
           this.userList = response.data.userList;
-          this.showGetUserListIcon = false;
           this.statusObject4UserListCheckbox = {
             statusIndicator: 'loaded',
           };
@@ -237,8 +232,5 @@
     border-radius: .25rem;
     border-left-width: .25rem;
     /*border-left-color: #28a745;*/
-  }
-  .cursor-pointer {
-    cursor: pointer;
   }
 </style>

@@ -12,6 +12,7 @@
             <template v-slot:card-body>
               <task-info-table :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-info-table>
               <file-manage-table :taskFiles="taskFiles" :statusObject="statusObject4TaskFiles"></file-manage-table>
+              <!--              TODO：添加任务执行用户的资料-->
             </template>
           </bottom-card>
         </div>

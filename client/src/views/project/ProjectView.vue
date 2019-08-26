@@ -12,6 +12,7 @@
             <template v-slot:card-body>
               <project-info-table :projectInfoObject="projectInfoObject" :statusObject="statusObject4Project"></project-info-table>
               <tasks-info-table :tasksInfoArray="projectTasksInfoArray" :statusObject="statusObject4ProjectTasks"></tasks-info-table>
+<!--              TODO：添加项目包含的用户s-->
             </template>
           </bottom-card>
         </div>
@@ -33,7 +34,7 @@
     },
     data: function () {
       return {
-        headerText: '项目资料',
+        headerText: '查看项目',
         tooltipText: '该项目的详细资料如下所示。',
         projectInfoObject: {},
         statusObject4Project: {},
