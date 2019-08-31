@@ -57,7 +57,7 @@
       },
       selectedProjectsIDOriginal: {
         type: Array,
-        required: true,
+        required: false,
       }
     },
     data: function () {

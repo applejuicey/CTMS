@@ -10,7 +10,7 @@
         <div class="col-12 mb-2">
           <bottom-card :cardHeaderText="userInfoHeaderText" :cardTooltipText="userInfoTooltipText">
             <template v-slot:card-body>
-
+              <user-edit-form :userInfoObject="userInfoObject" :statusObject="statusObject4User"></user-edit-form>
             </template>
           </bottom-card>
         </div>
@@ -21,15 +21,21 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
+  import UserEditForm from '@/components/UserEditForm.vue';
   export default {
     name: 'user_delete',
     components: {
       BottomCard,
+      UserEditForm,
     },
     data: function () {
       return {
         userInfoHeaderText: '用户资料',
         userInfoTooltipText: '您可以在下方填写新用户的资料并提交至服务器！',
+        userInfoObject: {},
+        statusObject4User: {
+          statusIndicator: 'loaded',
+        },
       }
     },
     computed: {
@@ -46,9 +52,6 @@
           $('[data-toggle="tooltip"]').tooltip();
         })
       });
-    },
-    methods: {
-
     },
   }
 </script>

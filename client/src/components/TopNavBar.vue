@@ -37,15 +37,10 @@
                 <i class="fas fa-address-card"></i>&nbsp;我
               </span>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                用户切换
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <span class="dropdown-item" @click="user001">刘沛</span>
-                <span class="dropdown-item" @click="user002">王诗远</span>
-                <span class="dropdown-item" @click="user003">范扬</span>
-              </div>
+            <li class="nav-item cursor-pointer">
+              <span class="nav-link" @click="logout">
+                <i class="fas fa-sign-out-alt"></i>&nbsp;注销
+              </span>
             </li>
           </ul>
         </div>
@@ -78,28 +73,12 @@
         const destinationName = routeMap.get(targetPage);
         this.$router.push({ name: destinationName});
       },
-      user001: function () {
-        localStorage.setItem('userInfo', JSON.stringify({
-          userID: 'USER001',
-          username: '刘沛',
-          isAdmin: true,
-        }));
-        // const payload = JSON.parse(localStorage.getItem('userInfo'));
-        // this.$store.dispatch('setIndicatorsAction', payload);
-      },
-      user002: function () {
-        localStorage.setItem('userInfo', JSON.stringify({
-          userID: 'USER002',
-          username: '王诗远',
-          isAdmin: false,
-        }));
-      },
-      user003: function () {
-        localStorage.setItem('userInfo', JSON.stringify({
-          userID: 'USER003',
-          username: '范扬',
-          isAdmin: false,
-        }));
+      logout: function () {
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('token');
+        this.$router.push({
+          name: 'login',
+        });
       },
     },
   }

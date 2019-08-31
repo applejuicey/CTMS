@@ -104,7 +104,7 @@
                             :selectedUsersIDOriginal="formValues.projectInvolvedUsersID"
                             @selectionChanged="changeFormInvolvedUsersID"></user-list-checkbox>
       </div>
-      <button type="button" class="btn btn-success" @click="updateTask">更新任务信息</button>
+      <button type="button" class="btn btn-success" @click="submit">提交</button>
     </form>
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
@@ -145,7 +145,19 @@
       return {
         userList: [],
         statusObject4UserListCheckbox: {},
-        formValues: {},
+        formValues: {
+          projectName: '',
+          projectBriefIntroduction: '',
+          projectExpectedStartTime: '',
+          projectExpectedEndTime: '',
+          projectSponsor: '',
+          projectInvestigator: '',
+          projectMonitor: '',
+          projectStatistician: '',
+          projectStage: '',
+          projectInvolvedUsersID: [],
+          // projectInvolvedUsersName: [],
+        },
       };
     },
     watch: {
@@ -169,10 +181,8 @@
         deep: true,
       },
     },
-    mounted: function () {
-      this.$nextTick(function () {
-
-      })
+    created: function () {
+      this.getUserList();
     },
     methods: {
       formatDate: function (dateString) {
@@ -198,7 +208,7 @@
             projectID: this.projectInfoObject.projectID,
           }
         }).then((response) => {
-          console.log('ProjectEditForm获取用户列表成功', response);
+          // console.log('ProjectEditForm获取用户列表成功', response);
           this.userList = response.data.userList;
           this.statusObject4UserListCheckbox = {
             statusIndicator: 'loaded',
@@ -216,7 +226,7 @@
         this.formValues.projectInvolvedUsersID = currentSelection;
       },
       // TODO: 将表格信息POST至服务器
-      updateTask: function () {
+      submit: function () {
         console.log(this.formValues)
       },
     },

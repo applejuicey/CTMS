@@ -10,7 +10,7 @@
         <div class="col-12 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
-{{$route.params.projectID}}
+              <task-edit-form :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-edit-form>
             </template>
           </bottom-card>
         </div>
@@ -21,15 +21,21 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
+  import TaskEditForm from '@/components/TaskEditForm.vue';
   export default {
     name: 'task_create',
     components: {
       BottomCard,
+      TaskEditForm,
     },
     data: function () {
       return {
         headerText: '创建新任务',
         tooltipText: '您可以在下方填写新用户的资料并提交至服务器！',
+        taskInfoObject: {},
+        statusObject4Task: {
+          statusIndicator: 'loaded',
+        },
       }
     },
     computed: {
@@ -46,9 +52,6 @@
           $('[data-toggle="tooltip"]').tooltip();
         })
       });
-    },
-    methods: {
-
     },
   }
 </script>

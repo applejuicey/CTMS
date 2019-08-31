@@ -65,10 +65,10 @@
       <div class="form-group text-left">
         <label class="font-weight-normal">可管理的项目：</label>
         <project-list-checkbox :projectList="projectList" :statusObject="statusObject4ProjectListCheckbox"
-                            :selectedProjectsIDOriginal="formValues.canManageProjectsID"
-                            @selectionChanged="changeFormCanManageProjectsID"></project-list-checkbox>
+                               :selectedProjectsIDOriginal="formValues.canManageProjectsID"
+                               @selectionChanged="changeFormCanManageProjectsID"></project-list-checkbox>
       </div>
-      <button type="button" class="btn btn-success" @click="updateUser">更新用户信息</button>
+      <button type="button" class="btn btn-success" @click="submit">提交</button>
     </form>
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
@@ -109,7 +109,14 @@
       return {
         projectList: [],
         statusObject4ProjectListCheckbox: {},
-        formValues: {},
+        formValues: {
+          username: '',
+          realName: '',
+          email: '',
+          accountStatus: '',
+          involvedProjectsID: [],
+          canManageProjectsID: [],
+        },
       };
     },
     watch: {
@@ -128,10 +135,8 @@
         deep: true,
       },
     },
-    mounted: function () {
-      this.$nextTick(function () {
-
-      })
+    created: function () {
+      this.getProjectList();
     },
     methods: {
       // 根据传入的userID，从服务器获取所有项目的信息
@@ -167,7 +172,7 @@
         this.formValues.involvedProjectsID = currentSelection;
       },
       // TODO: 将表格信息POST至服务器
-      updateUser: function () {
+      submit: function () {
         console.log(this.formValues)
       },
     },

@@ -10,7 +10,7 @@
         <div class="col-12 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
-
+              <project-edit-form :projectInfoObject="projectInfoObject" :statusObject="statusObject4Project"></project-edit-form>
             </template>
           </bottom-card>
         </div>
@@ -21,15 +21,21 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
+  import ProjectEditForm from '@/components/ProjectEditForm.vue';
   export default {
     name: 'project_create',
     components: {
       BottomCard,
+      ProjectEditForm,
     },
     data: function () {
       return {
         headerText: '创建新项目',
         tooltipText: '您可以在下方填写新项目的资料并提交至服务器！',
+        projectInfoObject: {},
+        statusObject4Project: {
+          statusIndicator: 'loaded',
+        },
       }
     },
     computed: {
@@ -46,9 +52,6 @@
           $('[data-toggle="tooltip"]').tooltip();
         })
       });
-    },
-    methods: {
-
     },
   }
 </script>

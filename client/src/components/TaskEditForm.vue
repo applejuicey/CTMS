@@ -22,10 +22,12 @@
     </div>
     <form v-else-if="statusObject.statusIndicator === 'loaded'">
       <div class="form-group text-left">
-        <label for="belongedToProjectName" class="font-weight-normal">
+        <label class="font-weight-normal">
           <span>隶属于项目：</span>
         </label>
-          <input v-model="formValues.belongedToProjectName" type="text" class="form-control" id="belongedToProjectName" placeholder="隶属于项目" disabled>
+        <project-list-radio :projectList="projectList" :statusObject="statusObject4ProjectListRadio"
+                         :selectedProjectIDOriginal="formValues.belongedToProjectID"
+                         @selectionChanged="changeFormBelongedToProjectID"></project-list-radio>
       </div>
       <div class="form-group text-left">
         <label for="taskName" class="font-weight-normal">
@@ -39,21 +41,21 @@
         </label>
         <input v-model="formValues.taskDescription" type="text" class="form-control" id="taskDescription" placeholder="任务描述">
       </div>
-
       <div class="form-group text-left">
-        <label class="font-weight-normal">任务接受者</label>
+        <label class="font-weight-normal">
+          <span>任务接受者</span>
+        </label>
         <user-list-radio :userList="userList" :statusObject="statusObject4UserListRadio"
-                            :selectedUserIDOriginal="formValues.taskExecutorID"
-                            @selectionChanged="changeFormTaskExecutorID"></user-list-radio>
+                         :selectedUserIDOriginal="formValues.taskExecutorID"
+                         @selectionChanged="changeFormTaskExecutorID"></user-list-radio>
       </div>
-
       <div class="form-group text-left">
         <label for="taskDueTime" class="font-weight-normal">
           <span>截止时间：</span>
         </label>
         <input v-model="formValues.taskDueTime" type="date" class="form-control" id="taskDueTime" placeholder="截止时间">
       </div>
-      <button type="button" class="btn btn-success" @click="updateTask">更新任务信息</button>
+      <button type="button" class="btn btn-success" @click="submit">提交</button>
     </form>
     <div class="row" v-else>
       <div class="col-xl-6 offset-xl-3">
@@ -69,10 +71,12 @@
 </template>
 
 <script>
+  import ProjectListRadio from '@/components/ProjectListRadio.vue';
   import UserListRadio from '@/components/UserListRadio.vue';
   export default {
     name: 'task_edit_form',
     components: {
+      ProjectListRadio,
       UserListRadio,
     },
     props: {
@@ -94,13 +98,24 @@
       return {
         userList: [],
         statusObject4UserListRadio: {},
-        formValues: {},
+        projectList: [],
+        statusObject4ProjectListRadio: {},
+        formValues: {
+          belongedToProjectID: '',
+          belongedToProjectName: '',
+          taskName: '',
+          taskDescription: '',
+          taskExecutorID: '',
+          taskExecutorName: '',
+          taskDueTime: '',
+        },
       };
     },
     watch: {
       taskInfoObject: {
         handler: function (newVal, oldVal) {
           this.formValues = {
+            belongedToProjectID: newVal.belongedToProjectID,
             belongedToProjectName: newVal.belongedToProjectName,
             taskName: newVal.taskName,
             taskDescription: newVal.taskDescription,
@@ -109,9 +124,14 @@
             taskDueTime: this.formatDate(newVal.taskDueTime),
           };
           this.getUserList();
+          this.getProjectList();
         },
         deep: true,
       },
+    },
+    created: function () {
+      this.getUserList();
+      this.getProjectList();
     },
     methods: {
       formatDate: function (dateString) {
@@ -150,11 +170,39 @@
           };
         });
       },
+      getProjectList: function () {
+        this.statusObject4ProjectListRadio = {
+          statusIndicator: 'loading',
+          alertHeader: '加载中',
+          feedbackMessage: '正在从服务器获取数据，请稍后......',
+        };
+        this.$axios.get('/projectList', {
+          params: {
+
+          }
+        }).then((response) => {
+          // console.log('TaskEditForm获取项目列表成功', response);
+          this.projectList = response.data.projectList;
+          this.statusObject4ProjectListRadio = {
+            statusIndicator: 'loaded',
+          };
+        }).catch((error) => {
+          console.error('TaskEditForm获取项目列表失败，错误：', error);
+          this.statusObject4ProjectListRadio = {
+            statusIndicator: 'error',
+            alertHeader: '有错误发生',
+            feedbackMessage: `从服务器获取项目列表失败，错误原因：${error}`,
+          };
+        });
+      },
       changeFormTaskExecutorID: function (currentSelection) {
         this.formValues.taskExecutorID = currentSelection;
       },
+      changeFormBelongedToProjectID: function (currentSelection) {
+        this.formValues.belongedToProjectID = currentSelection;
+      },
       // TODO: 将表格信息POST至服务器
-      updateTask: function () {
+      submit: function () {
         console.log(this.formValues)
       },
     },

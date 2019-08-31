@@ -23,9 +23,9 @@
     <div class="row" v-else-if="statusObject.statusIndicator === 'loaded'">
       <div class="col-12">
         <template>
-          <div class="form-check" v-for="(user, index) in userList">
-            <input class="form-check-input" type="checkbox" :id="user.userID" :value="user.userID" v-model="selectedUsersIDCurrent" @change="$emit('selectionChanged', selectedUsersIDCurrent)">
-            <label class="form-check-label" :for="user.userID">{{ user.username }}</label>
+          <div class="form-check" v-for="(project, index) in projectList">
+            <input class="form-check-input" type="radio" :id="project.projectID" :value="project.projectID" v-model="selectedProjectIDCurrent" @change="$emit('selectionChanged', selectedProjectIDCurrent)">
+            <label class="form-check-label" :for="project.projectID">{{ project.projectName }}</label>
           </div>
         </template>
       </div>
@@ -45,9 +45,9 @@
 
 <script>
   export default {
-    name: 'user_list_checkbox',
+    name: 'project_list_radio',
     props: {
-      userList: {
+      projectList: {
         type: Array,
         required: true,
       },
@@ -55,23 +55,23 @@
         type: Object,
         required: true,
       },
-      selectedUsersIDOriginal: {
-        type: Array,
+      selectedProjectIDOriginal: {
+        type: String,
         required: false,
       }
     },
     data: function () {
       return {
-        selectedUsersIDCurrent: [],
+        selectedProjectIDCurrent: '',
       };
     },
     mounted: function () {
-      this.selectedUsersIDCurrent = this.selectedUsersIDOriginal;
+      this.selectedProjectIDCurrent = this.selectedProjectIDOriginal;
     },
     watch: {
-      selectedUsersIDOriginal: {
+      selectedProjectIDOriginal: {
         handler: function (newVal, oldVal) {
-          this.selectedUsersIDCurrent = newVal;
+          this.selectedProjectIDCurrent = newVal;
         },
         deep: true,
       },
