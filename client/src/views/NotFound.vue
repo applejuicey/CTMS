@@ -5,7 +5,7 @@
         <h4 class="alert-heading">该页面不存在</h4>
         <p>您访问的页面不存在，请检查您的操作。如果所有操作正确，希望您可以向我们反映该情况。</p>
         <hr>
-        <button class="btn btn-primary" @click="toHome">
+        <button class="btn btn-warning" @click="toHome">
           回到主页
         </button>
       </div>
@@ -28,6 +28,6 @@
 
 <style scoped>
   #not_found {
-    height: 90vh;
+    height: 90%;
   }
 </style>

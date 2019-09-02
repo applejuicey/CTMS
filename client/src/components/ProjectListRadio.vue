@@ -1,5 +1,5 @@
 <template>
-  <div class="user-list">
+  <div class="scroll-list">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
       <div class="col-12">
         <div class="alert alert-primary text-center mb-0">
@@ -80,13 +80,5 @@
 </script>
 
 <style scoped>
-  .user-list {
-    padding: 1.25rem;
-    border: 1px solid #eee;
-    border-radius: .25rem;
-    border-left-width: .25rem;
-    border-left-color: #28a745;
-    overflow-y: scroll;
-    max-height: 400px;
-  }
+
 </style>

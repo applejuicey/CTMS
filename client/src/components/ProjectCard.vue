@@ -140,7 +140,5 @@
 </script>
 
 <style scoped>
-  .cursor-pointer {
-    cursor: pointer;
-  }
+
 </style>

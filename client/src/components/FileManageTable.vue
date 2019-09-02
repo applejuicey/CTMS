@@ -111,16 +111,5 @@
 </script>
 
 <style scoped>
-  .cursor-pointer {
-    cursor: pointer;
-  }
-  .list-card {
-    padding: 1.25rem;
-    margin-top: 1.25rem;
-    margin-bottom: 1.25rem;
-    border: 1px solid #eee;
-    border-radius: .25rem;
-    border-left-width: .25rem;
-    /*border-left-color: #28a745;*/
-  }
+
 </style>
