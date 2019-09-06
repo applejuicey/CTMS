@@ -14,8 +14,8 @@ body {
 b {
   font-weight: 500;
 }
-.shadow {
-  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,.1);
+.hover-vibrate {
+  transform: translate(0, -2px);
 }
 .obscure {
   opacity: 0.85;
@@ -32,12 +32,9 @@ b {
   border-width: 1px 1px 1px 0.25rem;
   border-style: dashed dashed dashed solid;
 }
-.table-left-column {
-  font-weight: 400;
-  text-align: right;
-}
-.table-right-column {
-  text-align: left;
+.list-card:hover {
+  transform: translate(0, -2px);
+  box-shadow:0 .5rem 1rem rgba(0,0,0,.15)
 }
 .scroll-list {
   padding: 1.25rem;
@@ -47,4 +44,23 @@ b {
   border-color: #eee #eee #eee #ffc107;
   border-width: 1px 1px 1px 0.25rem;
   border-style: dashed dashed dashed solid;
+}
+.scroll-list:hover {
+  transform: translate(0, -2px);
+  box-shadow:0 .5rem 1rem rgba(0,0,0,.15)
+}
+.table-left-column {
+  font-weight: 400;
+  text-align: right;
+}
+.table-right-column {
+  text-align: left;
+}
+@media screen and (max-width: 768px ) {
+  .text-ellipsis-sm {
+    width: 150px;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis
+  }
 }

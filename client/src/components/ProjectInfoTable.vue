@@ -28,10 +28,12 @@
         </span>
         <div class="btn-group ml-auto">
           <button type="button" class="btn btn-success" @click="changeRoute(projectInfoObject.projectID, 'edit')" v-if="isAdmin || projectInfoObject.projectManagerID === currentUserID">
-            <i class="fas fa-pen"></i>&nbsp;编辑项目
+            <i class="fas fa-pen"></i>
+            <span class="d-sm-inline d-none">&nbsp;编辑项目</span>
           </button>
           <button type="button" class="btn btn-success" @click="createTask(projectInfoObject.projectID)" v-if="isAdmin || projectInfoObject.projectManagerID === currentUserID">
-            <i class="fas fa-plus"></i>&nbsp;新建任务
+            <i class="fas fa-plus"></i>
+            <span class="d-sm-inline d-none">&nbsp;新建任务</span>
           </button>
         </div>
       </div>

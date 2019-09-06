@@ -27,6 +27,7 @@
           任务附属文件：
         </span>
         <button class="btn btn-success ml-auto">上传文件</button>
+        <p>增加垃圾箱功能、增加编辑功能</p>
       </div>
       <div class="table-responsive">
         <table class="table table-bordered text-nowrap">

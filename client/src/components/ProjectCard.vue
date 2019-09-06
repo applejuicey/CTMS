@@ -1,14 +1,15 @@
 <template>
-  <div class="card mb-2 shadow">
+  <div class="card mb-2" @mouseover="addHover($event)" @mouseout="removeHover($event)">
     <div class="card-header bg-transparent d-flex">
-      <b class="cursor-pointer text-primary" @click="toggleCollapse(projectID)" data-toggle="tooltip" data-placement="top" :title="projectNameTipText">
+      <b class="cursor-pointer text-primary text-ellipsis-sm" @click="toggleCollapse(projectID)" data-toggle="tooltip" data-placement="top" :title="projectNameTipText">
         <i class="fas fa-capsules"></i>&nbsp;
         {{ projectName }}&nbsp;
         <i class="fas fa-hand-point-left"></i>&nbsp;
       </b>
       <span class="ml-auto">
         <span class="cursor-pointer text-primary" @click="changeRoute(projectID, 'view')">
-          <i class="fas fa-search"></i>&nbsp;查看项目信息
+          <i class="fas fa-search"></i>
+          <span class="d-sm-inline d-none">&nbsp;查看项目信息</span>
         </span>
       </span>
     </div>
@@ -69,6 +70,12 @@
       })
     },
     methods: {
+      addHover: function (event) {
+        event.currentTarget.className = 'card mb-2 shadow hover-vibrate';
+      },
+      removeHover: function (event) {
+        event.currentTarget.className = 'card mb-2';
+      },
       toggleCollapse: function (projectID) {
         const clickedCollapseID = `#collapse${projectID}`;
         $(clickedCollapseID).collapse('toggle');

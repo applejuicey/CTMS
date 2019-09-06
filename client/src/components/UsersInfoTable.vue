@@ -28,7 +28,7 @@
         </span>
       </div>
       <div class="table-responsive">
-        <table class="table table-bordered text-nowrap">
+        <table class="table table-bordered table-hover text-nowrap">
           <tbody>
             <tr>
               <td>操作</td>

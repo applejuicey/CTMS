@@ -11,13 +11,22 @@
         <input v-model="taskNameKeyword" type="text" class="form-control" id="taskNameKeyword" placeholder="任务名称关键字">
       </div>
       <div class="form-group text-left">
-        <label for="trialNameKeyword" class="font-weight-normal">
-          <span class="ml-auto" data-toggle="tooltip" data-placement="top" :title="trialNameKeywordTooltipText">
+        <label for="projectNameKeyword" class="font-weight-normal">
+          <span class="ml-auto" data-toggle="tooltip" data-placement="top" :title="projectNameKeywordTooltipText">
             <i class="fas fa-question-circle"></i>&nbsp;
           </span>
           <span>项目名称：</span>
         </label>
-        <input v-model="trialNameKeyword" type="text" class="form-control" id="trialNameKeyword" placeholder="项目名称关键字">
+        <input v-model="projectNameKeyword" type="text" class="form-control" id="projectNameKeyword" placeholder="项目名称关键字">
+      </div>
+      <div class="form-group text-left">
+        <label for="taskExecutorNameKeyword" class="font-weight-normal">
+          <span class="ml-auto" data-toggle="tooltip" data-placement="top" :title="taskExecutorNameKeywordTooltipText">
+            <i class="fas fa-question-circle"></i>&nbsp;
+          </span>
+          <span>任务执行人姓名：</span>
+        </label>
+        <input v-model="taskExecutorNameKeyword" type="text" class="form-control" id="taskExecutorNameKeyword" placeholder="任务执行人姓名关键字">
       </div>
       <div class="form-group text-left">
         <label for="receivedStatus" class="font-weight-normal">
@@ -45,7 +54,10 @@
           <option value="-1">全部</option>
         </select>
       </div>
-      <button type="button" class="btn btn-success" @click="query">按上述条件筛选</button>
+      <button type="button" class="btn btn-success" @click="query">
+        <i class="fas fa-search"></i>
+        <span>&nbsp;按上述条件筛选</span>
+      </button>
     </form>
   </div>
 </template>
@@ -57,8 +69,10 @@
       return {
         taskNameKeyword: '',
         taskNameKeywordTooltipText: '请在这里填写任务名称中的关键字，留空默认匹配所有任务名称。',
-        trialNameKeyword: '',
-        trialNameKeywordTooltipText: '请在这里填写临床试验项目名称中的关键字，留空默认匹配所有临床试验项目名称。',
+        projectNameKeyword: '',
+        projectNameKeywordTooltipText: '请在这里填写项目名称中的关键字，留空默认匹配所有项目名称。',
+        taskExecutorNameKeyword: '',
+        taskExecutorNameKeywordTooltipText: '请在这里填写任务执行人姓名中的关键字，留空默认匹配所有任务执行人姓名。',
         receivedStatus: '-1',
         receivedStatusTooltipText: '请在这里选择任务被接受状态。',
         completeStatus: '-1',
@@ -80,23 +94,27 @@
             .set('1', ['completed', '已完成'])
             .set('0', ['not_completed', '未完成'])
             .set('-1', ['all', '全部']);
-        let filterDescription = '';
-        if (this.taskNameKeyword === '' && this.trialNameKeyword === '') {
-          filterDescription = `"任务名称关键字：不限；项目名称关键字：不限；任务接受状态：${receivedStatusMap.get(this.receivedStatus)[1]}；任务完成状态：${completeStatusMap.get(this.completeStatus)[1]}"`;
-        } else if (this.taskNameKeyword === '') {
-          filterDescription = `"任务名称关键字：不限；项目名称关键字：${this.trialNameKeyword}；任务接受状态：${receivedStatusMap.get(this.receivedStatus)[1]}；任务完成状态：${completeStatusMap.get(this.completeStatus)[1]}"`;
-        } else if (this.trialNameKeyword === '') {
-          filterDescription = `"任务名称关键字：${this.taskNameKeyword}；项目名称关键字：不限；任务接受状态：${receivedStatusMap.get(this.receivedStatus)[1]}；任务完成状态：${completeStatusMap.get(this.completeStatus)[1]}"`;
-        } else {
-          filterDescription = `"任务名称关键字：${this.taskNameKeyword}；项目名称关键字：${this.trialNameKeyword}；任务接受状态：${receivedStatusMap.get(this.receivedStatus)[1]}；任务完成状态：${completeStatusMap.get(this.completeStatus)[1]}"`;
+        let taskNameKeywordDescription = this.taskNameKeyword;
+        let projectNameKeywordDescription = this.projectNameKeyword;
+        let taskExecutorNameKeywordDescription = this.taskExecutorNameKeyword;
+        if (this.taskNameKeyword === '') {
+          taskNameKeywordDescription = '不限';
         }
+        if (this.projectNameKeyword === '') {
+          projectNameKeywordDescription = '不限';
+        }
+        if (this.taskExecutorNameKeyword === '') {
+          taskExecutorNameKeywordDescription = '不限';
+        }
+        let filterDescription = `"任务名称关键字：${taskNameKeywordDescription}；项目名称关键字：${projectNameKeywordDescription}；任务执行人姓名关键字：${taskExecutorNameKeywordDescription}；任务接受状态：${receivedStatusMap.get(this.receivedStatus)[1]}；任务完成状态：${completeStatusMap.get(this.completeStatus)[1]}"`;
         this.$store.dispatch('setTaskFilterDescriptionAction', {
           taskFilterDescription: filterDescription
         });
         return {
           userID: this.currentUserID,
           taskNameKeyword: this.taskNameKeyword,
-          trialNameKeyword: this.trialNameKeyword,
+          projectNameKeyword: this.projectNameKeyword,
+          taskExecutorNameKeyword: this.taskExecutorNameKeyword,
           receivedStatus: receivedStatusMap.get(this.receivedStatus)[0],
           completeStatus: completeStatusMap.get(this.completeStatus)[0],
         };

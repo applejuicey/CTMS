@@ -299,17 +299,21 @@ TODO:READ文件
 Project模块
 1.请求路径  /projects
   请求方法  GET
-  请求参数  projectName、projectStage、brief
+  请求参数  projectName、projectStage、investigatorName、sponsorName、involvedUserRealName、projectCreatedYearMonth、brief
   参数说明  projectName如果留空，代表查询所有；projectStage包含preparation\ongoing\ending\supplementing\all
   参数举例  {
             brief: 'false',
-            projectNameKeyword: 'ddd',
+            projectName: 'ddd',
+            investigatorName: 'ddd',
+            sponsorName: 'ddd',
+            involvedUserRealName: 'ddd',
+            projectCreatedYearMonth: '2019-01',
             projectStage: 'all',
            }
   请求描述  返回[上述参数查询出来的]项目的详细信息（数组）
   响应举例  {
             "statusCode": "1",
-            "project": {
+            "projects": {
              "projectID": "PROJECT001",
              "projectName": "狂犬1针",
              "projectStage": "要红交民",
@@ -390,12 +394,12 @@ User模块
   响应举例  {
               "users": [
                 {
-                  "username": "范扬",
+                  "username": "user3",
                   "userID": "USER003",
                   "userRealName": "范扬",
                 },
                 {
-                  "username": "陈振明",
+                  "username": "user4",
                   "userID": "USER004",
                   "userRealName": "陈振明",
                 },

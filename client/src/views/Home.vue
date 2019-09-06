@@ -14,9 +14,27 @@
             <template v-slot:card-body>
               <div>
                 <div class="btn-group">
-                  <button type="button" class="btn btn-success" @click="createProject">新增项目</button>
-                  <button type="button" class="btn btn-success" @click="createTask">新增任务</button>
-                  <button type="button" class="btn btn-success" @click="createUser">新增用户</button>
+                  <button type="button" class="btn btn-success" @click="createProject">
+                    <span class="d-xl-none">
+                      <i class="fas fa-plus"></i>&nbsp;
+                    <i class="fas fa-capsules"></i>
+                    </span>
+                    <span class="d-sm-inline d-none">&nbsp;新增项目</span>
+                  </button>
+                  <button type="button" class="btn btn-success" @click="createTask">
+                    <span class="d-xl-none">
+                      <i class="fas fa-plus"></i>&nbsp;
+                      <i class="fas fa-tasks"></i>
+                    </span>
+                    <span class="d-sm-inline d-none">&nbsp;新建任务</span>
+                  </button>
+                  <button type="button" class="btn btn-success" @click="createUser">
+                    <span class="d-xl-none">
+                      <i class="fas fa-plus"></i>&nbsp;
+                      <i class="fas fa-users-cog"></i>
+                    </span>
+                    <span class="d-sm-inline d-none">&nbsp;新增用户</span>
+                  </button>
                 </div>
               </div>
             </template>

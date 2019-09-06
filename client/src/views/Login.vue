@@ -2,7 +2,7 @@
   <div class="row align-items-center" id="login">
 
     <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-xs-10 offset-xs-1">
-      <div class="card shadow border-warning obscure">
+      <div class="card shadow border-warning obscure" @mouseover="addHover($event)" @mouseout="removeHover($event)">
         <div class="card-header bg-warning border-warning">
           <div class="m-2 font-weight-light h4">临床试验项目管理系统</div>
         </div>
@@ -22,7 +22,7 @@
             </div>
             <div class="form-group row">
               <div class="col-12 text-center">
-                <button class="btn btn-warning" type="button" :disabled="loading" @click="login" v-html="buttonText">
+                <button class="btn btn-warning text-white" type="button" :disabled="loading" @click="login" v-html="buttonText">
                   <span class="spinner-border spinner-border-sm" v-if="loading"></span>
                 </button>
               </div>
@@ -67,6 +67,12 @@
       };
     },
     methods: {
+      addHover: function (event) {
+        event.currentTarget.className = 'card shadow border-warning obscure hover-vibrate';
+      },
+      removeHover: function (event) {
+        event.currentTarget.className = 'card shadow border-warning obscure';
+      },
       login: function () {
         this.loading = true;
         this.buttonText = '登录中，请稍后';

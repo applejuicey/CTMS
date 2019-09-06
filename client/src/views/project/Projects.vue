@@ -92,7 +92,6 @@
       });
     },
     methods: {
-      // 根据userID\projectNameKeyword\projectStage从服务器获取与该用户有关的、符合检索条件的所有项目信息
       getProjectsInfo: function (queryParamsObject) {
         this.$store.dispatch('setProjectFilterQueryResultAction', {
           statusObject4Projects: {
@@ -104,8 +103,12 @@
         });
         this.$axios.get('/projectsInfo', {
           params: {
-            userID: queryParamsObject.userID,
-            projectNameKeyword: queryParamsObject.projectNameKeyword,
+            brief: false,
+            projectName: queryParamsObject.projectNameKeyword,
+            investigatorName: queryParamsObject.investigatorNameKeyword,
+            sponsorName: queryParamsObject.sponsorNameKeyword,
+            involvedUserRealName: queryParamsObject.involvedUserRealNameKeyword,
+            projectCreatedYearMonth: queryParamsObject.projectCreatedYearMonth,
             projectStage: queryParamsObject.projectStage,
           }
         }).then((response) => {

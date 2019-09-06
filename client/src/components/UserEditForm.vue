@@ -58,6 +58,7 @@
       </div>
       <div class="form-group text-left">
         <label class="font-weight-normal">参与的项目：</label>
+        <p>普通用户不可见该功能</p>
         <project-list-checkbox :projectList="projectList" :statusObject="statusObject4ProjectListCheckbox"
                                :selectedProjectsIDOriginal="formValues.involvedProjectsID"
                                @selectionChanged="changeFormInvolvedProjectsID"></project-list-checkbox>

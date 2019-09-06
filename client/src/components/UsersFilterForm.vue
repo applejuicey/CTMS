@@ -10,7 +10,10 @@
         </label>
         <input v-model="realNameKeyword" type="text" class="form-control" id="realNameKeyword" placeholder="真实姓名关键字">
       </div>
-      <button type="button" class="btn btn-success" @click="query">按上述条件筛选</button>
+      <button type="button" class="btn btn-success" @click="query">
+        <i class="fas fa-search"></i>
+        <span>&nbsp;按上述条件筛选</span>
+      </button>
     </form>
   </div>
 </template>
