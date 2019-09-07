@@ -88,11 +88,6 @@
         projectStageTooltipText: '请在这里选择项目当前阶段。',
       };
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-    },
     methods: {
       processFormData: function () {
         const projectStageMap = new Map()
@@ -126,11 +121,11 @@
           projectFilterDescription: filterDescription
         });
         return {
-          userID: this.currentUserID,
           projectNameKeyword: this.projectNameKeyword,
           sponsorNameKeyword: this.sponsorNameKeyword,
-          investigatorNameKeyword: this.investigatorNameKeyword,
-          involvedUserRealNameKeyword: this.involvedUserRealNameKeyword,
+          projectInvestigatorNameKeyword: this.investigatorNameKeyword,
+          projectSponsorNameKeyword: this.involvedUserRealNameKeyword,
+          projectInvolvedUserRealNameKeyword: this.involvedUserRealNameKeyword,
           projectCreatedYearMonth: this.projectCreatedYearMonth,
           projectStage: projectStageMap.get(this.projectStage)[0],
         };

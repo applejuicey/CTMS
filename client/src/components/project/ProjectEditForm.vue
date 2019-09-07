@@ -120,7 +120,7 @@
 </template>
 
 <script>
-  import UserListCheckbox from '@/components/UserListCheckbox.vue';
+  import UserListCheckbox from '@/components/user/UserListCheckbox.vue';
   export default {
     name: 'project_edit_form',
     components: {

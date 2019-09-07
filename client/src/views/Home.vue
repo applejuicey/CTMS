@@ -81,8 +81,8 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import ProjectCard from '@/components/ProjectCard.vue';
-  import TasksInboxCards from '@/components/TasksInboxCards.vue';
+  import ProjectCard from '@/components/project/ProjectCard.vue';
+  import TasksInboxCards from '@/components/task/TasksInboxCards.vue';
   export default {
     name: 'home',
     components: {
@@ -107,9 +107,6 @@
       }
     },
     computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
       currentUsername: function () {
         return JSON.parse(localStorage.getItem('userInfo')).username;
       },
@@ -129,18 +126,31 @@
       });
     },
     methods: {
-      // 从localStorage中取出currentUserID，去服务器获取该用户参加的所有项目
       getUserInvolvedProjects: function () {
-        this.$axios.get('/involvedProjects', {
+        this.$axios.get('/projects', {
           params: {
-            userID: this.currentUserID,
+            brief: true,
+            projectName: '',
+            projectInvestigatorName: '',
+            projectSponsorName: '',
+            projectInvolvedUserRealName: '',
+            projectCreatedYearMonth: '',
+            projectStage: 'all',
           }
         }).then((response) => {
-          // console.log('Home获取该用户参加的所有项目成功', response);
-          this.involvedProjects = response.data.involvedProjects;
-          this.statusIndicator = 'loaded';
+          if (response.data.response.statusCode === '1') {
+            this.involvedProjects = response.data.response.projects;
+            this.statusIndicator = 'loaded';
+          } else if (response.data.response.statusCode === '0') {
+            console.error('Home获取项目信息失败，错误：', response.data.response.error.message);
+            this.statusIndicator = 'error';
+            this.alertHeader = '有错误发生';
+            this.feedbackMessage = `从服务器获取项目信息失败，错误原因：${response.data.response.error.message}`;
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('Home获取该用户参加的所有项目失败，错误：', error);
+          console.error('Home获取项目信息失败，错误：', error);
           this.statusIndicator = 'error';
           this.alertHeader = '有错误发生';
           this.feedbackMessage = `从服务器获取项目信息失败，错误原因：${error}`;

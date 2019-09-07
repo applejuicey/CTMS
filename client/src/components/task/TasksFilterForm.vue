@@ -79,11 +79,6 @@
         completeStatusTooltipText: '请在这里选择任务的完成状态。',
       };
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-    },
     methods: {
       processFormData: function () {
         const receivedStatusMap = new Map()
@@ -111,12 +106,11 @@
           taskFilterDescription: filterDescription
         });
         return {
-          userID: this.currentUserID,
           taskNameKeyword: this.taskNameKeyword,
           projectNameKeyword: this.projectNameKeyword,
           taskExecutorNameKeyword: this.taskExecutorNameKeyword,
-          receivedStatus: receivedStatusMap.get(this.receivedStatus)[0],
-          completeStatus: completeStatusMap.get(this.completeStatus)[0],
+          taskReceivedStatus: receivedStatusMap.get(this.receivedStatus)[0],
+          taskCompletedStatus: completeStatusMap.get(this.completeStatus)[0],
         };
       },
       // 生成一个对象，包括用户ID与一些检索条件，将该对象保存至vuex

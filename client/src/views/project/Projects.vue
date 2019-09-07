@@ -44,8 +44,8 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import ProjectsFilterForm from '@/components/ProjectsFilterForm.vue';
-  import ProjectsInfoTable from '@/components/ProjectsInfoTable.vue';
+  import ProjectsFilterForm from '@/components/project/ProjectsFilterForm.vue';
+  import ProjectsInfoTable from '@/components/project/ProjectsInfoTable.vue';
   export default {
     name: 'projects',
     components: {
@@ -101,30 +101,44 @@
           },
           projectsInfoArray: [],
         });
-        this.$axios.get('/projectsInfo', {
+        this.$axios.get('/projects', {
           params: {
             brief: false,
             projectName: queryParamsObject.projectNameKeyword,
-            investigatorName: queryParamsObject.investigatorNameKeyword,
-            sponsorName: queryParamsObject.sponsorNameKeyword,
-            involvedUserRealName: queryParamsObject.involvedUserRealNameKeyword,
+            projectInvestigatorName: queryParamsObject.projectInvestigatorNameKeyword,
+            projectSponsorName: queryParamsObject.projectSponsorNameKeyword,
+            projectInvolvedUserRealName: queryParamsObject.projectInvolvedUserRealNameKeyword,
             projectCreatedYearMonth: queryParamsObject.projectCreatedYearMonth,
             projectStage: queryParamsObject.projectStage,
           }
         }).then((response) => {
-          this.$store.dispatch('setProjectFilterQueryResultAction', {
-            statusObject4Projects: {
-              statusIndicator: 'loaded',
-            },
-            projectsInfoArray: response.data.projectsInfo,
-          });
+          if (response.data.response.statusCode === '1') {
+            this.$store.dispatch('setProjectFilterQueryResultAction', {
+              statusObject4Projects: {
+                statusIndicator: 'loaded',
+              },
+              projectsInfoArray: response.data.response.projects,
+            });
+          } else if (response.data.response.statusCode === '0') {
+            console.error('Projects获取项目信息失败，错误：', response.data.response.error.message);
+            this.$store.dispatch('setProjectFilterQueryResultAction', {
+              statusObject4Projects: {
+                statusIndicator: 'error',
+                alertHeader: '有错误发生',
+                feedbackMessage: `从服务器获取项目信息失败，错误原因：${response.data.response.error.message}`,
+              },
+              projectsInfoArray: [],
+            });
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('Projects获取任务信息失败，错误：', error);
+          console.error('Projects获取项目信息失败，错误：', error);
           this.$store.dispatch('setProjectFilterQueryResultAction', {
             statusObject4Projects: {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取任务信息失败，错误原因：${error}`,
+              feedbackMessage: `从服务器获取项目信息失败，错误原因：${error}`,
             },
             projectsInfoArray: [],
           });

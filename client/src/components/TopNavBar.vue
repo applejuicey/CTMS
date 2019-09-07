@@ -16,13 +16,18 @@
               </span>
             </li>
             <li class="nav-item cursor-pointer">
+              <span class="nav-link" @click="navigate('projects')">
+                <i class="fas fa-capsules"></i>&nbsp;项目
+              </span>
+            </li>
+            <li class="nav-item cursor-pointer">
               <span class="nav-link" @click="navigate('tasks')">
                 <i class="fas fa-tasks"></i>&nbsp;任务
               </span>
             </li>
             <li class="nav-item cursor-pointer">
-              <span class="nav-link" @click="navigate('projects')">
-                <i class="fas fa-capsules"></i>&nbsp;项目
+              <span class="nav-link" @click="navigate('files')">
+               <i class="fas fa-file"></i>&nbsp;文件
               </span>
             </li>
             <li class="nav-item cursor-pointer" v-if="isAdmin">

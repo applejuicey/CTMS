@@ -21,7 +21,7 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import ProjectEditForm from '@/components/ProjectEditForm.vue';
+  import ProjectEditForm from '@/components/project/ProjectEditForm.vue';
   export default {
     name: 'project_create',
     components: {
@@ -37,14 +37,6 @@
           statusIndicator: 'loaded',
         },
       }
-    },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
     },
     mounted: function () {
       this.$nextTick(function () {

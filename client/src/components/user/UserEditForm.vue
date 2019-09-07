@@ -85,7 +85,7 @@
 </template>
 
 <script>
-  import ProjectListCheckbox from '@/components/ProjectListCheckbox.vue';
+  import ProjectListCheckbox from '@/components/project/ProjectListCheckbox.vue';
   export default {
     name: 'user_edit_form',
     components: {

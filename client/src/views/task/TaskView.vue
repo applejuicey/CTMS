@@ -23,7 +23,7 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import TaskInfoTable from '@/components/TaskInfoTable.vue';
+  import TaskInfoTable from '@/components/task/TaskInfoTable.vue';
   import FileManageTable from '@/components/FileManageTable.vue';
   export default {
     name: 'task_view',

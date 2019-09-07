@@ -44,8 +44,8 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import UsersFilterForm from '@/components/UsersFilterForm.vue';
-  import UsersInfoTable from '@/components/UsersInfoTable.vue';
+  import UsersFilterForm from '@/components/user/UsersFilterForm.vue';
+  import UsersInfoTable from '@/components/user/UsersInfoTable.vue';
   export default {
     name: 'users',
     components: {
@@ -92,7 +92,6 @@
       });
     },
     methods: {
-      // 从localStorage中取出currentUserID，去服务器获取所有用户资料
       getUsersInfo: function (queryParamsObject) {
         this.$store.dispatch('setUserFilterQueryResultAction', {
           statusObject4Users: {
@@ -104,23 +103,39 @@
         });
         this.$axios.get('/users', {
           params: {
-            userID: queryParamsObject.userID,
+            brief: false,
+            userRealName: queryParamsObject.userRealNameKeyword,
+            forTaskExecutor: false,
+            taskID: '',
           }
         }).then((response) => {
-          // console.log('Users获取用户资料成功', response);
-          this.$store.dispatch('setUserFilterQueryResultAction', {
-            statusObject4Users: {
-              statusIndicator: 'loaded',
-            },
-            usersInfoArray: response.data.users,
-          });
+          if (response.data.response.statusCode === '1') {
+            this.$store.dispatch('setUserFilterQueryResultAction', {
+              statusObject4Users: {
+                statusIndicator: 'loaded',
+              },
+              usersInfoArray: response.data.response.users,
+            });
+          } else if (response.data.response.statusCode === '0') {
+            console.error('Users获取用户信息失败，错误：', response.data.response.error.message);
+            this.$store.dispatch('setUserFilterQueryResultAction', {
+              statusObject4Users: {
+                statusIndicator: 'error',
+                alertHeader: '有错误发生',
+                feedbackMessage: `从服务器获取用户信息失败，错误原因：${response.data.response.error.message}`,
+              },
+              usersInfoArray: [],
+            });
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('Users获取用户资料失败，错误：', error);
+          console.error('Users获取用户信息失败，错误：', error);
           this.$store.dispatch('setUserFilterQueryResultAction', {
             statusObject4Users: {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取用户资料失败，错误原因：${error}`,
+              feedbackMessage: `从服务器获取用户信息失败，错误原因：${error}`,
             },
             usersInfoArray: [],
           });

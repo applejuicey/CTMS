@@ -71,8 +71,8 @@
 </template>
 
 <script>
-  import ProjectListRadio from '@/components/ProjectListRadio.vue';
-  import UserListRadio from '@/components/UserListRadio.vue';
+  import ProjectListRadio from '@/components/project/ProjectListRadio.vue';
+  import UserListRadio from '@/components/user/UserListRadio.vue';
   export default {
     name: 'task_edit_form',
     components: {

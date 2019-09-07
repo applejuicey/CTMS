@@ -43,14 +43,6 @@
         tooltipText: '请确认您的操作！',
       }
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
-    },
     mounted: function () {
       this.$nextTick(function () {
         $(function () {

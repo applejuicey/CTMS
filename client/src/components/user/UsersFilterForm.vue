@@ -27,11 +27,6 @@
         realNameKeywordTooltipText: '请在这里填写真实姓名中的关键字，留空默认匹配所有真实姓名。',
       };
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-    },
     methods: {
       processFormData: function () {
         let filterDescription = '';
@@ -44,8 +39,7 @@
           userFilterDescription: filterDescription
         });
         return {
-          userID: this.currentUserID,
-          realNameKeyword: this.realNameKeyword,
+          userRealNameKeyword: this.realNameKeyword,
         };
       },
       // 生成一个对象，包括用户ID与一些检索条件，将该对象保存至vuex

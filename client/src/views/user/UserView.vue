@@ -21,7 +21,7 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import UserInfoTable from '@/components/UserInfoTable.vue';
+  import UserInfoTable from '@/components/user/UserInfoTable.vue';
   export default {
     name: 'user_view',
     components: {

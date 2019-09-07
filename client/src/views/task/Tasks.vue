@@ -44,8 +44,8 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import TasksInfoTable from '@/components/TasksInfoTable.vue';
-  import TasksFilterForm from '@/components/TasksFilterForm.vue';
+  import TasksInfoTable from '@/components/task/TasksInfoTable.vue';
+  import TasksFilterForm from '@/components/task/TasksFilterForm.vue';
   export default {
     name: 'tasks',
     components: {
@@ -92,7 +92,6 @@
       });
     },
     methods: {
-      // 根据userID\taskNameKeyword\trialNameKeyword\receivedStatus\completeStatus从服务器获取与该用户有关的、符合检索条件的所有任务信息
       getTasksInfo: function (queryParamsObject) {
         this.$store.dispatch('setTaskFilterQueryResultAction', {
           statusObject4Tasks: {
@@ -102,21 +101,36 @@
           },
           tasksInfoArray: [],
         });
-        this.$axios.get('/tasksInfo', {
+        this.$axios.get('/tasks', {
           params: {
-            userID: queryParamsObject.userID,
-            taskNameKeyword: queryParamsObject.taskNameKeyword,
-            trialNameKeyword: queryParamsObject.trialNameKeyword,
-            receivedStatus: queryParamsObject.receivedStatus,
-            completeStatus: queryParamsObject.completeStatus,
+            brief: false,
+            taskName: queryParamsObject.taskNameKeyword,
+            projectName: queryParamsObject.projectNameKeyword,
+            taskExecutorName: queryParamsObject.taskExecutorNameKeyword,
+            taskReceivedStatus: queryParamsObject.taskReceivedStatus,
+            taskCompletedStatus: queryParamsObject.taskCompletedStatus,
           }
         }).then((response) => {
-          this.$store.dispatch('setTaskFilterQueryResultAction', {
-            statusObject4Tasks: {
-              statusIndicator: 'loaded',
-            },
-            tasksInfoArray: response.data.tasksInfo,
-          });
+          if (response.data.response.statusCode === '1') {
+            this.$store.dispatch('setTaskFilterQueryResultAction', {
+              statusObject4Tasks: {
+                statusIndicator: 'loaded',
+              },
+              tasksInfoArray: response.data.response.tasks,
+            });
+          } else if (response.data.response.statusCode === '0') {
+            console.error('Tasks获取任务信息失败，错误：', response.data.response.error.message);
+            this.$store.dispatch('setTaskFilterQueryResultAction', {
+              statusObject4Tasks: {
+                statusIndicator: 'error',
+                alertHeader: '有错误发生',
+                feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+              },
+              tasksInfoArray: [],
+            });
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
           console.error('Tasks获取任务信息失败，错误：', error);
           this.$store.dispatch('setTaskFilterQueryResultAction', {

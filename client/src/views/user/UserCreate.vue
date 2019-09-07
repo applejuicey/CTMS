@@ -21,7 +21,7 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import UserEditForm from '@/components/UserEditForm.vue';
+  import UserEditForm from '@/components/user/UserEditForm.vue';
   export default {
     name: 'user_delete',
     components: {

@@ -21,8 +21,8 @@
 </template>
 
 <script>
-  import ProjectInfoTable from '@/components/ProjectInfoTable.vue';
-  import TasksInfoTable from '@/components/TasksInfoTable.vue';
+  import ProjectInfoTable from '@/components/project/ProjectInfoTable.vue';
+  import TasksInfoTable from '@/components/task/TasksInfoTable.vue';
   export default {
     name: 'project_card',
     components: {
@@ -80,24 +80,32 @@
         const clickedCollapseID = `#collapse${projectID}`;
         $(clickedCollapseID).collapse('toggle');
       },
-      // 根据传入的projectID和currentUserID从服务器获取试验信息
       getProjectInfo: function () {
         this.statusObject4Project = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/projectInfo', {
+        this.$axios.get('/project', {
           params: {
             projectID: this.projectID,
-            userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('ProjectCard获取项目信息成功', response);
-          this.projectInfoObject = response.data.projectInfo;
-          this.statusObject4Project = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.response.statusCode === '1') {
+            this.projectInfoObject = response.data.response.project;
+            this.statusObject4Project = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.response.statusCode === '0') {
+            console.error('ProjectCard获取项目信息失败，错误：', response.data.response.error.message);
+            this.statusObject4Project = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取项目信息失败，错误原因：${response.data.response.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
           console.error('ProjectCard获取项目信息失败，错误：', error);
           this.statusObject4Project = {

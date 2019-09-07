@@ -23,8 +23,8 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import UserInfoTable from '@/components/UserInfoTable.vue';
-  import UserEditForm from '@/components/UserEditForm.vue';
+  import UserInfoTable from '@/components/user/UserInfoTable.vue';
+  import UserEditForm from '@/components/user/UserEditForm.vue';
   export default {
     name: 'me',
     components: {

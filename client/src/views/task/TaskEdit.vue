@@ -21,7 +21,7 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import TaskEditForm from '@/components/TaskEditForm.vue';
+  import TaskEditForm from '@/components/task/TaskEditForm.vue';
   export default {
     name: 'task_edit',
     components: {

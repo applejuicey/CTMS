@@ -63,7 +63,7 @@
                 </span>
               </td>
               <td>{{taskInfo.taskName}}</td>
-              <td>{{taskInfo.belongedToTrialName}}</td>
+              <td>{{taskInfo.belongedToProjectName}}</td>
               <td>{{taskInfo.taskCreatorName}}</td>
               <td>{{taskInfo.taskCreatedTime}}</td>
               <td>{{taskInfo.taskExecutorName}}</td>
