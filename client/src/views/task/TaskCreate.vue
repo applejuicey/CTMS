@@ -3,7 +3,8 @@
     <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
-          <h1>创建新任务</h1>
+          <h1 v-if="$route.params.projectID">为{{ $route.params.projectID }}创建新任务</h1>
+          <h1 v-else>创建新任务</h1>
         </div>
       </div>
       <div class="row">
@@ -38,13 +39,8 @@
         },
       }
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
+    created: function () {
+      this.taskInfoObject.taskBelongedToProjectID = this.$route.params.projectID;
     },
     mounted: function () {
       this.$nextTick(function () {

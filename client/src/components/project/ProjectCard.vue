@@ -39,6 +39,11 @@
         required: true,
       },
     },
+    computed: {
+      collapseID: function () {
+        return `#collapse${ this.projectID }`;
+      },
+    },
     data: function () {
       return {
         projectNameTipText: '点击项目名称可以展示或隐藏项目内容。',
@@ -47,14 +52,6 @@
         tasksInfoArray: [],
         statusObject4Tasks: {},
       };
-    },
-    computed: {
-      collapseID: function () {
-        return `#collapse${ this.projectID }`;
-      },
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
     },
     mounted: function () {
       this.$nextTick(function () {
@@ -66,7 +63,7 @@
         $(this.collapseID).on('shown.bs.collapse', () => {
           this.getProjectInfo();
           this.getTasksInfo();
-        })
+        });
       })
     },
     methods: {
@@ -115,24 +112,39 @@
           };
         });
       },
-      // 根据传入的trialID和currentUserID从服务器获取该试验内的、与该用户有关的所有任务信息
       getTasksInfo: function () {
         this.statusObject4Tasks = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/tasksInfo', {
+        this.$axios.get('/tasks', {
           params: {
-            trialID: this.trialID,
-            userID: this.currentUserID,
+            brief: false,
+            taskName: '',
+            projectID: this.projectID,
+            projectName: '',
+            taskExecutorName: '',
+            taskReceivedStatus: 'all',
+            taskCompletedStatus: 'all',
           }
         }).then((response) => {
-          // console.log('ProjectCard获取任务信息成功', response);
-          this.tasksInfoArray = response.data.tasksInfo;
-          this.statusObject4Tasks = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.response.statusCode === '1') {
+            // console.log('ProjectCard获取任务信息成功', response);
+            this.tasksInfoArray = response.data.response.tasks;
+            this.statusObject4Tasks = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.response.statusCode === '0') {
+            console.error('ProjectCard获取任务信息失败，错误：', response.data.response.error.message);
+            this.statusObject4Tasks = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
           console.error('ProjectCard获取任务信息失败，错误：', error);
           this.statusObject4Tasks = {

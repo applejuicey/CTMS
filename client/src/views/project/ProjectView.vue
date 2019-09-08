@@ -98,30 +98,45 @@
           };
         });
       },
-      // 根据传入的projectID和currentUserID从服务器获取该项目所有任务的信息
       getProjectTasksInfo: function () {
         this.statusObject4ProjectTasks = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/tasksInfo', {
+        this.$axios.get('/tasks', {
           params: {
+            brief: false,
+            taskName: '',
             projectID: this.$route.params.projectID,
-            userID: this.currentUserID,
+            projectName: '',
+            taskExecutorName: '',
+            taskReceivedStatus: 'all',
+            taskCompletedStatus: 'all',
           }
         }).then((response) => {
-          // console.log('Project获取任务信息成功', response);
-          this.projectTasksInfoArray = response.data.tasksInfo;
-          this.statusObject4ProjectTasks = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.response.statusCode === '1') {
+            // console.log('ProjectView获取任务信息成功', response);
+            this.projectTasksInfoArray = response.data.response.tasks;
+            this.statusObject4ProjectTasks = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.response.statusCode === '0') {
+            console.error('ProjectView获取任务信息失败，错误：', response.data.response.error.message);
+            this.statusObject4ProjectTasks = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('Project获取任务信息失败，错误：', error);
+          console.error('ProjectView获取任务信息失败，错误：', error);
           this.statusObject4ProjectTasks = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
-            feedbackMessage: `从服务器获取任务文件信息失败，错误原因：${error}`,
+            feedbackMessage: `从服务器获取任务信息失败，错误原因：${error}`,
           };
         });
       },

@@ -28,10 +28,12 @@
         </span>
         <div class="btn-group ml-auto">
           <button type="button" class="btn btn-success" @click="receiveTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === false">
-            <i class="fas fa-check"></i>&nbsp;接受任务
+            <i class="fas fa-check"></i>
+            <span class="d-sm-inline d-none">&nbsp;接受任务</span>
           </button>
           <button type="button" class="btn btn-success" @click="completeTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === true && taskInfoObject.taskCompletedStatus === false">
-            <i class="fas fa-check-double"></i>&nbsp;完成任务
+            <i class="fas fa-check-double"></i>
+            <span class="d-sm-inline d-none">&nbsp;完成任务</span>
           </button>
         </div>
       </div>
@@ -48,7 +50,7 @@
           </tr>
           <tr>
             <td class="table-left-column">隶属于：</td>
-            <td class="table-right-column">{{ taskInfoObject.belongedToTrialName }}</td>
+            <td class="table-right-column">{{ taskInfoObject.taskBelongedToProjectName }}</td>
           </tr>
           <tr>
             <td class="table-left-column">创建者：</td>

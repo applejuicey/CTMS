@@ -21,12 +21,12 @@
       </div>
     </div>
     <form v-else-if="statusObject.statusIndicator === 'loaded'">
-      <div class="form-group text-left">
+      <div class="form-group text-left" v-if="isAdmin">
         <label class="font-weight-normal">
           <span>隶属于项目：</span>
         </label>
         <project-list-radio :projectList="projectList" :statusObject="statusObject4ProjectListRadio"
-                         :selectedProjectIDOriginal="formValues.belongedToProjectID"
+                         :selectedProjectIDOriginal="formValues.taskBelongedToProjectID"
                          @selectionChanged="changeFormBelongedToProjectID"></project-list-radio>
       </div>
       <div class="form-group text-left">
@@ -93,6 +93,9 @@
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
       },
+      isAdmin: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
+      },
     },
     data: () => {
       return {
@@ -100,23 +103,15 @@
         statusObject4UserListRadio: {},
         projectList: [],
         statusObject4ProjectListRadio: {},
-        formValues: {
-          belongedToProjectID: '',
-          belongedToProjectName: '',
-          taskName: '',
-          taskDescription: '',
-          taskExecutorID: '',
-          taskExecutorName: '',
-          taskDueTime: '',
-        },
+        formValues: {},
       };
     },
     watch: {
       taskInfoObject: {
         handler: function (newVal, oldVal) {
           this.formValues = {
-            belongedToProjectID: newVal.belongedToProjectID,
-            belongedToProjectName: newVal.belongedToProjectName,
+            taskBelongedToProjectID: newVal.taskBelongedToProjectID,
+            taskBelongedToProjectName: newVal.taskBelongedToProjectName,
             taskName: newVal.taskName,
             taskDescription: newVal.taskDescription,
             taskExecutorID: newVal.taskExecutorID,
@@ -130,6 +125,15 @@
       },
     },
     created: function () {
+      this.formValues = {
+        taskBelongedToProjectID: this.taskInfoObject.taskBelongedToProjectID,
+        taskBelongedToProjectName: this.taskInfoObject.taskBelongedToProjectName,
+        taskName: this.taskInfoObject.taskName,
+        taskDescription: this.taskInfoObject.taskDescription,
+        taskExecutorID: this.taskInfoObject.taskExecutorID,
+        taskExecutorName: this.taskInfoObject.taskExecutorName,
+        taskDueTime: this.formatDate(this.taskInfoObject.taskDueTime),
+      };
       this.getUserList();
       this.getProjectList();
     },
@@ -176,18 +180,34 @@
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/projectList', {
+        this.$axios.get('/projects', {
           params: {
-
+            brief: true,
+            projectName: '',
+            projectInvestigatorName: '',
+            projectSponsorName: '',
+            projectInvolvedUserRealName: '',
+            projectCreatedYearMonth: '',
+            projectStage: 'all',
           }
         }).then((response) => {
-          // console.log('TaskEditForm获取项目列表成功', response);
-          this.projectList = response.data.projectList;
-          this.statusObject4ProjectListRadio = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.response.statusCode === '1') {
+            this.projectList = response.data.response.projects;
+            this.statusObject4ProjectListRadio = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.response.statusCode === '0') {
+            console.error('TaskEditForm获取项目信息失败，错误：', response.data.response.error.message);
+            this.statusObject4ProjectListRadio = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取项目列表失败，错误原因：${response.data.response.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('TaskEditForm获取项目列表失败，错误：', error);
+          console.error('TaskEditForm获取项目信息失败，错误：', error);
           this.statusObject4ProjectListRadio = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
@@ -199,11 +219,12 @@
         this.formValues.taskExecutorID = currentSelection;
       },
       changeFormBelongedToProjectID: function (currentSelection) {
-        this.formValues.belongedToProjectID = currentSelection;
+        this.formValues.taskBelongedToProjectID = currentSelection;
       },
       // TODO: 将表格信息POST至服务器
       submit: function () {
         console.log(this.formValues)
+        // 不要提供projectname，因为不对
       },
     },
   }

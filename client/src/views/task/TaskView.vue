@@ -12,6 +12,7 @@
             <template v-slot:card-body>
               <task-info-table :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-info-table>
               <file-manage-table :taskFiles="taskFiles" :statusObject="statusObject4TaskFiles"></file-manage-table>
+              <p>添加任务执行用户的资料</p>
               <!--              TODO：添加任务执行用户的资料-->
             </template>
           </bottom-card>
@@ -62,26 +63,34 @@
       });
     },
     methods: {
-      // 根据传入的taskID和currentUserID从服务器获取该任务的信息
       getTaskInfo: function () {
         this.statusObject4Task = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/taskInfo', {
+        this.$axios.get('/task', {
           params: {
             taskID: this.$route.params.taskID,
-            userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('Task获取任务信息成功', response);
-          this.taskInfoObject = response.data.taskInfo;
-          this.statusObject4Task = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.response.statusCode === '1') {
+            this.taskInfoObject = response.data.response.task;
+            this.statusObject4Task = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.response.statusCode === '0') {
+            console.error('TaskView获取任务信息失败，错误：', response.data.response.error.message);
+            this.statusObject4Task = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('Task获取任务信息失败，错误：', error);
+          console.error('TaskView获取任务信息失败，错误：', error);
           this.statusObject4Task = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',

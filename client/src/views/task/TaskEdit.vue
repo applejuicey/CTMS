@@ -36,14 +36,6 @@
         statusObject4Task: {},
       }
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
-    },
     created: function () {
       this.getTaskInfo();
     },
@@ -55,26 +47,34 @@
       });
     },
     methods: {
-      // 根据传入的projectID和currentUserID从服务器获取该任务的信息
       getTaskInfo: function () {
         this.statusObject4Task = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/taskInfo', {
+        this.$axios.get('/task', {
           params: {
             taskID: this.$route.params.taskID,
-            userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('TaskEdit获取任务信息成功', response);
-          this.taskInfoObject = response.data.taskInfo;
-          this.statusObject4Task = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.response.statusCode === '1') {
+            this.taskInfoObject = response.data.response.task;
+            this.statusObject4Task = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.response.statusCode === '0') {
+            console.error('TaskView获取任务信息失败，错误：', response.data.response.error.message);
+            this.statusObject4Task = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('TaskEdit获取任务信息失败，错误：', error);
+          console.error('TaskView获取任务信息失败，错误：', error);
           this.statusObject4Task = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',

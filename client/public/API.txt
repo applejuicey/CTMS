@@ -156,12 +156,18 @@ Home模块
 
 4.请求路径  /tasks
   请求方法  GET
-  请求参数  projectID
-  参数说明
+  请求参数  taskName、projectName、projectID、taskExecutorName、taskReceivedStatus、taskCompletedStatus、brief
+  参数说明  taskName、projectName、projectID、taskExecutorName为空则代表查询所有；taskReceivedStatus包含received\not_received\all；taskCompletedStatus包含completed\not_completed\all
   参数举例  {
+            brief: false,
+            taskName: '',
+            projectName: '',
             projectID: 'PROJECT001',
+            taskExecutorName: '',
+            taskReceivedStatus: 'all',
+            taskCompletedStatus: 'all',
            }
-  请求描述  根据userID返回该用户在项目projectID里的[所有]任务（数组）
+  请求描述  返回[上述参数查询出来的]任务的详细信息（数组）
   响应举例  {
             "statusCode": "1",
             "tasks": [
@@ -172,14 +178,14 @@ Home模块
                   "taskBelongedToProjectName": "狂犬1针",
                   "taskCreatorID": "USER001",
                   "taskCreatorName": "刘沛",
-                  "taskCreatedTime": "1975-04-11 22:06:12",
+                  "taskCreatedTime": "1975-04-11",
                   "taskExecutorID": "USER003",
                   "taskExecutorName": "范扬",
                   "taskReceivedStatus": true,
-                  "taskDueTime": "1979-02-20 15:50:19",
+                  "taskDueTime": "1979-02-20",
                   "taskProgress": 16,
                   "taskCompletedStatus": false,
-                  "taskActualCompletedTime": "1987-07-30 09:28:56"
+                  "taskActualCompletedTime": "1987-07-30"
                 },
              ]
           }
@@ -190,11 +196,12 @@ Home模块
 Task模块
 1.请求路径  /tasks
   请求方法  GET
-  请求参数  taskName、projectName、taskExecutorName、taskReceivedStatus、taskCompletedStatus、brief
-  参数说明  taskName、projectName、taskExecutorName为空则代表查询所有；taskReceivedStatus包含received\not_received\all；taskCompletedStatus包含completed\not_completed\all
+  请求参数  taskName、projectName、projectID、taskExecutorName、taskReceivedStatus、taskCompletedStatus、brief
+  参数说明  taskName、projectName、projectID、taskExecutorName为空则代表查询所有；taskReceivedStatus包含received\not_received\all；taskCompletedStatus包含completed\not_completed\all
   参数举例  {
             brief: false,
             taskName: 'ddd',
+            projectID: '',
             projectName: 'PROJECT001',
             taskExecutorName: 'ass',
             taskReceivedStatus: 'all',
@@ -392,14 +399,14 @@ TODO:DELETE项目
 
 
 --------------------------------------------------
-User模块
+User模块(全部修改，仿照上述，统一参数)
 1.请求路径  /users
   请求参数  userRealName、forTaskExecutor、taskID、brief
   参数说明  realName为用户真名的关键字，留空则默认所有；forTaskExecutor（为true时返回除了admin和taskID所属的项目的manager以外的、所有参加该项目的用户）
   参数举例  {
             brief: false,
             userRealName: 'wwww',
-            forTaskExecutor: true,
+            forTaskExecutor: false,
             taskID: "TASK001",
            }
   请求描述  判断userID的权限，如果足够则返回对应的用户列表
