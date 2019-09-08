@@ -31,42 +31,41 @@
         <label for="realName" class="font-weight-normal">
           <span>真实姓名：</span>
         </label>
-        <input v-model="formValues.realName" type="text" class="form-control" id="realName" placeholder="真实姓名">
+        <input v-model="formValues.userRealName" type="text" class="form-control" id="realName" placeholder="真实姓名">
       </div>
       <div class="form-group text-left">
         <label for="email" class="font-weight-normal">
           <span>邮箱地址：</span>
         </label>
-        <input v-model="formValues.email" type="email" class="form-control" id="email" placeholder="邮箱地址">
+        <input v-model="formValues.userEmail" type="email" class="form-control" id="email" placeholder="邮箱地址">
       </div>
       <div class="form-group text-left">
         <label class="font-weight-normal">
           <span>账户状态：</span>
         </label>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="accountStatus1" value="1" v-model="formValues.accountStatus">
+          <input class="form-check-input" type="radio" id="accountStatus1" value="1" v-model="formValues.userAccountStatus">
           <label class="form-check-label" for="accountStatus1">
             正常
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" id="accountStatus2" value="2" v-model="formValues.accountStatus">
+          <input class="form-check-input" type="radio" id="accountStatus2" value="2" v-model="formValues.userAccountStatus">
           <label class="form-check-label" for="accountStatus2">
             冻结
           </label>
         </div>
       </div>
-      <div class="form-group text-left">
+      <div class="form-group text-left" v-if="isAdmin">
         <label class="font-weight-normal">参与的项目：</label>
-        <p>普通用户不可见该功能</p>
         <project-list-checkbox :projectList="projectList" :statusObject="statusObject4ProjectListCheckbox"
-                               :selectedProjectsIDOriginal="formValues.involvedProjectsID"
+                               :selectedProjectsIDOriginal="formValues.userInvolvedProjectsID"
                                @selectionChanged="changeFormInvolvedProjectsID"></project-list-checkbox>
       </div>
-      <div class="form-group text-left">
+      <div class="form-group text-left" v-if="isAdmin">
         <label class="font-weight-normal">可管理的项目：</label>
         <project-list-checkbox :projectList="projectList" :statusObject="statusObject4ProjectListCheckbox"
-                               :selectedProjectsIDOriginal="formValues.canManageProjectsID"
+                               :selectedProjectsIDOriginal="formValues.userCanManageProjectsID"
                                @selectionChanged="changeFormCanManageProjectsID"></project-list-checkbox>
       </div>
       <button type="button" class="btn btn-success" @click="submit">提交</button>
@@ -105,19 +104,15 @@
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
       },
+      isAdmin: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
+      },
     },
     data: () => {
       return {
         projectList: [],
         statusObject4ProjectListCheckbox: {},
-        formValues: {
-          username: '',
-          realName: '',
-          email: '',
-          accountStatus: '',
-          involvedProjectsID: [],
-          canManageProjectsID: [],
-        },
+        formValues: {},
       };
     },
     watch: {
@@ -125,11 +120,11 @@
         handler: function (newVal, oldVal) {
           this.formValues = {
             username: newVal.username,
-            realName: newVal.realName,
-            email: newVal.email,
-            accountStatus: newVal.accountStatus,
-            involvedProjectsID: newVal.involvedProjectsID,
-            canManageProjectsID: newVal.canManageProjectsID,
+            userRealName: newVal.userRealName,
+            userEmail: newVal.userEmail,
+            userAccountStatus: newVal.userAccountStatus,
+            userInvolvedProjectsID: newVal.userInvolvedProjectsID,
+            userCanManageProjectsID: newVal.userCanManageProjectsID,
           };
           this.getProjectList();
         },
@@ -137,28 +132,51 @@
       },
     },
     created: function () {
+      this.formValues = {
+        username: this.userInfoObject.username,
+        userRealName: this.userInfoObject.userRealName,
+        userEmail: this.userInfoObject.userEmail,
+        userAccountStatus: this.userInfoObject.userAccountStatus,
+        userInvolvedProjectsID: this.userInfoObject.userInvolvedProjectsID,
+        userCanManageProjectsID: this.userInfoObject.userCanManageProjectsID,
+      };
       this.getProjectList();
     },
     methods: {
-      // 根据传入的userID，从服务器获取所有项目的信息
       getProjectList: function () {
         this.statusObject4ProjectListCheckbox = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/projectList', {
+        this.$axios.get('/projects', {
           params: {
-            userID: this.currentUserID,
+            brief: true,
+            projectName: '',
+            projectInvestigatorName: '',
+            projectSponsorName: '',
+            projectInvolvedUserRealName: '',
+            projectCreatedYearMonth: '',
+            projectStage: 'all',
           }
         }).then((response) => {
-          // console.log('UserEditForm获取项目列表成功', response);
-          this.projectList = response.data.projectList;
-          this.statusObject4ProjectListCheckbox = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.response.statusCode === '1') {
+            this.projectList = response.data.response.projects;
+            this.statusObject4ProjectListCheckbox = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.response.statusCode === '0') {
+            console.error('UserEditForm获取项目信息失败，错误：', response.data.response.error.message);
+            this.statusObject4ProjectListCheckbox = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取项目列表失败，错误原因：${response.data.response.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('UserEditForm获取项目列表失败，错误：', error);
+          console.error('UserEditForm获取项目信息失败，错误：', error);
           this.statusObject4ProjectListCheckbox = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
@@ -167,10 +185,10 @@
         });
       },
       changeFormCanManageProjectsID: function (currentSelection) {
-        this.formValues.canManageProjectsID = currentSelection;
+        this.formValues.userCanManageProjectsID = currentSelection;
       },
       changeFormInvolvedProjectsID: function (currentSelection) {
-        this.formValues.involvedProjectsID = currentSelection;
+        this.formValues.userInvolvedProjectsID = currentSelection;
       },
       // TODO: 将表格信息POST至服务器
       submit: function () {

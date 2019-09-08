@@ -36,14 +36,6 @@
         statusObject4User: {},
       }
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
-    },
     created: function () {
       this.getUserInfo();
     },
@@ -55,23 +47,32 @@
       });
     },
     methods: {
-      // 根据传入的userID从服务器获取用户的信息
       getUserInfo: function () {
         this.statusObject4User = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/userInfo', {
+        this.$axios.get('/user', {
           params: {
             userID: this.$route.params.userID,
           }
         }).then((response) => {
-          // console.log('UserView获取用户信息成功', response);
-          this.userInfoObject = response.data.userInfo;
-          this.statusObject4User = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.response.statusCode === '1') {
+            this.userInfoObject = response.data.response.user;
+            this.statusObject4User = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.response.statusCode === '0') {
+            console.error('UserView获取用户信息失败，错误：', response.data.response.error.message);
+            this.statusObject4User = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取用户信息失败，错误原因：${response.data.response.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
           console.error('UserView获取用户信息失败，错误：', error);
           this.statusObject4User = {

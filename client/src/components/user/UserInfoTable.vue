@@ -28,7 +28,8 @@
         </span>
         <div class="btn-group ml-auto" v-if="this.$route.path.split('/')[1] !== 'me'">
           <button type="button" class="btn btn-success" @click="changeRoute(userInfoObject.userID, 'edit')" v-if="isAdmin || userInfoObject.userID === currentUserID">
-            <i class="fas fa-pen"></i>&nbsp;编辑用户
+            <i class="fas fa-pen"></i>
+            <span class="d-sm-inline d-none">&nbsp;编辑用户</span>
           </button>
         </div>
       </div>
@@ -54,6 +55,10 @@
             <tr>
               <td class="table-left-column">用户状态：</td>
               <td class="table-right-column">{{ userInfoObject.accountStatus }}</td>
+            </tr>
+            <tr>
+              <td class="table-left-column">参与项目：</td>
+              <td class="table-right-column">{{ userInfoObject.involvedProjectsName }}</td>
             </tr>
             <tr>
               <td class="table-left-column">可管理项目：</td>

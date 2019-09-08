@@ -105,8 +105,6 @@
           params: {
             brief: false,
             userRealName: queryParamsObject.userRealNameKeyword,
-            forTaskExecutor: false,
-            taskID: '',
           }
         }).then((response) => {
           if (response.data.response.statusCode === '1') {

@@ -399,65 +399,98 @@ TODO:DELETE项目
 
 
 --------------------------------------------------
-User模块(全部修改，仿照上述，统一参数)
+User模块
 1.请求路径  /users
-  请求参数  userRealName、forTaskExecutor、taskID、brief
-  参数说明  realName为用户真名的关键字，留空则默认所有；forTaskExecutor（为true时返回除了admin和taskID所属的项目的manager以外的、所有参加该项目的用户）
+  请求参数  userRealName、brief
+  参数说明  realName为用户真名的关键字，留空则默认所有
   参数举例  {
             brief: false,
             userRealName: 'wwww',
-            forTaskExecutor: false,
-            taskID: "TASK001",
            }
-  请求描述  判断userID的权限，如果足够则返回对应的用户列表
+  请求描述  判断userID的权限，如果足够则返回对应的用户列表（数组）
   响应举例  {
               "users": [
-                {
-                  "username": "user3",
-                  "userID": "USER003",
-                  "userRealName": "范扬",
-                },
-                {
-                  "username": "user4",
-                  "userID": "USER004",
-                  "userRealName": "陈振明",
-                },
-              ],
+                "userID": "USER001",
+                "username": "刘沛",
+                "userRealName": "刘沛",
+                "userEmail": "s.mxaei@wcs.cc",
+                "userAccountStatus": "1",
+                "userLastLoginTime": "1987-08-02 02:26:00",
+                "userInvolvedProjectsID": [
+                  "PROJECT001",
+                  "PROJECT002",
+                  "PROJECT003",
+                  "PROJECT004",
+                  "PROJECT005"
+                ],
+                "userInvolvedProjectsName": [],
+                "userCanManageProjectsID": [
+                  "PROJECT001",
+                  "PROJECT002",
+                  "PROJECT003",
+                  "PROJECT004",
+                  "PROJECT005"
+                ],
+                "userCanManageProjectsName": [
+                  "狂犬1针",
+                  "狂犬2针",
+                  "狂犬3针",
+                  "狂犬4针",
+                  "狂犬5针"
+                ]
+              }
+             ],
            }
 
-2.请求路径  /users
-  请求参数  projectID、forProjectInvolvedUsers
-  参数说明  forProjectInvolvedUsers（为true时返回除了admin以外的、所有参加该项目的用户）
-  参数举例  {
-            projectID: "PROJECT001",
-            forProjectInvolvedUsers: true,
-           }
-  请求描述  判断userID的权限，如果足够则返回对应的用户列表
-  响应举例  {
-              "users": [
-                {
-                  "username": "范扬",
-                  "userID": "USER003",
-                  "userRealName": "范扬",
-                },
-                {
-                  "username": "陈振明",
-                  "userID": "USER004",
-                  "userRealName": "陈振明",
-                },
-              ],
-           }
-
-TODO:READ用户
-3.请求路径  /user
+2.请求路径  /user
   请求方法  GET
+  请求参数  userID
+  参数说明
+  参数举例  {
+            userID: 'USER001',
+           }
+  请求描述  提供userID，返回当前userID对应的用户的详细信息（对象）
+  响应举例  {
+            "statusCode": "1",
+            "user": {
+              "userID": "USER001",
+              "username": "刘沛",
+              "userRealName": "刘沛",
+              "userEmail": "s.mxaei@wcs.cc",
+              "userAccountStatus": "1",
+              "userLastLoginTime": "1987-08-02 02:26:00",
+              "userInvolvedProjectsID": [
+                "PROJECT001",
+                "PROJECT002",
+                "PROJECT003",
+                "PROJECT004",
+                "PROJECT005"
+              ],
+              "userInvolvedProjectsName": [],
+              "userCanManageProjectsID": [
+                "PROJECT001",
+                "PROJECT002",
+                "PROJECT003",
+                "PROJECT004",
+                "PROJECT005"
+              ],
+              "userCanManageProjectsName": [
+                "狂犬1针",
+                "狂犬2针",
+                "狂犬3针",
+                "狂犬4针",
+                "狂犬5针"
+              ]
+            }
+          }
+
 TODO:CREATE用户
-4.请求路径  /user
+3.请求路径  /user
   请求方法  POST
 TODO:UPDATE用户
-5.请求路径  /user
+4.请求路径  /user
   请求方法  PUT
 TODO:DELETE用户
-6.请求路径  /user
+5.请求路径  /user
   请求方法  DELETE
 --------------------------------------------------
