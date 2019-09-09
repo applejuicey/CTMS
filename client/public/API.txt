@@ -49,8 +49,13 @@ Login模块
   请求描述  成功则返回该用户信息userInfo+token（对象）
   响应举例  {
              "statusCode": "1",
-             "userInfo": {},
-             "token": "adsiufhoubsvhdfouigndioruwfh",
+             "userInfo": {
+                "userID": "USER001",
+                "username": "liupei",
+                "userRealName": "刘沛",
+                "isAdmin": "true"
+             },
+             "token": "adsiufhoubsvhdfouigndioruwfh"
            }
 --------------------------------------------------
 
@@ -70,7 +75,7 @@ Home模块
             projectCreatedYearMonth: '',
             projectStage: 'all',
            }
-  请求描述  首先验证header中的Authorization中的token，取出userID，限定为该userID参与的项目。再返回[上述参数查询出来的]项目的详细信息（数组）
+  请求描述  返回[上述参数查询出来的]项目的详细信息（数组）。
   响应举例  {
             "statusCode": "1",
             "projects": [
@@ -89,52 +94,20 @@ Home模块
             ]
            }
 
-2.请求路径  /tasks
-  请求方法  GET
-  请求参数  taskReceivedStatus
-  参数说明
-  参数举例  {
-            taskReceivedStatus: false,
-           }
-  请求描述  根据userID返回该用户[尚未接受的]所有任务（数组）
-  响应举例  {
-            "statusCode": "1",
-            "tasks": [
-                {
-                  "taskID": "TASK001",
-                  "taskName": "写DMP",
-                  "taskBelongedToProjectID": "PROJECT001",
-                  "taskBelongedToProjectName": "狂犬1针",
-                  "taskCreatorID": "USER001",
-                  "taskCreatorName": "刘沛",
-                  "taskCreatedTime": "1977-02-27 23:04:41",
-                  "taskExecutorID": "USER003",
-                  "taskExecutorName": "范扬",
-                  "taskReceivedStatus": false,
-                  "taskDueTime": "2013-01-03 14:47:25",
-                  "taskProgress": 71,
-                  "taskCompletedStatus": false,
-                  "taskActualCompletedTime": "1971-02-27 18:28:00"
-                },
-             ]
-          }
-
-3.请求路径  /project
+2.请求路径  /project
   请求方法  GET
   请求参数  projectID
   参数说明
   参数举例  {
             projectID: 'PROJECT001',
            }
-  请求描述  检查userID的权限，足够则返回projectID对应的项目的详细信息（对象）
+  请求描述  返回projectID对应的项目的详细信息（对象）。
   响应举例  {
             "statusCode": "1",
             "project": {
                 "projectID": "PROJECT001",
                 "projectName": "狂犬1针",
-                "projectManagerID": "USER002",
-                "projectManagerName": "王诗远",
-                "projectStage": "农切力价",
+                "projectStage": "preparation\ongoing\ending\supplementing四选一",
                 "projectBriefIntroduction": "问人其决说战为资华共议进将声值毛建及军型会方化许严给那号出结定带能做取将他联划直重话造千容支难件分学质及意儿六老身结实马号明至说处别根酸。",
                 "projectCreatedTime": "2016-01-22",
                 "projectExpectedStartTime": "1999-11-14",
@@ -145,6 +118,8 @@ Home模块
                 "projectInvestigator": "生住清入属今直元第期群题里",
                 "projectMonitor": "为总子六军计红油工海家内月",
                 "projectStatistician": "红素市府圆完果历该从",
+                "projectManagerID": "USER002",
+                "projectManagerName": "王诗远",
                 "projectInvolvedUsersID": [
                   "USER003",
                 ],
@@ -154,7 +129,7 @@ Home模块
             }
           }
 
-4.请求路径  /tasks
+3.请求路径  /tasks
   请求方法  GET
   请求参数  taskName、projectName、projectID、taskExecutorName、taskReceivedStatus、taskCompletedStatus、brief
   参数说明  taskName、projectName、projectID、taskExecutorName为空则代表查询所有；taskReceivedStatus包含received\not_received\all；taskCompletedStatus包含completed\not_completed\all
@@ -167,7 +142,16 @@ Home模块
             taskReceivedStatus: 'all',
             taskCompletedStatus: 'all',
            }
-  请求描述  返回[上述参数查询出来的]任务的详细信息（数组）
+           {
+            brief: false,
+            taskName: '',
+            projectName: '',
+            projectID: '',
+            taskExecutorName: '',
+            taskReceivedStatus: 'not_received',
+            taskCompletedStatus: 'all',
+           }
+  请求描述  返回[上述参数查询出来的]任务的详细信息（数组）。
   响应举例  {
             "statusCode": "1",
             "tasks": [
@@ -181,10 +165,10 @@ Home模块
                   "taskCreatedTime": "1975-04-11",
                   "taskExecutorID": "USER003",
                   "taskExecutorName": "范扬",
-                  "taskReceivedStatus": true,
+                  "taskReceivedStatus": "received\not_received二选一",
                   "taskDueTime": "1979-02-20",
                   "taskProgress": 16,
-                  "taskCompletedStatus": false,
+                  "taskCompletedStatus": "completed\not_completed二选一",
                   "taskActualCompletedTime": "1987-07-30"
                 },
              ]
@@ -207,7 +191,7 @@ Task模块
             taskReceivedStatus: 'all',
             taskCompletedStatus: 'all',
            }
-  请求描述  返回[上述参数查询出来的]任务的详细信息（数组）
+  请求描述  返回[上述参数查询出来的]任务的详细信息（数组）。
   响应举例  {
             "statusCode": "1",
             "tasks": [
@@ -221,10 +205,10 @@ Task模块
                   "taskCreatedTime": "1975-04-11",
                   "taskExecutorID": "USER003",
                   "taskExecutorName": "范扬",
-                  "taskReceivedStatus": true,
+                  "taskReceivedStatus": "received\not_received二选一",
                   "taskDueTime": "1979-02-20",
                   "taskProgress": 16,
-                  "taskCompletedStatus": false,
+                  "taskCompletedStatus": "completed\not_completed二选一",
                   "taskActualCompletedTime": "1987-07-30"
                 },
              ]
@@ -237,7 +221,7 @@ Task模块
   参数举例  {
             taskID: 'TASK001',
            }
-  请求描述  提供userID与taskID，返回当前taskID对应的任务的详细信息（对象）
+  请求描述  返回taskID对应的任务的详细信息（对象）。
   响应举例  {
             "statusCode": "1",
             "task": {
@@ -247,14 +231,14 @@ Task模块
                 "taskBelongedToProjectName": "狂犬1针",
                 "taskCreatorID": "USER001",
                 "taskCreatorName": "刘沛",
-                "taskCreatedTime": "2004-01-04 18:53:07",
+                "taskCreatedTime": "1975-04-11",
                 "taskExecutorID": "USER003",
                 "taskExecutorName": "范扬",
-                "taskReceivedStatus": false,
-                "taskDueTime": "1997-06-10 13:35:37",
-                "taskProgress": 74,
-                "taskCompletedStatus": false,
-                "taskActualCompletedTime": "1977-08-03 02:26:27"
+                "taskReceivedStatus": "received\not_received二选一",
+                "taskDueTime": "1979-02-20",
+                "taskProgress": 16,
+                "taskCompletedStatus": "completed\not_completed二选一",
+                "taskActualCompletedTime": "1987-07-30"
               }
             }
 
@@ -274,23 +258,32 @@ TODO:DELETE任务
 File模块
 1.请求路径  /files
   请求方法  GET
-  请求参数  taskID
-  参数说明
+  请求参数  fileBelongedToTaskID、fileName、fileBelongedToTaskName、fileBelongedToProjectName、fileCreatorName、brief
+  参数说明  fileBelongedToTaskID、fileName、fileBelongedToTaskName、fileBelongedToProjectName、fileCreatorName为空则代表查询所有
   参数举例  {
-            taskID: 'TASK001',
+            brief: 'false',
+            fileBelongedToTaskID: '',
+            fileName: 'DMP',
+            fileBelongedToTaskName: '',
+            fileBelongedToProjectName: '',
+            fileCreatorName: '',
            }
-  请求描述  提供userID与taskID，返回当前taskID对应的任务所拥有的所有文件的详细信息（数组）
+  请求描述  返回[上述参数查询出来的]文件的详细信息（数组）。
   响应举例  {
           "statusCode": "1",
           "files": [
             {
               "fileID": "FILE001",
-              "fileBelongedToTaskID": "TASK001",
               "fileName": "DMP-SOP-V1.0",
+              "fileDescription": "版本已更新，请勿使用！",
+              "fileBelongedToTaskID": "TASK001",
+              "fileBelongedToTaskName": "任务1的名称",
+              "fileBelongedToProjectID": "PROJECT001",
+              "fileBelongedToProjectName": "狂犬1针",
               "fileCreateDate": "2019-08-11",
               "fileCreatorID": "USER001",
               "fileCreatorName": "刘沛",
-              "fileDescription": "版本已更新，请勿使用！",
+              "fileStatus": "removed/deleted/normal三选一",
               "fileDeleteDate": "2019-08-11",
               "fileDeleteExecutorID": "USER001",
               "fileDeleteExecutorName": "刘沛",
@@ -298,15 +291,19 @@ File模块
             },
           ]
 
-TODO:CREATE文件（文件不需要UPDATE方法）
-2.请求路径  /file
-  请求方法  POST
-TODO:DELETE文件
-3.请求路径  /file
-  请求方法  DELETE
 TODO:READ文件
-4.请求路径  /file
+2.请求路径  /file
   请求方法  GET
+TODO:CREATE文件
+3.请求路径  /file
+  请求方法  POST
+TODO:UPDATE文件
+4.请求路径  /file
+  请求方法  PUT
+TODO:DELETE文件
+4.请求路径  /file
+  请求方法  DELETE
+
 --------------------------------------------------
 
 
@@ -325,14 +322,14 @@ Project模块
             projectCreatedYearMonth: '2019-01',
             projectStage: 'all',
            }
-  请求描述  首先验证header中的Authorization中的token，取出userID，限定为该userID参与的项目。再返回[上述参数查询出来的]项目的详细信息（数组）
+  请求描述  返回[上述参数查询出来的]项目的详细信息（数组）
   响应举例  {
             "statusCode": "1",
             "projects": [
               {
                "projectID": "PROJECT001",
                "projectName": "狂犬1针",
-               "projectStage": "要红交民",
+               "projectStage": "preparation\ongoing\ending\supplementing四选一",
                "projectBriefIntroduction": "复离一战太动通难格青给革道度受样统改以使会传气路命东教在在事细向采日院划况次百东周手技精色计指容样需管区东权人水院为养非党传何验始思管华红。",
                "projectCreatedTime": "1996-08-19",
                "projectExpectedStartTime": "2015-07-25",
@@ -343,6 +340,8 @@ Project模块
                "projectInvestigator": "并问很问济程之地而只定世制",
                "projectMonitor": "军运林打花系反难他他克亲需",
                "projectStatistician": "议基属近会容着精",
+               "projectManagerID": "USER002",
+               "projectManagerName": "王诗远",
                "projectInvolvedUsersID": [
                   "USER003",
                ],
@@ -360,13 +359,13 @@ Project模块
   参数举例  {
             projectID: 'PROJECT001',
            }
-  请求描述  提供userID与projectID，返回当前projectID对应的项目的详细信息（对象）
+  请求描述  返回projectID对应的项目的详细信息（对象）。
   响应举例  {
             "statusCode": "1",
             "project": {
                "projectID": "PROJECT001",
                "projectName": "狂犬1针",
-               "projectStage": "要红交民",
+               "projectStage": "preparation\ongoing\ending\supplementing四选一",
                "projectBriefIntroduction": "复离一战太动通难格青给革道度受样统改以使会传气路命东教在在事细向采日院划况次百东周手技精色计指容样需管区东权人水院为养非党传何验始思管华红。",
                "projectCreatedTime": "1996-08-19",
                "projectExpectedStartTime": "2015-07-25",
@@ -377,6 +376,8 @@ Project模块
                "projectInvestigator": "并问很问济程之地而只定世制",
                "projectMonitor": "军运林打花系反难他他克亲需",
                "projectStatistician": "议基属近会容着精",
+               "projectManagerID": "USER002",
+               "projectManagerName": "王诗远",
                "projectInvolvedUsersID": [
                   "USER003",
                ],
@@ -405,16 +406,17 @@ User模块
   参数说明  realName为用户真名的关键字，留空则默认所有
   参数举例  {
             brief: false,
-            userRealName: 'wwww',
+            userRealName: '王',
            }
-  请求描述  判断userID的权限，如果足够则返回对应的用户列表（数组）
+  请求描述  返回[上述参数查询出来的]用户的详细信息（数组）。
   响应举例  {
               "users": [
                 "userID": "USER001",
-                "username": "刘沛",
+                "isAdmin": "true",
+                "username": "liupei",
                 "userRealName": "刘沛",
                 "userEmail": "s.mxaei@wcs.cc",
-                "userAccountStatus": "1",
+                "userAccountStatus": "normal/frozen二选一",
                 "userLastLoginTime": "1987-08-02 02:26:00",
                 "userInvolvedProjectsID": [
                   "PROJECT001",
@@ -423,7 +425,13 @@ User模块
                   "PROJECT004",
                   "PROJECT005"
                 ],
-                "userInvolvedProjectsName": [],
+                "userInvolvedProjectsName": [
+                  "狂犬1针",
+                  "狂犬2针",
+                  "狂犬3针",
+                  "狂犬4针",
+                  "狂犬5针"
+                ],
                 "userCanManageProjectsID": [
                   "PROJECT001",
                   "PROJECT002",
@@ -449,15 +457,16 @@ User模块
   参数举例  {
             userID: 'USER001',
            }
-  请求描述  提供userID，返回当前userID对应的用户的详细信息（对象）
+  请求描述  返回userID对应的用户的详细信息（对象）。
   响应举例  {
             "statusCode": "1",
             "user": {
               "userID": "USER001",
-              "username": "刘沛",
+              "isAdmin": "true",
+              "username": "liupei",
               "userRealName": "刘沛",
               "userEmail": "s.mxaei@wcs.cc",
-              "userAccountStatus": "1",
+              "userAccountStatus": "normal/frozen二选一",
               "userLastLoginTime": "1987-08-02 02:26:00",
               "userInvolvedProjectsID": [
                 "PROJECT001",
@@ -466,7 +475,13 @@ User模块
                 "PROJECT004",
                 "PROJECT005"
               ],
-              "userInvolvedProjectsName": [],
+              "userInvolvedProjectsName": [
+                "狂犬1针",
+                "狂犬2针",
+                "狂犬3针",
+                "狂犬4针",
+                "狂犬5针"
+              ],
               "userCanManageProjectsID": [
                 "PROJECT001",
                 "PROJECT002",

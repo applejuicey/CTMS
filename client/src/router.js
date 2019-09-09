@@ -18,6 +18,11 @@ import UserView from './views/user/UserView.vue';
 import UserEdit from './views/user/UserEdit.vue';
 import UserDelete from './views/user/UserDelete.vue';
 import UserCreate from './views/user/UserCreate.vue';
+import Files from './views/file/Files.vue';
+import FileView from './views/file/FileView.vue';
+import FileEdit from './views/file/FileEdit.vue';
+import FileDelete from './views/file/FileDelete.vue';
+import FileCreate from './views/file/FileCreate.vue';
 import Me from './views/Me.vue';
 import About from './views/About.vue';
 import NotFound from './views/NotFound.vue';
@@ -161,6 +166,46 @@ const router = new Router({
       path: '/user/create',
       name: 'user_create',
       component: UserCreate,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/files',
+      name: 'files',
+      component: Files,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/file/view/:fileID',
+      name: 'file_view',
+      component: FileView,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/file/edit/:fileID',
+      name: 'file_edit',
+      component: FileEdit,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/file/delete/:fileID',
+      name: 'file_delete',
+      component: FileDelete,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/file/create',
+      name: 'file_create',
+      component: FileCreate,
       meta: {
         needAuth: true,
       },

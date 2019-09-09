@@ -11,7 +11,7 @@
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
               <task-info-table :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-info-table>
-              <file-manage-table :taskFiles="taskFiles" :statusObject="statusObject4TaskFiles"></file-manage-table>
+              <file-info-table :taskFiles="taskFiles" :statusObject="statusObject4TaskFiles"></file-info-table>
               <p>添加任务执行用户的资料</p>
               <!--              TODO：添加任务执行用户的资料-->
             </template>
@@ -25,13 +25,13 @@
 <script>
   import BottomCard from '@/components/BottomCard.vue';
   import TaskInfoTable from '@/components/task/TaskInfoTable.vue';
-  import FileManageTable from '@/components/FileManageTable.vue';
+  import FileInfoTable from '@/components/file/FileInfoTable.vue';
   export default {
     name: 'task_view',
     components: {
       BottomCard,
       TaskInfoTable,
-      FileManageTable,
+      FileInfoTable,
     },
     data: function () {
       return {

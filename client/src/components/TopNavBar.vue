@@ -74,6 +74,7 @@
             .set('tasks', 'tasks')
             .set('projects', 'projects')
             .set('users', 'users')
+            .set('files', 'files')
             .set('me', 'me');
         const destinationName = routeMap.get(targetPage);
         this.$router.push({ name: destinationName});
