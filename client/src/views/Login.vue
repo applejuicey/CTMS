@@ -81,6 +81,8 @@
             // console.log('Login登录成功', response);
             localStorage.setItem('userInfo', JSON.stringify(response.data.data.userInfo));
             localStorage.setItem('token', JSON.stringify(response.data.data.token));
+            this.$axios.defaults.headers.userID = JSON.stringify(response.data.data.userInfo).userID;
+            this.$axios.defaults.headers.Authorization = `Bearer ${JSON.stringify(response.data.data.token)}`;
             this.$router.push({
               name: 'home',
             });

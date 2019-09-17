@@ -2,11 +2,22 @@ import axios from 'axios';
 
 axios.defaults.timeout = 10000;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-
-let userid = JSON.parse(localStorage.getItem('userInfo')).userID;
-console.log(userid)
-axios.defaults.headers.userID = userid;
 axios.defaults.baseURL = 'https://easy-mock.com/mock/5b8e6ff6189f3722c8cb6da3/api';
+// http://47.100.168.127:5000/api
+try {
+  let userID = JSON.parse(localStorage.getItem('userInfo')).userID;
+  console.log(userID);
+  axios.defaults.headers.userID = userID;
+} catch (error) {
+  console.error('没有在localStorage中读取到userID', error);
+}
+try {
+  let token = JSON.parse(localStorage.getItem('token'));
+  console.log(token);
+  axios.defaults.headers.Authorization = `Bearer ${token}`;
+} catch (error) {
+  console.error('没有在localStorage中读取到token', error);
+}
 
 export {
   axios

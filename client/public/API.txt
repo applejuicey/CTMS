@@ -284,12 +284,47 @@ File模块
               "fileCreatorID": "USER001",
               "fileCreatorName": "刘沛",
               "fileStatus": "removed/deleted/normal三选一",
+              "fileRemoveDate": "2019-08-11",
+              "fileRemoveExecutorID": "USER001",
+              "fileRemoveExecutorName": "刘沛",
               "fileDeleteDate": "2019-08-11",
               "fileDeleteExecutorID": "USER001",
               "fileDeleteExecutorName": "刘沛",
               "fileDownloadURL": ""
             },
           ]
+
+2.请求路径  /file
+  请求方法  GET
+  请求参数  fileID
+  参数说明
+  参数举例  {
+            fileID: 'FILE001',
+           }
+  请求描述  返回fileID对应的文件的详细信息（对象）。
+  响应举例  {
+            "statusCode": "1",
+            "file": {
+                "fileID": "FILE001",
+                "fileName": "DMP-SOP-V1.0",
+                "fileDescription": "版本已更新，请勿使用！",
+                "fileBelongedToTaskID": "TASK001",
+                "fileBelongedToTaskName": "任务1的名称",
+                "fileBelongedToProjectID": "PROJECT001",
+                "fileBelongedToProjectName": "狂犬1针",
+                "fileCreateDate": "2019-08-11",
+                "fileCreatorID": "USER001",
+                "fileCreatorName": "刘沛",
+                "fileStatus": "removed/deleted/normal三选一",
+                "fileRemoveDate": "2019-08-11",
+                "fileRemoveExecutorID": "USER001",
+                "fileRemoveExecutorName": "刘沛",
+                "fileDeleteDate": "2019-08-11",
+                "fileDeleteExecutorID": "USER001",
+                "fileDeleteExecutorName": "刘沛",
+                "fileDownloadURL": ""
+              },
+            }
 
 TODO:READ文件
 2.请求路径  /file

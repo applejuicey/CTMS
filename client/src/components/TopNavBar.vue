@@ -2,7 +2,7 @@
   <div class="row mb-4 shadow" id="top_nav_bar">
     <div class="col-12">
       <nav class="navbar navbar-expand-md navbar-light bg-warning">
-        <span class="navbar-brand">
+        <span class="navbar-brand cursor-default">
           <i class="fas fa-cog"></i>&nbsp;项目管理系统
         </span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">

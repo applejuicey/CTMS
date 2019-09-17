@@ -39,25 +39,39 @@
             <td>创建时间</td>
             <td>创建者姓名</td>
             <td>文件状态</td>
-            <td>删除时间</td>
-            <td>删除者姓名</td>
+            <td>暂时移除时间</td>
+            <td>暂时移除者姓名</td>
+            <td>彻底删除时间</td>
+            <td>彻底删除者姓名</td>
           </tr>
           <template v-for="(fileInfo, index) in filesInfoArray">
             <tr>
               <td>
-                <span class="cursor-pointer text-primary" @click="changeRoute(fileInfo.fileID, 'view')">
+                <!--任何人可以下载fileStatus为normal的文件-->
+                <span class="cursor-pointer text-success" @click="downloadFile(fileInfo.fileID)" v-if="fileInfo.fileStatus === 'normal'">
+                  <i class="fas fa-download"></i>&nbsp;
+                </span>
+                <!--任何人可以查看fileStatus为非deleted的文件-->
+                <span class="cursor-pointer text-primary" @click="changeRoute(fileInfo.fileID, 'view')" v-if="fileInfo.fileStatus !== 'deleted'">
                   <i class="fas fa-search"></i>&nbsp;
                 </span>
-                <span class="cursor-pointer text-success" @click="changeRoute(fileInfo.fileID, 'edit')" v-if="isAdmin || currentUserID === fileInfo.fileCreatorID">
+                <!--admin或文件创建人可以编辑fileStatus为非deleted的文件-->
+                <span class="cursor-pointer text-success" @click="changeRoute(fileInfo.fileID, 'edit')" v-if="(fileInfo.fileStatus !== 'deleted') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
                   <i class="fas fa-edit"></i>&nbsp;
                 </span>
-                <span class="cursor-pointer text-warning" @click="removeFile(fileInfo.fileID)" v-if="fileInfo.fileStatus === 'normal' && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
+                <!--admin或文件创建人可以暂时移除fileStatus为normal的文件-->
+                <!--暂时移除代表着将fileStatus标记为removed-->
+                <span class="cursor-pointer text-warning" @click="removeFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === 'normal') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
                   <i class="fas fa-minus-circle"></i>&nbsp;
                 </span>
-                <span class="cursor-pointer text-success" @click="recoverFile(fileInfo.fileID)" v-if="fileInfo.fileStatus === 'removed' && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
+                <!--admin或文件创建人可以恢复fileStatus为removed的文件-->
+                <!--恢复代表着将fileStatus标记为normal-->
+                <span class="cursor-pointer text-success" @click="recoverFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === 'removed') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
                   <i class="fas fa-redo"></i>&nbsp;
                 </span>
-                <span class="cursor-pointer text-danger" @click="changeRoute(fileInfo.fileID, 'delete')" v-if="isAdmin || currentUserID === fileInfo.fileCreatorID">
+                <!--admin或文件创建人可以彻底删除fileStatus为removed的文件-->
+                <!--彻底删除代表着将fileStatus标记为deleted且清除fileDownloadURL及具体文件-->
+                <span class="cursor-pointer text-danger" @click="changeRoute(fileInfo.fileID, 'delete')" v-if="(fileInfo.fileStatus === 'removed') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
                   <i class="fas fa-trash"></i>&nbsp;
                 </span>
               </td>
@@ -68,6 +82,8 @@
               <td>{{fileInfo.fileCreateDate}}</td>
               <td>{{fileInfo.fileCreatorName}}</td>
               <td>{{fileInfo.fileStatus}}</td>
+              <td>{{fileInfo.fileRemoveDate}}</td>
+              <td>{{fileInfo.fileRemoveExecutorName}}</td>
               <td>{{fileInfo.fileDeleteDate}}</td>
               <td>{{fileInfo.fileDeleteExecutorName}}</td>
             </tr>
@@ -124,6 +140,9 @@
       },
       recoverFile: function (fileID) {
         alert(`recover${fileID}`)
+      },
+      downloadFile: function (fileID) {
+        alert(`download${fileID}`)
       },
     },
   }

@@ -1,5 +1,6 @@
 html {
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
 }
 body {
   height: 100%;
@@ -8,7 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
   text-align: center;
-  background: url('body_bg.jpg');
+  background: url('../images/body_bg.jpg');
   background-size: cover;
 }
 b {
@@ -18,10 +19,13 @@ b {
   transform: translate(0, -2px);
 }
 .obscure {
-  opacity: 0.85;
+  opacity: 0.90;
 }
 .cursor-pointer {
   cursor: pointer;
+}
+.cursor-default {
+  cursor: default;
 }
 .list-card {
   padding: 1.25rem;

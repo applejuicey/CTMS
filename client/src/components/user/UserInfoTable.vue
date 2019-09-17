@@ -46,27 +46,27 @@
             </tr>
             <tr>
               <td class="table-left-column">真实姓名：</td>
-              <td class="table-right-column">{{ userInfoObject.realName }}</td>
+              <td class="table-right-column">{{ userInfoObject.userRealName }}</td>
             </tr>
             <tr>
               <td class="table-left-column">邮箱：</td>
-              <td class="table-right-column">{{ userInfoObject.email }}</td>
+              <td class="table-right-column">{{ userInfoObject.userEmail }}</td>
             </tr>
             <tr>
               <td class="table-left-column">用户状态：</td>
-              <td class="table-right-column">{{ userInfoObject.accountStatus }}</td>
+              <td class="table-right-column">{{ userInfoObject.userAccountStatus }}</td>
             </tr>
             <tr>
               <td class="table-left-column">参与项目：</td>
-              <td class="table-right-column">{{ userInfoObject.involvedProjectsName }}</td>
+              <td class="table-right-column">{{ userInfoObject.userInvolvedProjectsName }}</td>
             </tr>
             <tr>
               <td class="table-left-column">可管理项目：</td>
-              <td class="table-right-column">{{ userInfoObject.canManageProjectsName }}</td>
+              <td class="table-right-column">{{ userInfoObject.userCanManageProjectsName }}</td>
             </tr>
             <tr>
               <td class="table-left-column">上次登录时间：</td>
-              <td class="table-right-column">{{ userInfoObject.lastLoginTime }}</td>
+              <td class="table-right-column">{{ userInfoObject.userLastLoginTime }}</td>
             </tr>
           </tbody>
         </table>

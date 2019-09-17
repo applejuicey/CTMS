@@ -78,7 +78,6 @@
       // watch VUEX中的fileFilterQueryObject，有变化时从服务器获取数据
       '$store.state.fileFilterQueryObject': {
         handler: function (newVal, oldVal) {
-          // console.log(newVal);
           this.getFilesInfo(newVal);
         },
         deep: true

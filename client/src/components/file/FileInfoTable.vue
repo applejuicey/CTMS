@@ -24,40 +24,79 @@
       <div class="d-flex mb-2">
         <span class="font-weight-normal">
           <i class="fas fa-caret-right"></i>&nbsp;
-          任务附属文件：
+          文件信息：
         </span>
-        <button class="btn btn-success ml-auto">上传文件</button>
-        <p>增加垃圾箱功能、增加编辑功能</p>
+        <div class="btn-group ml-auto">
+          <button type="button" class="btn btn-success" @click="downloadFile(fileInfoObject.fileID)" v-if="fileInfoObject.fileStatus === 'normal'">
+            <i class="fas fa-download"></i>
+            <span class="d-sm-inline d-none">&nbsp;下载文件</span>
+          </button>
+          <button type="button" class="btn btn-success" @click="changeRoute(fileInfoObject.fileID, 'edit')" v-if="(fileInfoObject.fileStatus !== 'deleted') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+            <i class="fas fa-pen"></i>
+            <span class="d-sm-inline d-none">&nbsp;编辑文件</span>
+          </button>
+          <button type="button" class="btn btn-warning" @click="removeFile(fileInfoObject.fileID)" v-if="(fileInfoObject.fileStatus === 'normal') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+            <i class="fas fa-minus-circle"></i>
+            <span class="d-sm-inline d-none">&nbsp;移除文件</span>
+          </button>
+          <button type="button" class="btn btn-success" @click="recoverFile(fileInfoObject.fileID)" v-if="(fileInfoObject.fileStatus === 'removed') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+            <i class="fas fa-redo"></i>
+            <span class="d-sm-inline d-none">&nbsp;恢复文件</span>
+          </button>
+          <button type="button" class="btn btn-danger" @click="changeRoute(fileInfoObject.fileID, 'delete')" v-if="(fileInfoObject.fileStatus === 'removed') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+            <i class="fas fa-trash"></i>
+            <span class="d-sm-inline d-none">&nbsp;彻底删除文件</span>
+          </button>
+        </div>
       </div>
       <div class="table-responsive">
-        <table class="table table-bordered text-nowrap">
+        <table class="table table-borderless table-sm text-nowrap mb-0">
+          <tbody>
           <tr>
-            <td>文件名</td>
-            <td>创建日期</td>
-            <td>创建者</td>
-            <td>简介</td>
-            <td>删除日期</td>
-            <td>删除者</td>
-            <td>操作</td>
+            <td class="table-left-column">文件名称：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileName }}</td>
           </tr>
-          <template v-for="(file, index) in taskFiles">
-            <tr>
-              <td>{{file.fileName}}</td>
-              <td>{{file.createDate}}</td>
-              <td>{{file.creatorName}}</td>
-              <td>{{file.description}}</td>
-              <td>{{file.deleteDate}}</td>
-              <td>{{file.deleteExecutorName}}</td>
-              <td>
-            <span class="cursor-pointer text-primary" @click="downloadFile(file.fileID, 'view')">
-              <i class="fas fa-download"></i>&nbsp;
-            </span>
-                <span class="cursor-pointer text-danger" @click="deleteFile(file.fileID, 'delete')" v-if="isAdmin || currentUserID === file.creatorID">
-              <i class="fas fa-trash"></i>&nbsp;
-            </span>
-              </td>
-            </tr>
-          </template>
+          <tr>
+            <td class="table-left-column">文件描述：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileDescription }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">隶属于任务：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileBelongedToTaskName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">隶属于项目：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileBelongedToProjectName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">创建时间：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileCreatedDate }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">创建者：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileCreatorName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">文件状态：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileStatus }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">暂时移除时间：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileRemoveDate }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">暂时移除者：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileRemoveExecutorName }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">彻底删除时间：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileDeleteDate }}</td>
+          </tr>
+          <tr>
+            <td class="table-left-column">彻底删除者：</td>
+            <td class="table-right-column">{{ fileInfoObject.fileDeleteExecutorName }}</td>
+          </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -76,21 +115,16 @@
 
 <script>
   export default {
-    name: 'file_manage_table',
+    name: 'file_info_table',
     props: {
-      taskFiles: {
-        type: Array,
+      fileInfoObject: {
+        type: Object,
         required: true,
       },
       statusObject: {
         type: Object,
         required: true,
       },
-    },
-    data: () => {
-      return {
-
-      };
     },
     computed: {
       isAdmin: function () {
@@ -101,11 +135,22 @@
       },
     },
     methods: {
-      downloadFile: function (fileID) {
-
+      changeRoute: function (fileID, identifier) {
+        this.$router.push({
+          name: `file_${identifier}`,
+          params: {
+            fileID: fileID,
+          },
+        });
       },
-      deleteFile: function (fileID) {
-
+      removeFile: function (fileID) {
+        alert(`remove${fileID}`)
+      },
+      recoverFile: function (fileID) {
+        alert(`recover${fileID}`)
+      },
+      downloadFile: function (fileID) {
+        alert(`download${fileID}`)
       },
     },
   }
