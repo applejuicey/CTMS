@@ -8,7 +8,8 @@ API规则：（以任务TASK为例，单数返回对象，复数返回数组）
 POST /task
 2.READ:
 GET /task
-参数里面带taskID
+  2.1 参数里面带taskID，则返回单个任务
+  2.2 参数里面不带taskID而带其他很多字段，则返回多个任务
 3.UPDATE:
 PUT /task
 参数里面带taskID
@@ -62,7 +63,7 @@ Login模块
 
 --------------------------------------------------
 Home模块
-1.请求路径  /projects
+1.请求路径  /project
   请求方法  GET
   请求参数  projectName、projectStage、projectInvestigatorName、projectSponsorName、projectInvolvedUserRealName、projectCreatedYearMonth、brief
   参数说明  projectName、projectInvestigatorName、projectSponsorName、projectInvolvedUserRealName、projectCreatedYearMonth如果留空，代表查询所有；projectStage包含preparation\ongoing\ending\supplementing\all；brief代表是否返回的是简要的信息
@@ -129,7 +130,7 @@ Home模块
             }
           }
 
-3.请求路径  /tasks
+3.请求路径  /task
   请求方法  GET
   请求参数  taskName、projectName、projectID、taskExecutorName、taskReceivedStatus、taskCompletedStatus、brief
   参数说明  taskName、projectName、projectID、taskExecutorName为空则代表查询所有；taskReceivedStatus包含received\not_received\all；taskCompletedStatus包含completed\not_completed\all
@@ -137,17 +138,9 @@ Home模块
             brief: false,
             taskName: '',
             projectName: '',
-            projectID: 'PROJECT001',
-            taskExecutorName: '',
-            taskReceivedStatus: 'all',
-            taskCompletedStatus: 'all',
-           }
-           {
-            brief: false,
-            taskName: '',
-            projectName: '',
             projectID: '',
             taskExecutorName: '',
+            taskExecutorID: 'USER001',
             taskReceivedStatus: 'not_received',
             taskCompletedStatus: 'all',
            }
@@ -178,7 +171,7 @@ Home模块
 
 --------------------------------------------------
 Task模块
-1.请求路径  /tasks
+1.请求路径  /task
   请求方法  GET
   请求参数  taskName、projectName、projectID、taskExecutorName、taskReceivedStatus、taskCompletedStatus、brief
   参数说明  taskName、projectName、projectID、taskExecutorName为空则代表查询所有；taskReceivedStatus包含received\not_received\all；taskCompletedStatus包含completed\not_completed\all
@@ -187,6 +180,7 @@ Task模块
             taskName: 'ddd',
             projectID: '',
             projectName: 'PROJECT001',
+            taskExecutorID: '',
             taskExecutorName: 'ass',
             taskReceivedStatus: 'all',
             taskCompletedStatus: 'all',
@@ -256,7 +250,7 @@ TODO:DELETE任务
 
 --------------------------------------------------
 File模块
-1.请求路径  /files
+1.请求路径  /file
   请求方法  GET
   请求参数  fileBelongedToTaskID、fileName、fileBelongedToTaskName、fileBelongedToProjectName、fileCreatorName、brief
   参数说明  fileBelongedToTaskID、fileName、fileBelongedToTaskName、fileBelongedToProjectName、fileCreatorName为空则代表查询所有
@@ -326,9 +320,6 @@ File模块
               },
             }
 
-TODO:READ文件
-2.请求路径  /file
-  请求方法  GET
 TODO:CREATE文件
 3.请求路径  /file
   请求方法  POST
@@ -344,7 +335,7 @@ TODO:DELETE文件
 
 --------------------------------------------------
 Project模块
-1.请求路径  /projects
+1.请求路径  /project
   请求方法  GET
   请求参数  projectName、projectStage、projectInvestigatorName、projectSponsorName、projectInvolvedUserRealName、projectCreatedYearMonth、brief
   参数说明  projectName、projectInvestigatorName、projectSponsorName、projectInvolvedUserRealName、projectCreatedYearMonth如果留空，代表查询所有；projectStage包含preparation\ongoing\ending\supplementing\all
@@ -436,7 +427,7 @@ TODO:DELETE项目
 
 --------------------------------------------------
 User模块
-1.请求路径  /users
+1.请求路径  /user
   请求参数  userRealName、brief
   参数说明  realName为用户真名的关键字，留空则默认所有
   参数举例  {

@@ -77,19 +77,20 @@
         this.loading = true;
         this.buttonText = '登录中，请稍后';
         this.$axios.post('/login', this.formValues).then((response) => {
-          if (response.data.data.statusCode === '1') {
+          console.log(response)
+          if (response.data.statusCode === '1') {
             // console.log('Login登录成功', response);
-            localStorage.setItem('userInfo', JSON.stringify(response.data.data.userInfo));
-            localStorage.setItem('token', JSON.stringify(response.data.data.token));
-            this.$axios.defaults.headers.userID = JSON.stringify(response.data.data.userInfo).userID;
-            this.$axios.defaults.headers.Authorization = `Bearer ${JSON.stringify(response.data.data.token)}`;
+            localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo));
+            localStorage.setItem('token', JSON.stringify(response.data.token));
             this.$router.push({
               name: 'home',
             });
-          } else {
-            console.error('Login登录失败，错误：', response.data.data.error.message);
-            this.responseMessage = `${response.data.data.error.message}`;
+          } else if (response.data.statusCode === '0') {
+            console.error('Login登录失败，错误：', response.data.error.message);
+            this.responseMessage = `${response.data.error.message}`;
             $('#errorModal').modal('show');
+          } else {
+            throw new Error('CLIENT未知错误');
           }
         }).catch((error) => {
           console.error('Login登录失败，错误：', error);

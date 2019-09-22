@@ -108,7 +108,7 @@
     },
     computed: {
       currentUsername: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).username;
+        return JSON.parse(localStorage.getItem('userInfo')).userRealName;
       },
       isAdmin: function () {
         return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
@@ -127,7 +127,7 @@
     },
     methods: {
       getUserInvolvedProjects: function () {
-        this.$axios.get('/projects', {
+        this.$axios.get('/project', {
           params: {
             brief: true,
             projectName: '',
@@ -138,14 +138,14 @@
             projectStage: 'all',
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
-            this.involvedProjects = response.data.response.projects;
+          if (response.data.statusCode === '1') {
+            this.involvedProjects = response.data.projects;
             this.statusIndicator = 'loaded';
-          } else if (response.data.response.statusCode === '0') {
-            console.error('Home获取项目信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('Home获取项目信息失败，错误：', response.data.error.message);
             this.statusIndicator = 'error';
             this.alertHeader = '有错误发生';
-            this.feedbackMessage = `从服务器获取项目信息失败，错误原因：${response.data.response.error.message}`;
+            this.feedbackMessage = `从服务器获取项目信息失败，错误原因：${response.data.error.message}`;
           } else {
             throw new Error('CLIENT未知错误');
           }
@@ -163,16 +163,31 @@
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/unreceivedTasks', {
+        this.$axios.get('/task', {
           params: {
-            userID: this.currentUserID,
+            brief: false,
+            taskName: '',
+            projectName: '',
+            projectID: '',
+            taskExecutorName: '',
+            taskExecutorID: this.currentUserID,
+            taskReceivedStatus: 'not_received',
+            taskCompletedStatus: 'all',
           }
         }).then((response) => {
-          // console.log('Home获取未接受的任务成功', response);
-          this.unreceivedTasksArray = response.data.unreceivedTasks;
-          this.statusObject4UnreceivedTasks = {
-            statusIndicator: 'loaded',
-          };
+          if (response.data.statusCode === '1') {
+            this.unreceivedTasksArray = response.data.tasks;
+            this.statusObject4UnreceivedTasks = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.statusCode === '0') {
+            console.error('Home获取未接受的任务失败，错误：', response.data.error.message);
+            this.statusIndicator = 'error';
+            this.alertHeader = '有错误发生';
+            this.feedbackMessage = `从服务器获取未接受的任务失败，错误原因：${response.data.error.message}`;
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
           console.error('Home获取未接受的任务失败，错误：', error);
           this.statusObject4UnreceivedTasks = {
