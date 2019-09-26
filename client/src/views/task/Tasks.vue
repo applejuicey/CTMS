@@ -1,6 +1,6 @@
 <template>
-  <div class="row" id="tasks">
-    <div class="col-12">
+  <div class="row height-100-percentage" id="tasks">
+    <div class="col-12 height-100-percentage">
       <div class="row mb-2">
         <div class="col-12">
           <h1>
@@ -101,7 +101,7 @@
           },
           tasksInfoArray: [],
         });
-        this.$axios.get('/tasks', {
+        this.$axios.get('/task', {
           params: {
             brief: false,
             taskName: queryParamsObject.taskNameKeyword,
@@ -111,20 +111,20 @@
             taskCompletedStatus: queryParamsObject.taskCompletedStatus,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
+          if (response.data.statusCode === '1') {
             this.$store.dispatch('setTaskFilterQueryResultAction', {
               statusObject4Tasks: {
                 statusIndicator: 'loaded',
               },
-              tasksInfoArray: response.data.response.tasks,
+              tasksInfoArray: response.data.tasks,
             });
-          } else if (response.data.response.statusCode === '0') {
-            console.error('Tasks获取任务信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('Tasks获取任务信息失败，错误：', response.data.error.message);
             this.$store.dispatch('setTaskFilterQueryResultAction', {
               statusObject4Tasks: {
                 statusIndicator: 'error',
                 alertHeader: '有错误发生',
-                feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+                feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.error.message}`,
               },
               tasksInfoArray: [],
             });

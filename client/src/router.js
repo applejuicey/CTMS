@@ -23,6 +23,12 @@ import FileView from './views/file/FileView.vue';
 import FileEdit from './views/file/FileEdit.vue';
 import FileDelete from './views/file/FileDelete.vue';
 import FileCreate from './views/file/FileCreate.vue';
+import Templates from './views/template/Templates.vue';
+import TemplateView from './views/template/TemplateView.vue';
+import TemplateEdit from './views/template/TemplateEdit.vue';
+import TemplateDelete from './views/template/TemplateDelete.vue';
+import TemplateCreate from './views/template/TemplateCreate.vue';
+
 import Me from './views/Me.vue';
 import About from './views/About.vue';
 import NotFound from './views/NotFound.vue';
@@ -206,6 +212,46 @@ const router = new Router({
       path: '/file/create',
       name: 'file_create',
       component: FileCreate,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/templates',
+      name: 'templates',
+      component: Templates,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/template/view/:templateID',
+      name: 'template_view',
+      component: TemplateView,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/template/edit/:templateID',
+      name: 'template_edit',
+      component: TemplateEdit,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/template/delete/:templateID',
+      name: 'template_delete',
+      component: TemplateDelete,
+      meta: {
+        needAuth: true,
+      },
+    },
+    {
+      path: '/template/create',
+      name: 'template_create',
+      component: TemplateCreate,
       meta: {
         needAuth: true,
       },

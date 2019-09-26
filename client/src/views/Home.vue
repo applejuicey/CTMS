@@ -1,6 +1,6 @@
 <template>
-  <div class="row" id="home">
-    <div class="col-12">
+  <div class="row height-100-percentage" id="home">
+    <div class="col-12 height-100-percentage">
       <div class="row mb-2">
         <div class="col-12">
           <h1>

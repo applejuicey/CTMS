@@ -24,7 +24,7 @@
       <div class="d-flex mb-2" v-if="$route.path.split('/')[1] !== 'files'">
         <span class="font-weight-normal">
           <i class="fas fa-caret-right"></i>&nbsp;
-          项目：
+          文件：
         </span>
       </div>
       <div class="table-responsive">

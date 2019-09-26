@@ -1,5 +1,5 @@
 <template>
-  <div class="row align-items-center" id="not_found">
+  <div class="row align-items-center height-100-percentage" id="not_found">
     <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
       <div class="alert alert-danger">
         <h4 class="alert-heading">该页面不存在</h4>
@@ -25,9 +25,3 @@
     },
   }
 </script>
-
-<style scoped>
-  #not_found {
-    height: 90%;
-  }
-</style>

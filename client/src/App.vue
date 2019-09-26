@@ -1,7 +1,10 @@
 <template>
-  <div id="app" class="container-fluid">
+  <div id="app" class="height-100-percentage">
     <top-nav-bar v-if="!showTopNavBar"></top-nav-bar>
-    <router-view/>
+    <div v-else>&nbsp;</div>
+    <div class="container-fluid mt-3">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -21,8 +24,8 @@
   }
 </script>
 
-<style>
-  #app {
-    height: 100%;
+<style scoped>
+  .container-fluid {
+    height: 80%;
   }
 </style>

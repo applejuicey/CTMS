@@ -1,10 +1,10 @@
 <template>
-  <div class="row height-100-percentage" id="files">
+  <div class="row height-100-percentage" id="templates">
     <div class="col-12 height-100-percentage">
       <div class="row mb-2">
         <div class="col-12">
           <h1>
-            <i class="fas fa-capsules"></i>&nbsp;文件查询
+            <i class="fas fa-capsules"></i>&nbsp;模板查询
           </h1>
         </div>
       </div>
@@ -12,7 +12,7 @@
         <div class="col-xl-3 mb-2">
           <bottom-card :cardHeaderText="filterToolboxHeaderText" :cardTooltipText="filterToolboxTooltipText">
             <template v-slot:card-body>
-              <files-filter-form></files-filter-form>
+              <templates-filter-form></templates-filter-form>
             </template>
           </bottom-card>
         </div>
@@ -32,7 +32,7 @@
                   <mark>{{ resultDescription }}</mark>
                   的查询结果如下所示：
                 </p>
-                <files-info-table :filesInfoArray="filesInfoArray" :statusObject="statusObject4Files"></files-info-table>
+                <templates-info-table :templatesInfoArray="templatesInfoArray" :statusObject="statusObject4Templates"></templates-info-table>
               </div>
             </template>
           </bottom-card>
@@ -44,41 +44,41 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import FilesFilterForm from '@/components/file/FilesFilterForm.vue';
-  import FilesInfoTable from '@/components/file/FilesInfoTable.vue';
+  import TemplatesFilterForm from '@/components/template/TemplatesFilterForm.vue';
+  import TemplatesInfoTable from '@/components/template/TemplatesInfoTable.vue';
   export default {
-    name: 'files',
+    name: 'templates',
     components: {
       BottomCard,
-      FilesFilterForm,
-      FilesInfoTable,
+      TemplatesFilterForm,
+      TemplatesInfoTable,
     },
     data: function () {
       return {
-        filterToolboxHeaderText: '文件筛选器',
+        filterToolboxHeaderText: '模板筛选器',
         filterToolboxTooltipText: '请在这里设定筛选内容，然后点击"筛选"按钮获得命中条目。',
-        resultCardHeaderText: '文件查询结果',
-        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击"放大镜"按钮以查看文件详细资料；点击"铅笔"按钮以编辑文件信息；点击""按钮可以暂时移除文件；点击""按钮可以恢复暂时移除的文件；点击""按钮可以永久删除文件。',
+        resultCardHeaderText: '模板查询结果',
+        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击"放大镜"按钮以查看模板详细资料；点击"铅笔"按钮以编辑模板信息；点击""按钮可以暂时移除模板；点击""按钮可以恢复暂时移除的模板；点击""按钮可以永久删除模板。',
       };
     },
     computed: {
       // 从VUEX中取出整理后的检索描述字符串
       resultDescription: function () {
-        return this.$store.state.messages.fileFilterDescription;
+        return this.$store.state.messages.templateFilterDescription;
       },
       // 从VUEX中取出检索结果
-      filesInfoArray: function () {
-        return this.$store.state.fileFilterQueryResult.filesInfoArray;
+      templatesInfoArray: function () {
+        return this.$store.state.templateFilterQueryResult.templatesInfoArray;
       },
-      statusObject4Files: function () {
-        return this.$store.state.fileFilterQueryResult.statusObject4Files;
+      statusObject4Templates: function () {
+        return this.$store.state.templateFilterQueryResult.statusObject4Templates;
       },
     },
     watch: {
-      // watch VUEX中的fileFilterQueryObject，有变化时从服务器获取数据
-      '$store.state.fileFilterQueryObject': {
+      // watch VUEX中的templateFilterQueryObject，有变化时从服务器获取数据
+      '$store.state.templateFilterQueryObject': {
         handler: function (newVal, oldVal) {
-          this.getFilesInfo(newVal);
+          this.getTemplatesInfo(newVal);
         },
         deep: true
       },
@@ -91,61 +91,54 @@
       });
     },
     methods: {
-      getFilesInfo: function (queryParamsObject) {
-        this.$store.dispatch('setFileFilterQueryResultAction', {
-          statusObject4Files: {
+      getTemplatesInfo: function (queryParamsObject) {
+        this.$store.dispatch('setTemplateFilterQueryResultAction', {
+          statusObject4Templates: {
             statusIndicator: 'loading',
             alertHeader: '加载中',
             feedbackMessage: '正在从服务器获取数据，请稍后......',
           },
-          filesInfoArray: [],
+          templatesInfoArray: [],
         });
-        this.$axios.get('/file', {
+        this.$axios.get('/template', {
           params: {
             brief: false,
-            fileBelongedToTaskID: '',
-            fileName: queryParamsObject.fileNameKeyword,
-            fileBelongedToTaskName: queryParamsObject.fileBelongedToTaskNameKeyword,
-            fileBelongedToProjectName: queryParamsObject.fileBelongedToProjectNameKeyword,
-            fileCreatorName: queryParamsObject.fileCreatorNameKeyword,
+            templateName: queryParamsObject.templateNameKeyword,
+            templateCreatorName: queryParamsObject.templateCreatorNameKeyword,
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {
-            this.$store.dispatch('setFileFilterQueryResultAction', {
-              statusObject4Files: {
+            this.$store.dispatch('setTemplateFilterQueryResultAction', {
+              statusObject4Templates: {
                 statusIndicator: 'loaded',
               },
-              filesInfoArray: response.data.files,
+              templatesInfoArray: response.data.templates,
             });
           } else if (response.data.statusCode === '0') {
-            console.error('Files获取文件信息失败，错误：', response.data.error.message);
-            this.$store.dispatch('setFileFilterQueryResultAction', {
-              statusObject4Files: {
+            console.error('Templates获取模板信息失败，错误：', response.data.error.message);
+            this.$store.dispatch('setTemplateFilterQueryResultAction', {
+              statusObject4Templates: {
                 statusIndicator: 'error',
                 alertHeader: '有错误发生',
-                feedbackMessage: `从服务器获取文件信息失败，错误原因：${response.data.error.message}`,
+                feedbackMessage: `从服务器获取模板信息失败，错误原因：${response.data.error.message}`,
               },
-              filesInfoArray: [],
+              templatesInfoArray: [],
             });
           } else {
             throw new Error('CLIENT未知错误');
           }
         }).catch((error) => {
-          console.error('Files获取文件信息失败，错误：', error);
-          this.$store.dispatch('setFileFilterQueryResultAction', {
-            statusObject4Files: {
+          console.error('Templates获取模板信息失败，错误：', error);
+          this.$store.dispatch('setTemplateFilterQueryResultAction', {
+            statusObject4Templates: {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取文件信息失败，错误原因：${error}`,
+              feedbackMessage: `从服务器获取模板信息失败，错误原因：${error}`,
             },
-            filesInfoArray: [],
+            templatesInfoArray: [],
           });
         });
       },
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="row" id="project_edit">
+  <div class="row" id="file_edit">
     <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
@@ -23,7 +23,7 @@
   import BottomCard from '@/components/BottomCard.vue';
   import ProjectEditForm from '@/components/project/ProjectEditForm.vue';
   export default {
-    name: 'project_edit',
+    name: 'file_edit',
     components: {
       BottomCard,
       ProjectEditForm,

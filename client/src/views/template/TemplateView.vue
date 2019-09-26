@@ -1,16 +1,16 @@
 <template>
-  <div class="row" id="file_view">
-    <div class="col-12">
+  <div class="row height-100-percentage" id="template_view">
+    <div class="col-12 height-100-percentage">
       <div class="row mb-2">
         <div class="col-12">
-          <h1>查看文件-{{ $route.params.fileID }}</h1>
+          <h1>查看模板-{{ $route.params.templateID }}</h1>
         </div>
       </div>
       <div class="row">
         <div class="col-12 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
-              <file-info-table :fileInfoObject="fileInfoObject" :statusObject="statusObject4File"></file-info-table>
+              <template-info-table :templateInfoObject="templateInfoObject" :statusObject="statusObject4Template"></template-info-table>
             </template>
           </bottom-card>
         </div>
@@ -21,19 +21,19 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import FileInfoTable from '@/components/file/FileInfoTable.vue';
+  import TemplateInfoTable from '@/components/template/TemplateInfoTable.vue';
   export default {
-    name: 'file_view',
+    name: 'template_view',
     components: {
       BottomCard,
-      FileInfoTable,
+      TemplateInfoTable,
     },
     data: function () {
       return {
-        headerText: '查看文件',
-        tooltipText: '该文件的详细资料如下所示。',
-        fileInfoObject: {},
-        statusObject4File: {},
+        headerText: '查看模板',
+        tooltipText: '该模板的详细资料如下所示。',
+        templateInfoObject: {},
+        statusObject4Template: {},
       }
     },
     computed: {
@@ -45,7 +45,7 @@
       },
     },
     created: function () {
-      this.getFileInfo();
+      this.getTemplateInfo();
     },
     mounted: function () {
       this.$nextTick(function () {
@@ -55,45 +55,41 @@
       });
     },
     methods: {
-      getFileInfo: function () {
-        this.statusObject4File = {
+      getTemplateInfo: function () {
+        this.statusObject4Template = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/file', {
+        this.$axios.get('/template', {
           params: {
-            fileID: this.$route.params.fileID,
+            templateID: this.$route.params.templateID,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
-            this.fileInfoObject = response.data.response.file;
-            this.statusObject4File = {
+          if (response.data.statusCode === '1') {
+            this.templateInfoObject = response.data.template;
+            this.statusObject4Template = {
               statusIndicator: 'loaded',
             };
-          } else if (response.data.response.statusCode === '0') {
-            console.error('FileView获取文件信息失败，错误：', response.data.response.error.message);
-            this.statusObject4File = {
+          } else if (response.data.statusCode === '0') {
+            console.error('TemplateView获取模板信息失败，错误：', response.data.error.message);
+            this.statusObject4Template = {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取文件信息失败，错误原因：${response.data.response.error.message}`,
+              feedbackMessage: `从服务器获取模板信息失败，错误原因：${response.data.error.message}`,
             };
           } else {
             throw new Error('CLIENT未知错误');
           }
         }).catch((error) => {
-          console.error('FileView获取文件信息失败，错误：', error);
-          this.statusObject4File = {
+          console.error('TemplateView获取模板信息失败，错误：', error);
+          this.statusObject4Template = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
-            feedbackMessage: `从服务器获取文件信息失败，错误原因：${error}`,
+            feedbackMessage: `从服务器获取模板信息失败，错误原因：${error}`,
           };
         });
       },
     },
   }
 </script>
-
-<style scoped>
-
-</style>

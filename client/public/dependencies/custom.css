@@ -1,25 +1,32 @@
 html {
-  height: 100vh;
-  width: 100vw;
-}
-body {
-  height: 100%;
   font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-weight: 300;
-  text-align: center;
+  height: 100%;
+}
+body {
+  padding: 0;
+  margin: 0;
   background: url('../images/body_bg.jpg');
   background-size: cover;
+  background-attachment: fixed;
+  font-weight: 300;
+  text-align: center;
+  height: 100%;
 }
 b {
   font-weight: 500;
+}
+.height-100-percentage {
+  height: 100%;
 }
 .hover-vibrate {
   transform: translate(0, -2px);
 }
 .obscure {
-  opacity: 0.90;
+  opacity: 0.85;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 .cursor-pointer {
   cursor: pointer;

@@ -1,6 +1,6 @@
 <template>
-  <div class="row" id="projects">
-    <div class="col-12">
+  <div class="row height-100-percentage" id="projects">
+    <div class="col-12 height-100-percentage">
       <div class="row mb-2">
         <div class="col-12">
           <h1>
@@ -101,7 +101,7 @@
           },
           projectsInfoArray: [],
         });
-        this.$axios.get('/projects', {
+        this.$axios.get('/project', {
           params: {
             brief: false,
             projectName: queryParamsObject.projectNameKeyword,
@@ -112,20 +112,20 @@
             projectStage: queryParamsObject.projectStage,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
+          if (response.data.statusCode === '1') {
             this.$store.dispatch('setProjectFilterQueryResultAction', {
               statusObject4Projects: {
                 statusIndicator: 'loaded',
               },
-              projectsInfoArray: response.data.response.projects,
+              projectsInfoArray: response.data.projects,
             });
-          } else if (response.data.response.statusCode === '0') {
-            console.error('Projects获取项目信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('Projects获取项目信息失败，错误：', response.data.error.message);
             this.$store.dispatch('setProjectFilterQueryResultAction', {
               statusObject4Projects: {
                 statusIndicator: 'error',
                 alertHeader: '有错误发生',
-                feedbackMessage: `从服务器获取项目信息失败，错误原因：${response.data.response.error.message}`,
+                feedbackMessage: `从服务器获取项目信息失败，错误原因：${response.data.error.message}`,
               },
               projectsInfoArray: [],
             });

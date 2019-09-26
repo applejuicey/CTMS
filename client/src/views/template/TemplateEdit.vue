@@ -1,16 +1,16 @@
 <template>
-  <div class="row" id="file_view">
+  <div class="row" id="project_edit">
     <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
-          <h1>查看文件-{{ $route.params.fileID }}</h1>
+          <h1>编辑项目-{{ $route.params.projectID }}</h1>
         </div>
       </div>
       <div class="row">
         <div class="col-12 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
-              <file-info-table :fileInfoObject="fileInfoObject" :statusObject="statusObject4File"></file-info-table>
+              <project-edit-form :projectInfoObject="projectInfoObject" :statusObject="statusObject4Project"></project-edit-form>
             </template>
           </bottom-card>
         </div>
@@ -21,31 +21,24 @@
 
 <script>
   import BottomCard from '@/components/BottomCard.vue';
-  import FileInfoTable from '@/components/file/FileInfoTable.vue';
+  import ProjectEditForm from '@/components/project/ProjectEditForm.vue';
   export default {
-    name: 'file_view',
+    name: 'project_edit',
     components: {
       BottomCard,
-      FileInfoTable,
+      ProjectEditForm,
     },
     data: function () {
       return {
-        headerText: '查看文件',
-        tooltipText: '该文件的详细资料如下所示。',
-        fileInfoObject: {},
-        statusObject4File: {},
+        headerText: '编辑项目',
+        tooltipText: '您可以在下方修改该项目并提交至服务器。',
+        projectInfoObject: {},
+        statusObject4Project: {},
       }
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
-    },
+
     created: function () {
-      this.getFileInfo();
+      this.getProjectInfo();
     },
     mounted: function () {
       this.$nextTick(function () {
@@ -55,38 +48,38 @@
       });
     },
     methods: {
-      getFileInfo: function () {
-        this.statusObject4File = {
+      getProjectInfo: function () {
+        this.statusObject4Project = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/file', {
+        this.$axios.get('/project', {
           params: {
-            fileID: this.$route.params.fileID,
+            projectID: this.$route.params.projectID,
           }
         }).then((response) => {
           if (response.data.response.statusCode === '1') {
-            this.fileInfoObject = response.data.response.file;
-            this.statusObject4File = {
+            this.projectInfoObject = response.data.response.project;
+            this.statusObject4Project = {
               statusIndicator: 'loaded',
             };
           } else if (response.data.response.statusCode === '0') {
-            console.error('FileView获取文件信息失败，错误：', response.data.response.error.message);
-            this.statusObject4File = {
+            console.error('ProjectCard获取项目信息失败，错误：', response.data.response.error.message);
+            this.statusObject4Project = {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取文件信息失败，错误原因：${response.data.response.error.message}`,
+              feedbackMessage: `从服务器获取项目信息失败，错误原因：${response.data.response.error.message}`,
             };
           } else {
             throw new Error('CLIENT未知错误');
           }
         }).catch((error) => {
-          console.error('FileView获取文件信息失败，错误：', error);
-          this.statusObject4File = {
+          console.error('ProjectCard获取项目信息失败，错误：', error);
+          this.statusObject4Project = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
-            feedbackMessage: `从服务器获取文件信息失败，错误原因：${error}`,
+            feedbackMessage: `从服务器获取项目信息失败，错误原因：${error}`,
           };
         });
       },

@@ -5,20 +5,19 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // indicators: {
-    //   isAdmin: true,
-    // },
     messages: {
       taskFilterDescription: '',
       projectFilterDescription: '',
       userFilterDescription: '',
       fileFilterDescription: '',
+      templateFilterDescription: '',
     },
     // 代表检索表达式的对象
     taskFilterQueryObject: {},
     projectFilterQueryObject: {},
     userFilterQueryObject: {},
     fileFilterQueryObject: {},
+    templateFilterQueryObject: {},
     // 检索结果
     taskFilterQueryResult: {
       tasksInfoArray: [],
@@ -36,11 +35,12 @@ export default new Vuex.Store({
       filesInfoArray: [],
       statusObject4Files: {},
     },
+    templateFilterQueryResult: {
+      templatesInfoArray: [],
+      statusObject4Templates: {},
+    },
   },
   mutations: {
-    // setIndicators: (state, payload) => {
-    //   state.indicators.isAdmin = payload.isAdmin;
-    // },
     // 描述字符串
     setTaskFilterDescription: (state, payload) => {
       state.messages.taskFilterDescription = payload.taskFilterDescription;
@@ -53,6 +53,9 @@ export default new Vuex.Store({
     },
     setFileFilterDescription: (state, payload) => {
       state.messages.fileFilterDescription = payload.fileFilterDescription;
+    },
+    setTemplateFilterDescription: (state, payload) => {
+      state.messages.templateFilterDescription = payload.templateFilterDescription;
     },
     // 检索表达式的对象
     setTaskFilterQueryObject: (state, payload) => {
@@ -67,6 +70,9 @@ export default new Vuex.Store({
     setFileFilterQueryObject: (state, payload) => {
       state.fileFilterQueryObject = payload;
     },
+    setTemplateFilterQueryObject: (state, payload) => {
+      state.templateFilterQueryObject = payload;
+    },
     // 检索结果
     setTaskFilterQueryResult: (state, payload) => {
       state.taskFilterQueryResult = payload;
@@ -80,11 +86,11 @@ export default new Vuex.Store({
     setFileFilterQueryResult: (state, payload) => {
       state.fileFilterQueryResult = payload;
     },
+    setTemplateFilterQueryResult: (state, payload) => {
+      state.templateFilterQueryResult = payload;
+    },
   },
   actions: {
-    // setIndicatorsAction: ({ commit }, payload) => {
-    //   commit('setIndicators', payload);
-    // },
     // 描述字符串
     setTaskFilterDescriptionAction: ({ commit }, payload) => {
       commit('setTaskFilterDescription', payload);
@@ -97,6 +103,9 @@ export default new Vuex.Store({
     },
     setFileFilterDescriptionAction: ({ commit }, payload) => {
       commit('setFileFilterDescription', payload);
+    },
+    setTemplateFilterDescriptionAction: ({ commit }, payload) => {
+      commit('setTemplateFilterDescription', payload);
     },
     // 检索表达式的对象
     setTaskFilterQueryObjectAction: ({ commit }, payload) => {
@@ -111,6 +120,9 @@ export default new Vuex.Store({
     setFileFilterQueryObjectAction: ({ commit }, payload) => {
       commit('setFileFilterQueryObject', payload);
     },
+    setTemplateFilterQueryObjectAction: ({ commit }, payload) => {
+      commit('setTemplateFilterQueryObject', payload);
+    },
     // 检索结果
     setTaskFilterQueryResultAction: ({ commit }, payload) => {
       commit('setTaskFilterQueryResult', payload);
@@ -123,6 +135,9 @@ export default new Vuex.Store({
     },
     setFileFilterQueryResultAction: ({ commit }, payload) => {
       commit('setFileFilterQueryResult', payload);
+    },
+    setTemplateFilterQueryResultAction: ({ commit }, payload) => {
+      commit('setTemplateFilterQueryResult', payload);
     },
   }
 })

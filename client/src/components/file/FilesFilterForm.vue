@@ -83,10 +83,10 @@
           fileFilterDescription: filterDescription
         });
         return {
-          fileNameKeyword: this.sponsorNameKeyword || '',
-          fileBelongedToTaskNameKeyword: this.investigatorNameKeyword || '',
-          fileBelongedToProjectNameKeyword: this.involvedUserRealNameKeyword || '',
-          fileCreatorNameKeyword: this.involvedUserRealNameKeyword || '',
+          fileNameKeyword: this.fileNameKeyword || '',
+          fileBelongedToTaskNameKeyword: this.fileBelongedToTaskNameKeyword || '',
+          fileBelongedToProjectNameKeyword: this.fileBelongedToProjectNameKeyword || '',
+          fileCreatorNameKeyword: this.fileCreatorNameKeyword || '',
         };
       },
       // 生成一个对象，包括用户ID与一些检索条件，将该对象保存至vuex

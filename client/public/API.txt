@@ -535,3 +535,76 @@ TODO:DELETE用户
 5.请求路径  /user
   请求方法  DELETE
 --------------------------------------------------
+
+--------------------------------------------------
+Template模块
+1.请求路径  /template
+  请求方法  GET
+  请求参数  templateName、templateCreatorName、brief
+  参数说明  templateName、templateCreatorName为空则代表查询所有
+  参数举例  {
+            brief: 'false',
+            templateName: '',
+            templateCreatorName: '',
+           }
+  请求描述  返回[上述参数查询出来的]模板的详细信息（数组）。
+  响应举例  {
+          "statusCode": "1",
+          "templates": [
+            {
+              "templateID": "TEMPLATE001",
+              "templateName": "DMP-SOP-V1.0",
+              "templateDescription": "版本已更新，请勿使用！",
+              "templateCreateDate": "2019-08-11",
+              "templateCreatorID": "USER001",
+              "templateCreatorName": "刘沛",
+              "templateStatus": "removed/deleted/normal三选一",
+              "templateRemoveDate": "2019-08-11",
+              "templateRemoveExecutorID": "USER001",
+              "templateRemoveExecutorName": "刘沛",
+              "templateDeleteDate": "2019-08-11",
+              "templateDeleteExecutorID": "USER001",
+              "templateDeleteExecutorName": "刘沛",
+              "templateDownloadURL": ""
+            },
+          ]
+
+2.请求路径  /template
+  请求方法  GET
+  请求参数  templateID
+  参数说明
+  参数举例  {
+            templateID: 'TEMPLATE001',
+           }
+  请求描述  返回templateID对应的模板的详细信息（对象）。
+  响应举例  {
+            "statusCode": "1",
+            "template": {
+                "templateID": "TEMPLATE001",
+                "templateName": "DMP-SOP-V1.0",
+                "templateDescription": "版本已更新，请勿使用！",
+                "templateCreateDate": "2019-08-11",
+                "templateCreatorID": "USER001",
+                "templateCreatorName": "刘沛",
+                "templateStatus": "removed/deleted/normal三选一",
+                "templateRemoveDate": "2019-08-11",
+                "templateRemoveExecutorID": "USER001",
+                "templateRemoveExecutorName": "刘沛",
+                "templateDeleteDate": "2019-08-11",
+                "templateDeleteExecutorID": "USER001",
+                "templateDeleteExecutorName": "刘沛",
+                "templateDownloadURL": ""
+              },
+            }
+
+TODO:CREATE模板
+3.请求路径  /template
+  请求方法  POST
+TODO:UPDATE模板
+4.请求路径  /template
+  请求方法  PUT
+TODO:DELETE模板
+4.请求路径  /template
+  请求方法  DELETE
+
+--------------------------------------------------
