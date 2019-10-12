@@ -74,17 +74,17 @@
             projectID: this.$route.params.projectID,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
-            this.projectInfoObject = response.data.response.project;
+          if (response.data.statusCode === '1') {
+            this.projectInfoObject = response.data.project[0];
             this.statusObject4Project = {
               statusIndicator: 'loaded',
             };
-          } else if (response.data.response.statusCode === '0') {
-            console.error('ProjectCard获取项目信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('ProjectCard获取项目信息失败，错误：', response.data.error.message);
             this.statusObject4Project = {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取项目信息失败，错误原因：${response.data.response.error.message}`,
+              feedbackMessage: `从服务器获取项目信息失败，错误原因：${response.data.error.message}`,
             };
           } else {
             throw new Error('CLIENT未知错误');
@@ -104,7 +104,7 @@
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/tasks', {
+        this.$axios.get('/task', {
           params: {
             brief: false,
             taskName: '',
@@ -115,18 +115,18 @@
             taskCompletedStatus: 'all',
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
+          if (response.data.statusCode === '1') {
             // console.log('ProjectView获取任务信息成功', response);
-            this.projectTasksInfoArray = response.data.response.tasks;
+            this.projectTasksInfoArray = response.data.tasks;
             this.statusObject4ProjectTasks = {
               statusIndicator: 'loaded',
             };
-          } else if (response.data.response.statusCode === '0') {
-            console.error('ProjectView获取任务信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('ProjectView获取任务信息失败，错误：', response.data.error.message);
             this.statusObject4ProjectTasks = {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.error.message}`,
             };
           } else {
             throw new Error('CLIENT未知错误');

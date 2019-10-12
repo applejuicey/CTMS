@@ -68,7 +68,7 @@
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {
-            this.userInfoObject = response.data.user;
+            this.userInfoObject = response.data.users[0];
             this.statusObject4User = {
               statusIndicator: 'loaded',
             };

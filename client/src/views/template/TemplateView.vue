@@ -67,7 +67,7 @@
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {
-            this.templateInfoObject = response.data.template;
+            this.templateInfoObject = response.data.template[0];
             this.statusObject4Template = {
               statusIndicator: 'loaded',
             };

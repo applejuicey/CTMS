@@ -11,7 +11,7 @@
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
               <task-info-table :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-info-table>
-              <file-info-table :taskFiles="taskFiles" :statusObject="statusObject4TaskFiles"></file-info-table>
+              <file-info-table :fileInfoObject="fileInfoObject" :statusObject="statusObject4File"></file-info-table>
               <p>添加任务执行用户的资料</p>
               <!--              TODO：添加任务执行用户的资料-->
             </template>
@@ -39,8 +39,8 @@
         tooltipText: '该任务的详细资料如下所示。',
         taskInfoObject: {},
         statusObject4Task: {},
-        taskFiles: [],
-        statusObject4TaskFiles: {},
+        fileInfoObject: {},
+        statusObject4File: {},
       }
     },
     computed: {
@@ -74,17 +74,17 @@
             taskID: this.$route.params.taskID,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
-            this.taskInfoObject = response.data.response.task;
+          if (response.data.statusCode === '1') {
+            this.taskInfoObject = response.data.task[0];
             this.statusObject4Task = {
               statusIndicator: 'loaded',
             };
-          } else if (response.data.response.statusCode === '0') {
-            console.error('TaskView获取任务信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('TaskView获取任务信息失败，错误：', response.data.error.message);
             this.statusObject4Task = {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.error.message}`,
             };
           } else {
             throw new Error('CLIENT未知错误');
@@ -100,25 +100,36 @@
       },
       // 根据传入的taskID和currentUserID从服务器获取该任务有关文件的信息
       getTaskFilesInfo: function () {
-        this.statusObject4TaskFiles = {
+        this.statusObject4File = {
           statusIndicator: 'loading',
           alertHeader: '加载中',
           feedbackMessage: '正在从服务器获取数据，请稍后......',
         };
-        this.$axios.get('/taskFilesInfo', {
+        this.$axios.get('/file', {
           params: {
             taskID: this.$route.params.taskID,
             userID: this.currentUserID,
           }
         }).then((response) => {
-          // console.log('Task获取任务文件信息成功', response);
-          this.taskFiles = response.data.taskFiles;
-          this.statusObject4TaskFiles = {
-            statusIndicator: 'loaded',
-          };
+          // console.log('TaskView获取任务文件信息成功', response);
+          if (response.data.statusCode === '1') {
+            this.fileInfoObject = response.data.files[0];
+            this.statusObject4File = {
+              statusIndicator: 'loaded',
+            };
+          } else if (response.data.statusCode === '0') {
+            console.error('TaskView获取任务文件信息成功，错误：', response.data.error.message);
+            this.statusObject4File = {
+              statusIndicator: 'error',
+              alertHeader: '有错误发生',
+              feedbackMessage: `从服务器获取任务文件信息失败，错误原因：${response.data.error.message}`,
+            };
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
         }).catch((error) => {
-          console.error('Task获取任务文件信息失败，错误：', error);
-          this.statusObject4TaskFiles = {
+          console.error('TaskView获取任务文件信息成功，错误：', error);
+          this.statusObject4File = {
             statusIndicator: 'error',
             alertHeader: '有错误发生',
             feedbackMessage: `从服务器获取任务文件信息失败，错误原因：${error}`,

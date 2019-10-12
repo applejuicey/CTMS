@@ -101,26 +101,26 @@
           },
           usersInfoArray: [],
         });
-        this.$axios.get('/users', {
+        this.$axios.get('/user', {
           params: {
             brief: false,
             userRealName: queryParamsObject.userRealNameKeyword,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
+          if (response.data.statusCode === '1') {
             this.$store.dispatch('setUserFilterQueryResultAction', {
               statusObject4Users: {
                 statusIndicator: 'loaded',
               },
-              usersInfoArray: response.data.response.users,
+              usersInfoArray: response.data.users,
             });
-          } else if (response.data.response.statusCode === '0') {
-            console.error('Users获取用户信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('Users获取用户信息失败，错误：', response.data.error.message);
             this.$store.dispatch('setUserFilterQueryResultAction', {
               statusObject4Users: {
                 statusIndicator: 'error',
                 alertHeader: '有错误发生',
-                feedbackMessage: `从服务器获取用户信息失败，错误原因：${response.data.response.error.message}`,
+                feedbackMessage: `从服务器获取用户信息失败，错误原因：${response.data.error.message}`,
               },
               usersInfoArray: [],
             });

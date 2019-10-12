@@ -66,17 +66,18 @@
             fileID: this.$route.params.fileID,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
-            this.fileInfoObject = response.data.response.file;
+          console.log('aa',response)
+          if (response.data.statusCode === '1') {
+            this.fileInfoObject = response.data.file[0];
             this.statusObject4File = {
               statusIndicator: 'loaded',
             };
-          } else if (response.data.response.statusCode === '0') {
-            console.error('FileView获取文件信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('FileView获取文件信息失败，错误：', response.data.error.message);
             this.statusObject4File = {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取文件信息失败，错误原因：${response.data.response.error.message}`,
+              feedbackMessage: `从服务器获取文件信息失败，错误原因：${response.data.error.message}`,
             };
           } else {
             throw new Error('CLIENT未知错误');
