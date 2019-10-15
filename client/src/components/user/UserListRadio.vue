@@ -1,5 +1,5 @@
 <template>
-  <div class="user-list">
+  <div class="scroll-list">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
       <div class="col-12">
         <div class="alert alert-primary text-center mb-0">
@@ -24,8 +24,8 @@
       <div class="col-12">
         <template>
           <div class="form-check" v-for="(user, index) in userList">
-            <input class="form-check-input" type="radio" :id="user.userID" :value="user.userID" v-model="selectedUserIDCurrent" @change="$emit('selectionChanged', selectedUserIDCurrent)">
-            <label class="form-check-label" :for="user.userID">{{ user.username }}</label>
+            <input class="form-check-input" type="radio" :id="user.userID + uniqueNumber" :value="user.userID" v-model="selectedUserIDCurrent" @change="$emit('selectionChanged', selectedUserIDCurrent)">
+            <label class="form-check-label" :for="user.userID + uniqueNumber">{{ user.username }}</label>
           </div>
         </template>
       </div>
@@ -45,7 +45,7 @@
 
 <script>
   export default {
-    name: 'user_list_checkbox',
+    name: 'user_list_radio',
     props: {
       userList: {
         type: Array,
@@ -56,17 +56,19 @@
         required: true,
       },
       selectedUserIDOriginal: {
-        type: String,
+        type: Number,
         required: false,
       }
     },
     data: function () {
       return {
-        selectedUserIDCurrent: '',
+        selectedUserIDCurrent: null,
+        uniqueNumber: null,
       };
     },
     mounted: function () {
       this.selectedUserIDCurrent = this.selectedUserIDOriginal;
+      this.uniqueNumber = Math.floor(Math.random() * 1000000);
     },
     watch: {
       selectedUserIDOriginal: {
@@ -78,7 +80,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

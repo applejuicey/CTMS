@@ -136,6 +136,7 @@
         handler: function (newVal, oldVal) {
           this.formValues = {
             username: newVal.username,
+            password: newVal.password,
             userRealName: newVal.userRealName,
             userEmail: newVal.userEmail,
             userAccountStatus: newVal.userAccountStatus,
@@ -150,6 +151,7 @@
     created: function () {
       this.formValues = {
         username: this.userInfoObject.username || '',
+        password: this.userInfoObject.password || '',
         userRealName: this.userInfoObject.userRealName || '',
         userEmail: this.userInfoObject.userEmail || '',
         userAccountStatus: this.userInfoObject.userAccountStatus || '1',

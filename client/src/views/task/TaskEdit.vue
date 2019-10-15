@@ -2,12 +2,12 @@
   <div class="row" id="task_edit">
     <div class="col-12">
       <div class="row mb-2">
-        <div class="col-12">
+        <div class="col-xl-6 offset-xl-3">
           <h1>编辑任务-{{ $route.params.taskID }}</h1>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 mb-2">
+        <div class="col-xl-6 offset-xl-3 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
               <task-edit-form :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-edit-form>
@@ -39,13 +39,6 @@
     created: function () {
       this.getTaskInfo();
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
     methods: {
       getTaskInfo: function () {
         this.statusObject4Task = {
@@ -58,17 +51,17 @@
             taskID: this.$route.params.taskID,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
-            this.taskInfoObject = response.data.response.task;
+          if (response.data.statusCode === '1') {
+            this.taskInfoObject = response.data.task[0];
             this.statusObject4Task = {
               statusIndicator: 'loaded',
             };
-          } else if (response.data.response.statusCode === '0') {
-            console.error('TaskView获取任务信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('TaskView获取任务信息失败，错误：', response.data.error.message);
             this.statusObject4Task = {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.response.error.message}`,
+              feedbackMessage: `从服务器获取任务信息失败，错误原因：${response.data.error.message}`,
             };
           } else {
             throw new Error('CLIENT未知错误');
@@ -85,7 +78,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

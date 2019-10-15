@@ -2,13 +2,13 @@
   <div class="row" id="task_create">
     <div class="col-12">
       <div class="row mb-2">
-        <div class="col-12">
+        <div class="col-xl-6 offset-xl-3">
           <h1 v-if="$route.params.projectID">为{{ $route.params.projectID }}创建新任务</h1>
           <h1 v-else>创建新任务</h1>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 mb-2">
+        <div class="col-xl-6 offset-xl-3 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
               <task-edit-form :taskInfoObject="taskInfoObject" :statusObject="statusObject4Task"></task-edit-form>
@@ -42,16 +42,5 @@
     created: function () {
       this.taskInfoObject.taskBelongedToProjectID = this.$route.params.projectID;
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
   }
 </script>
-
-<style scoped>
-
-</style>

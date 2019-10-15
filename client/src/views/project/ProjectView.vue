@@ -139,7 +139,7 @@
           params: {
             brief: false,
             userRealName: '',
-            userInvolvedProjectID: this.$route.params.projectID,
+            projectID: this.$route.params.projectID,
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

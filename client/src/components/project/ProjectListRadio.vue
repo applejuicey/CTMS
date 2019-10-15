@@ -24,8 +24,8 @@
       <div class="col-12">
         <template>
           <div class="form-check" v-for="(project, index) in projectList">
-            <input class="form-check-input" type="radio" :id="project.projectID" :value="project.projectID" v-model="selectedProjectIDCurrent" @change="$emit('selectionChanged', selectedProjectIDCurrent)">
-            <label class="form-check-label" :for="project.projectID">{{ project.projectName }}</label>
+            <input class="form-check-input" type="radio" :id="project.projectID + uniqueNumber" :value="project.projectID" v-model="selectedProjectIDCurrent" @change="$emit('selectionChanged', selectedProjectIDCurrent)">
+            <label class="form-check-label" :for="project.projectID + uniqueNumber">{{ project.projectName }}</label>
           </div>
         </template>
       </div>
@@ -56,17 +56,19 @@
         required: true,
       },
       selectedProjectIDOriginal: {
-        type: String,
+        type: Number,
         required: false,
       }
     },
     data: function () {
       return {
-        selectedProjectIDCurrent: '',
+        selectedProjectIDCurrent: null,
+        uniqueNumber: null,
       };
     },
     mounted: function () {
       this.selectedProjectIDCurrent = this.selectedProjectIDOriginal;
+      this.uniqueNumber = Math.floor(Math.random() * 1000000);
     },
     watch: {
       selectedProjectIDOriginal: {
@@ -78,7 +80,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

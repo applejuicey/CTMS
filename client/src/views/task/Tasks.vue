@@ -1,6 +1,6 @@
 <template>
-  <div class="row height-100-percentage" id="tasks">
-    <div class="col-12 height-100-percentage">
+  <div class="row" id="tasks">
+    <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
           <h1>
@@ -139,7 +139,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

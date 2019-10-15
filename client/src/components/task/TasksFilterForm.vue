@@ -82,13 +82,13 @@
     methods: {
       processFormData: function () {
         const receivedStatusMap = new Map()
-            .set('1', ['yes', '已接受'])
-            .set('0', ['no', '未接受'])
-            .set('-1', ['', '全部']);
+            .set('1', '已接受')
+            .set('0', '未接受')
+            .set('-1', '全部');
         const completeStatusMap = new Map()
-            .set('1', ['yes', '已完成'])
-            .set('0', ['no', '未完成'])
-            .set('-1', ['', '全部']);
+            .set('1', '已完成')
+            .set('0', '未完成')
+            .set('-1', '全部');
         let taskNameKeywordDescription = this.taskNameKeyword;
         let projectNameKeywordDescription = this.projectNameKeyword;
         let taskExecutorNameKeywordDescription = this.taskExecutorNameKeyword;
@@ -101,7 +101,7 @@
         if (this.taskExecutorNameKeyword === '') {
           taskExecutorNameKeywordDescription = '不限';
         }
-        let filterDescription = `"任务名称关键字：${taskNameKeywordDescription}；项目名称关键字：${projectNameKeywordDescription}；任务执行人姓名关键字：${taskExecutorNameKeywordDescription}；任务接受状态：${receivedStatusMap.get(this.receivedStatus)[1]}；任务完成状态：${completeStatusMap.get(this.completeStatus)[1]}"`;
+        let filterDescription = `"任务名称关键字：${taskNameKeywordDescription}；项目名称关键字：${projectNameKeywordDescription}；任务执行人姓名关键字：${taskExecutorNameKeywordDescription}；任务接受状态：${receivedStatusMap.get(this.receivedStatus)}；任务完成状态：${completeStatusMap.get(this.completeStatus)}"`;
         this.$store.dispatch('setTaskFilterDescriptionAction', {
           taskFilterDescription: filterDescription
         });
@@ -109,8 +109,8 @@
           taskNameKeyword: this.taskNameKeyword,
           projectNameKeyword: this.projectNameKeyword,
           taskExecutorNameKeyword: this.taskExecutorNameKeyword,
-          taskReceivedStatus: receivedStatusMap.get(this.receivedStatus)[0],
-          taskCompletedStatus: completeStatusMap.get(this.completeStatus)[0],
+          taskReceivedStatus: this.receivedStatus,
+          taskCompletedStatus: this.completeStatus,
         };
       },
       // 生成一个对象，包括用户ID与一些检索条件，将该对象保存至vuex
@@ -121,7 +121,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,7 +1,7 @@
 <template>
   <div class="list-card">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
-      <div class="col-12">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-primary text-center mb-0">
           <h4 class="alert-heading">{{ statusObject.alertHeader }}</h4>
           <p>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="row" v-else-if="statusObject.statusIndicator === 'error'">
-      <div class="col-12">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-danger text-center mb-0">
           <h4 class="alert-heading">{{ statusObject.alertHeader }}</h4>
           <p>
@@ -107,7 +107,7 @@
       </div>
     </div>
     <div class="row" v-else>
-      <div class="col-12">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-info text-center mb-0">
           <h4 class="alert-heading">等待初始化</h4>
           <p>

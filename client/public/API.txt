@@ -174,7 +174,7 @@ Task模块
 1.请求路径  /task
   请求方法  GET
   请求参数  taskName、projectName、projectID、taskExecutorName、taskReceivedStatus、taskCompletedStatus、brief
-  参数说明  taskName、projectName、projectID、taskExecutorName为空则代表查询所有；taskReceivedStatus包含received\not_received\all；taskCompletedStatus包含completed\not_completed\all
+  参数说明  taskName、projectName、projectID、taskExecutorName为空则代表查询所有；taskReceivedStatus和taskCompletedStatus都是字符串，有"1"、"0"种
   参数举例  {
             brief: false,
             taskName: 'ddd',
@@ -182,8 +182,8 @@ Task模块
             taskBelongedToProjectName: 'PROJECT001',
             taskExecutorID: '',
             taskExecutorName: 'ass',
-            taskReceivedStatus: 'all',
-            taskCompletedStatus: 'all',
+            taskReceivedStatus: '-1',
+            taskCompletedStatus: '',
            }
   请求描述  返回[上述参数查询出来的]任务的详细信息（数组）。
   响应举例  {
@@ -194,15 +194,16 @@ Task模块
                   "taskName": "写DMP",
                   "taskBelongedToProjectID": "PROJECT001",
                   "taskBelongedToProjectName": "狂犬1针",
+                  "taskDescription": "green skin bag",
                   "taskCreatorID": "USER001",
                   "taskCreatorName": "刘沛",
                   "taskCreatedTime": "1975-04-11",
                   "taskExecutorID": "USER003",
                   "taskExecutorName": "范扬",
-                  "taskReceivedStatus": "received\not_received二选一",
+                  "taskReceivedStatus": "1",
                   "taskDueTime": "1979-02-20",
                   "taskProgress": 16,
-                  "taskCompletedStatus": "completed\not_completed二选一",
+                  "taskCompletedStatus": "1",
                   "taskActualCompletedTime": "1987-07-30"
                 },
              ]
@@ -223,22 +224,35 @@ Task模块
                 "taskName": "写DMP",
                 "taskBelongedToProjectID": "PROJECT001",
                 "taskBelongedToProjectName": "狂犬1针",
+                "taskDescription": "green skin bag",
                 "taskCreatorID": "USER001",
                 "taskCreatorName": "刘沛",
                 "taskCreatedTime": "1975-04-11",
                 "taskExecutorID": "USER003",
                 "taskExecutorName": "范扬",
-                "taskReceivedStatus": "received\not_received二选一",
+                "taskReceivedStatus": "0",
                 "taskDueTime": "1979-02-20",
                 "taskProgress": 16,
-                "taskCompletedStatus": "completed\not_completed二选一",
+                "taskCompletedStatus": "0",
                 "taskActualCompletedTime": "1987-07-30"
               }
             }
 
-TODO:CREATE任务
 3.请求路径  /task
   请求方法  POST
+  请求参数  如下例所示
+  参数说明  projectStage为项目阶段，字符串，可取1、2、3、4
+  参数举例  {
+            "taskName": "写DMP",
+            "taskBelongedToProjectID": "PROJECT001",
+            "taskDescription": "green skin bag",
+            "taskExecutorID": "USER003",
+            "taskDueTime": "1979-02-20",
+            "taskProgress": 0,
+           }
+  请求描述  返回操作结果
+  响应举例  {}
+
 TODO:UPDATE任务
 4.请求路径  /task
   请求方法  PUT
