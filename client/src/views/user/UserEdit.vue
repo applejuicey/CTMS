@@ -39,13 +39,6 @@
     created: function () {
       this.getUserInfo();
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
     methods: {
       getUserInfo: function () {
         this.statusObject4User = {
@@ -85,7 +78,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

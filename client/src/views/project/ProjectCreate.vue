@@ -2,12 +2,12 @@
   <div class="row" id="project_create">
     <div class="col-12">
       <div class="row mb-2">
-        <div class="col-12">
+        <div class="col-xl-6 offset-xl-3">
           <h1>创建新项目</h1>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 mb-2">
+        <div class="col-xl-6 offset-xl-3 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
               <project-edit-form :projectInfoObject="projectInfoObject" :statusObject="statusObject4Project"></project-edit-form>
@@ -38,16 +38,5 @@
         },
       }
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
   }
 </script>
-
-<style scoped>
-
-</style>

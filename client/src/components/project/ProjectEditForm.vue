@@ -1,7 +1,7 @@
 <template>
   <div class="list-card">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
-      <div class="col-xl-6 offset-xl-3">
+      <div class="col-12">
         <div class="alert alert-primary text-center mb-0">
           <h4 class="alert-heading">{{ statusObject.alertHeader }}</h4>
           <p>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="row" v-else-if="statusObject.statusIndicator === 'error'">
-      <div class="col-xl-6 offset-xl-3">
+      <div class="col-12">
         <div class="alert alert-danger text-center mb-0">
           <h4 class="alert-heading">{{ statusObject.alertHeader }}</h4>
           <p>
@@ -20,94 +20,94 @@
         </div>
       </div>
     </div>
-    <form v-else-if="statusObject.statusIndicator === 'loaded'">
-      <div class="form-group text-left">
-        <label for="projectName" class="font-weight-normal">
-          <span>项目名称：</span>
-        </label>
-        <input v-model="formValues.projectName" type="text" class="form-control" id="projectName" placeholder="项目名称">
+    <div class="row" v-else-if="statusObject.statusIndicator === 'loaded'">
+      <div class="col-12">
+        <form>
+          <div class="form-group text-left">
+            <label for="projectName" class="font-weight-normal">
+              <span>项目名称：</span>
+            </label>
+            <input v-model="formValues.projectName" type="text" class="form-control" id="projectName" placeholder="项目名称">
+          </div>
+          <div class="form-group text-left">
+            <label for="projectBriefIntroduction" class="font-weight-normal">
+              <span>项目简要描述：</span>
+            </label>
+            <input v-model="formValues.projectBriefIntroduction" type="text" class="form-control" id="projectBriefIntroduction" placeholder="项目简要描述">
+          </div>
+          <div class="form-group text-left">
+            <label for="projectExpectedStartTime" class="font-weight-normal">
+              <span>预计开始时间：</span>
+            </label>
+            <input v-model="formValues.projectExpectedStartTime" type="date" class="form-control" id="projectExpectedStartTime" placeholder="预计开始时间">
+          </div>
+          <div class="form-group text-left">
+            <label for="projectExpectedEndTime" class="font-weight-normal">
+              <span>预计结束时间：</span>
+            </label>
+            <input v-model="formValues.projectExpectedEndTime" type="date" class="form-control" id="projectExpectedEndTime" placeholder="预计结束时间">
+          </div>
+          <div class="form-group text-left">
+            <label for="projectSponsor" class="font-weight-normal">
+              <span>申办方：</span>
+            </label>
+            <input v-model="formValues.projectSponsor" type="text" class="form-control" id="projectSponsor" placeholder="申办方">
+          </div>
+          <div class="form-group text-left">
+            <label for="projectInvestigator" class="font-weight-normal">
+              <span>研究方：</span>
+            </label>
+            <input v-model="formValues.projectInvestigator" type="text" class="form-control" id="projectInvestigator" placeholder="研究方">
+          </div>
+          <div class="form-group text-left">
+            <label for="projectMonitor" class="font-weight-normal">
+              <span>监查方：</span>
+            </label>
+            <input v-model="formValues.projectMonitor" type="text" class="form-control" id="projectMonitor" placeholder="监查方">
+          </div>
+          <div class="form-group text-left">
+            <label for="projectStatistician" class="font-weight-normal">
+              <span>统计方：</span>
+            </label>
+            <input v-model="formValues.projectStatistician" type="text" class="form-control" id="projectStatistician" placeholder="统计方">
+          </div>
+          <div class="form-group text-left">
+            <label class="font-weight-normal">
+              <span>项目当前阶段：</span>
+            </label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="projectStage1" value="1" v-model="formValues.projectStage">
+              <label class="form-check-label" for="projectStage1">
+                准备阶段
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="projectStage2" value="2" v-model="formValues.projectStage">
+              <label class="form-check-label" for="projectStage2">
+                进行阶段
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="projectStage3" value="3" v-model="formValues.projectStage">
+              <label class="form-check-label" for="projectStage3">
+                收尾阶段
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="projectStage4" value="4" v-model="formValues.projectStage">
+              <label class="form-check-label" for="projectStage4">
+                补发阶段
+              </label>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success" @click="submit" :disabled="submitLoading">
+            <i class="fas fa-check"></i>&nbsp;提交
+          </button>
+        </form>
       </div>
-      <div class="form-group text-left">
-        <label for="projectBriefIntroduction" class="font-weight-normal">
-          <span>项目简要描述：</span>
-        </label>
-        <input v-model="formValues.projectBriefIntroduction" type="text" class="form-control" id="projectBriefIntroduction" placeholder="项目简要描述">
-      </div>
-      <div class="form-group text-left">
-        <label for="projectExpectedStartTime" class="font-weight-normal">
-          <span>预计开始时间：</span>
-        </label>
-        <input v-model="formValues.projectExpectedStartTime" type="date" class="form-control" id="projectExpectedStartTime" placeholder="预计开始时间">
-      </div>
-      <div class="form-group text-left">
-        <label for="projectExpectedEndTime" class="font-weight-normal">
-          <span>预计结束时间：</span>
-        </label>
-        <input v-model="formValues.projectExpectedEndTime" type="date" class="form-control" id="projectExpectedEndTime" placeholder="预计结束时间">
-      </div>
-      <div class="form-group text-left">
-        <label for="projectSponsor" class="font-weight-normal">
-          <span>申办方：</span>
-        </label>
-        <input v-model="formValues.projectSponsor" type="text" class="form-control" id="projectSponsor" placeholder="申办方">
-      </div>
-      <div class="form-group text-left">
-        <label for="projectInvestigator" class="font-weight-normal">
-          <span>研究方：</span>
-        </label>
-        <input v-model="formValues.projectInvestigator" type="text" class="form-control" id="projectInvestigator" placeholder="研究方">
-      </div>
-      <div class="form-group text-left">
-        <label for="projectMonitor" class="font-weight-normal">
-          <span>监查方：</span>
-        </label>
-        <input v-model="formValues.projectMonitor" type="text" class="form-control" id="projectMonitor" placeholder="监查方">
-      </div>
-      <div class="form-group text-left">
-        <label for="projectStatistician" class="font-weight-normal">
-          <span>统计方：</span>
-        </label>
-        <input v-model="formValues.projectStatistician" type="text" class="form-control" id="projectStatistician" placeholder="统计方">
-      </div>
-      <div class="form-group text-left">
-        <label class="font-weight-normal">
-          <span>项目当前阶段：</span>
-        </label>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="projectStage1" value="1" v-model="formValues.projectStage">
-          <label class="form-check-label" for="projectStage1">
-            准备阶段
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="projectStage2" value="2" v-model="formValues.projectStage">
-          <label class="form-check-label" for="projectStage2">
-            进行阶段
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="projectStage3" value="3" v-model="formValues.projectStage">
-          <label class="form-check-label" for="projectStage3">
-            收尾阶段
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="projectStage4" value="4" v-model="formValues.projectStage">
-          <label class="form-check-label" for="projectStage4">
-            补发阶段
-          </label>
-        </div>
-      </div>
-      <div class="form-group text-left">
-        <label class="font-weight-normal">项目参与人员</label>
-        <user-list-checkbox :userList="userList" :statusObject="statusObject4UserListCheckbox"
-                            :selectedUsersIDOriginal="formValues.projectInvolvedUsersID"
-                            @selectionChanged="changeFormInvolvedUsersID"></user-list-checkbox>
-      </div>
-      <button type="button" class="btn btn-success" @click="submit">提交</button>
-    </form>
+    </div>
     <div class="row" v-else>
-      <div class="col-xl-6 offset-xl-3">
+      <div class="col-12">
         <div class="alert alert-info text-center mb-0">
           <h4 class="alert-heading">等待初始化</h4>
           <p>
@@ -116,15 +116,16 @@
         </div>
       </div>
     </div>
+    <custom-modal :modalHeader="modalHeader" :responseMessage="responseMessage" :modalButtonTarget="modalButtonTarget"></custom-modal>
   </div>
 </template>
 
 <script>
-  import UserListCheckbox from '@/components/user/UserListCheckbox.vue';
+  import CustomModal from '@/components/CustomModal.vue';
   export default {
     name: 'project_edit_form',
     components: {
-      UserListCheckbox,
+      CustomModal,
     },
     props: {
       projectInfoObject: {
@@ -136,28 +137,13 @@
         required: true,
       },
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-    },
     data: () => {
       return {
-        userList: [],
-        statusObject4UserListCheckbox: {},
-        formValues: {
-          projectName: '',
-          projectBriefIntroduction: '',
-          projectExpectedStartTime: '',
-          projectExpectedEndTime: '',
-          projectSponsor: '',
-          projectInvestigator: '',
-          projectMonitor: '',
-          projectStatistician: '',
-          projectStage: '',
-          projectInvolvedUsersID: [],
-          // projectInvolvedUsersName: [],
-        },
+        formValues: {},
+        submitLoading: false,
+        modalHeader: '',
+        responseMessage: '',
+        modalButtonTarget: 'nowhere',
       };
     },
     watch: {
@@ -173,16 +159,23 @@
             projectMonitor: newVal.projectMonitor,
             projectStatistician: newVal.projectStatistician,
             projectStage: newVal.projectStage,
-            projectInvolvedUsersID: newVal.projectInvolvedUsersID,
-            // projectInvolvedUsersName: newVal.projectInvolvedUsersName,
           };
-          this.getUserList();
         },
         deep: true,
       },
     },
     created: function () {
-      this.getUserList();
+      this.formValues = {
+        projectName: this.projectInfoObject.projectName || '',
+        projectBriefIntroduction: this.projectInfoObject.projectBriefIntroduction || '',
+        projectExpectedStartTime: this.formatDate(this.projectInfoObject.projectExpectedStartTime || new Date()),
+        projectExpectedEndTime: this.formatDate(this.projectInfoObject.projectExpectedEndTime || new Date()),
+        projectSponsor: this.projectInfoObject.projectSponsor || '',
+        projectInvestigator: this.projectInfoObject.projectInvestigator || '',
+        projectMonitor: this.projectInfoObject.projectMonitor || '',
+        projectStatistician: this.projectInfoObject.projectStatistician || '',
+        projectStage: this.projectInfoObject.projectStage || '1',
+      };
     },
     methods: {
       formatDate: function (dateString) {
@@ -194,45 +187,47 @@
         date = date < 10 ? ('0' + date) : date;
         return `${year}-${month}-${date}`;
       },
-      // 根据传入的userID\projectManagerID，从服务器获取除了该userID和管理员projectManagerID外，所有其他用户的信息
-      getUserList: function () {
-        this.statusObject4UserListCheckbox = {
-          statusIndicator: 'loading',
-          alertHeader: '加载中',
-          feedbackMessage: '正在从服务器获取数据，请稍后......',
-        };
-        this.$axios.get('/userList', {
-          params: {
-            projectManagerID: this.projectInfoObject.projectManagerID,
-            userID: this.currentUserID,
-            projectID: this.projectInfoObject.projectID,
-          }
-        }).then((response) => {
-          // console.log('ProjectEditForm获取用户列表成功', response);
-          this.userList = response.data.userList;
-          this.statusObject4UserListCheckbox = {
-            statusIndicator: 'loaded',
-          };
-        }).catch((error) => {
-          console.error('ProjectEditForm获取用户列表失败，错误：', error);
-          this.statusObject4UserListCheckbox = {
-            statusIndicator: 'error',
-            alertHeader: '有错误发生',
-            feedbackMessage: `从服务器获取任务信息失败，错误原因：${error}`,
-          };
-        });
-      },
-      changeFormInvolvedUsersID: function (currentSelection) {
-        this.formValues.projectInvolvedUsersID = currentSelection;
-      },
-      // TODO: 将表格信息POST至服务器
       submit: function () {
-        console.log(this.formValues)
+        const submitInfo = {
+          projectName: this.formValues.projectName,
+          projectBriefIntroduction: this.formValues.projectBriefIntroduction,
+          projectExpectedStartTime: this.formValues.projectExpectedStartTime,
+          projectExpectedEndTime: this.formValues.projectExpectedEndTime,
+          projectSponsor: this.formValues.projectSponsor,
+          projectInvestigator: this.formValues.projectInvestigator,
+          projectMonitor: this.formValues.projectMonitor,
+          projectStatistician: this.formValues.projectStatistician,
+          projectStage: this.formValues.projectStage,
+        };
+        this.submitLoading = true;
+        const axiosMethod = this.$route.path.split('/')[2] === 'create'? 'post' : 'put';
+        this.$axios({
+          method: axiosMethod,
+          url: '/project',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'projects';
+          } else if (response.data.statusCode === '0') {
+            console.error('ProjectEditForm操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('ProjectEditForm操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          this.submitLoading = false;
+          $('#customModal').modal('show');
+        });
       },
     },
   }
 </script>
-
-<style scoped>
-
-</style>

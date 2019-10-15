@@ -178,8 +178,8 @@ Task模块
   参数举例  {
             brief: false,
             taskName: 'ddd',
-            projectID: '',
-            projectName: 'PROJECT001',
+            taskBelongedToProjectID: '',
+            taskBelongedToProjectName: 'PROJECT001',
             taskExecutorID: '',
             taskExecutorName: 'ass',
             taskReceivedStatus: 'all',
@@ -338,7 +338,7 @@ Project模块
 1.请求路径  /project
   请求方法  GET
   请求参数  projectName、projectStage、projectInvestigatorName、projectSponsorName、projectInvolvedUserRealName、projectCreatedYearMonth、brief
-  参数说明  projectName、projectInvestigatorName、projectSponsorName、projectInvolvedUserRealName、projectCreatedYearMonth如果留空，代表查询所有；projectStage包含preparation\ongoing\ending\supplementing\all
+  参数说明  projectName、projectInvestigatorName、projectSponsorName、projectInvolvedUserRealName、projectCreatedYearMonth如果留空，代表查询所有；projectStage为字符串
   参数举例  {
             brief: 'false',
             projectName: 'ddd',
@@ -346,7 +346,7 @@ Project模块
             projectSponsorName: 'ddd',
             projectInvolvedUserRealName: 'ddd',
             projectCreatedYearMonth: '2019-01',
-            projectStage: 'all',
+            projectStage: '3',
            }
   请求描述  返回[上述参数查询出来的]项目的详细信息（数组）
   响应举例  {
@@ -355,7 +355,7 @@ Project模块
               {
                "projectID": "PROJECT001",
                "projectName": "狂犬1针",
-               "projectStage": "preparation\ongoing\ending\supplementing四选一",
+               "projectStage": "1",
                "projectBriefIntroduction": "复离一战太动通难格青给革道度受样统改以使会传气路命东教在在事细向采日院划况次百东周手技精色计指容样需管区东权人水院为养非党传何验始思管华红。",
                "projectCreatedTime": "1996-08-19",
                "projectExpectedStartTime": "2015-07-25",
@@ -391,7 +391,7 @@ Project模块
             "project": {
                "projectID": "PROJECT001",
                "projectName": "狂犬1针",
-               "projectStage": "preparation\ongoing\ending\supplementing四选一",
+               "projectStage": "4",
                "projectBriefIntroduction": "复离一战太动通难格青给革道度受样统改以使会传气路命东教在在事细向采日院划况次百东周手技精色计指容样需管区东权人水院为养非党传何验始思管华红。",
                "projectCreatedTime": "1996-08-19",
                "projectExpectedStartTime": "2015-07-25",
@@ -413,15 +413,51 @@ Project模块
               }
             }
 
-TODO:CREATE项目
 3.请求路径  /project
   请求方法  POST
-TODO:UPDATE项目
+  请求参数  如下例所示
+  参数说明  projectStage为项目阶段，字符串，可取1、2、3、4
+  参数举例  {
+            "projectName": "this.project"
+            "projectBriefIntroduction": ""
+            "projectExpectedStartTime": ""
+            "projectExpectedEndTime": ""
+            "projectSponsor": "this.proj"
+            "projectInvestigator": "this"
+            "projectMonitor": "this.proj"
+            "projectStatistician": "this"
+            "projectStage": "1"
+           }
+  请求描述  返回操作结果
+  响应举例  {}
+
 4.请求路径  /project
   请求方法  PUT
-TODO:DELETE项目
+  请求参数  如下例所示
+  参数说明
+  参数举例  {
+              "projectName": "this.project"
+              "projectBriefIntroduction": ""
+              "projectExpectedStartTime": ""
+              "projectExpectedEndTime": ""
+              "projectSponsor": "this.proj"
+              "projectInvestigator": "this"
+              "projectMonitor": "this.proj"
+              "projectStatistician": "this"
+              "projectStage": "1"
+           }
+  请求描述  返回操作结果
+  响应举例  {}
+
 5.请求路径  /project
   请求方法  DELETE
+  请求参数  如下例所示
+  参数说明
+  参数举例  {
+              "projectID": "PROJECT001"
+           }
+  请求描述  返回操作结果
+  响应举例  {}
 --------------------------------------------------
 
 
@@ -429,11 +465,12 @@ TODO:DELETE项目
 User模块
 1.请求路径  /user
   请求方法  GET
-  请求参数  userRealName、brief
-  参数说明  realName为用户真名的关键字，留空则默认所有
+  请求参数  userRealName、brief、userInvolvedProjectID
+  参数说明  userRealName为用户真名的关键字，留空则默认所有；userInvolvedProjectID为参加的项目的名称；userAccountStatus为用户账户状态，字符串1代表normal、字符串2代表frozen
   参数举例  {
             brief: false,
             userRealName: '王',
+            userInvolvedProjectID: 'PROJECT1',
            }
   请求描述  返回[上述参数查询出来的]用户的详细信息（数组）。
   响应举例  {
@@ -443,7 +480,7 @@ User模块
                 "username": "liupei",
                 "userRealName": "刘沛",
                 "userEmail": "s.mxaei@wcs.cc",
-                "userAccountStatus": "normal/frozen二选一",
+                "userAccountStatus": "1",
                 "userLastLoginTime": "1987-08-02 02:26:00",
                 "userInvolvedProjectsID": [
                   "PROJECT001",
@@ -493,7 +530,7 @@ User模块
               "username": "liupei",
               "userRealName": "刘沛",
               "userEmail": "s.mxaei@wcs.cc",
-              "userAccountStatus": "normal/frozen二选一",
+              "userAccountStatus": "1",
               "userLastLoginTime": "1987-08-02 02:26:00",
               "userInvolvedProjectsID": [
                 "PROJECT001",
@@ -526,69 +563,51 @@ User模块
             }
           }
 
-TODO:CREATE用户
 3.请求路径  /user
   请求方法  POST
   请求参数  如下例所示
-  参数说明  isAdmin默认false；userAccountStatus默认normal；userLastLoginTime默认null；userCanManageProjectsID为用户可管理项目的ID；userInvolvedProjectsID为用户参加项目的ID
+  参数说明  isAdmin默认false；userAccountStatus默认为字符串1；userLastLoginTime默认null；userCanManageProjectsID为用户可管理项目的ID；userInvolvedProjectsID为用户参加项目的ID
   参数举例  {
             "userEmail": "useraasf@sb.com",
             "password": "123456",
             "username": "greenskin",
             "userRealName": "BAG",
-            isAdmin: false,
-            userAccountStatus: 'normal',
-            userLastLoginTime: null,
-            userCanManageProjectsID: [],
-            userInvolvedProjectsID: []
+            "isAdmin": false,
+            "userAccountStatus": '1',
+            "userLastLoginTime": null,
+            "userCanManageProjectsID": [],
+            "userInvolvedProjectsID": []
            }
   请求描述  返回操作结果
-  响应举例  {
-              "user": [
-                "userID": "USER001",
-                "isAdmin": "true",
-                "username": "liupei",
-                "userRealName": "刘沛",
-                "userEmail": "s.mxaei@wcs.cc",
-                "userAccountStatus": "normal/frozen二选一",
-                "userLastLoginTime": "1987-08-02 02:26:00",
-                "userInvolvedProjectsID": [
-                  "PROJECT001",
-                  "PROJECT002",
-                  "PROJECT003",
-                  "PROJECT004",
-                  "PROJECT005"
-                ],
-                "userInvolvedProjectsName": [
-                  "狂犬1针",
-                  "狂犬2针",
-                  "狂犬3针",
-                  "狂犬4针",
-                  "狂犬5针"
-                ],
-                "userCanManageProjectsID": [
-                  "PROJECT001",
-                  "PROJECT002",
-                  "PROJECT003",
-                  "PROJECT004",
-                  "PROJECT005"
-                ],
-                "userCanManageProjectsName": [
-                  "狂犬1针",
-                  "狂犬2针",
-                  "狂犬3针",
-                  "狂犬4针",
-                  "狂犬5针"
-                ]
-              }
-             ],
-           }
-TODO:UPDATE用户
+  响应举例  {}
+
 4.请求路径  /user
   请求方法  PUT
-TODO:DELETE用户
+  请求参数  如下例所示
+  参数说明  isAdmin不可变更，默认false；userLastLoginTime不可变更
+  参数举例  {
+              "userEmail": "useraasf@sb.com",
+              "password": "123456",
+              "username": "greenskin",
+              "userRealName": "BAG",
+              "isAdmin": false,
+              "userAccountStatus": '1',
+              "userLastLoginTime": null,
+              "userCanManageProjectsID": [],
+              "userInvolvedProjectsID": []
+            }
+  请求描述  返回操作结果
+  响应举例  {}
+
 5.请求路径  /user
   请求方法  DELETE
+  请求参数  如下例所示
+  参数说明
+  参数举例  {
+              "userID": "USER001"
+           }
+  请求描述  返回操作结果
+  响应举例  {}
 --------------------------------------------------
 
 --------------------------------------------------

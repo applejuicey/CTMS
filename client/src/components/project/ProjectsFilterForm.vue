@@ -91,11 +91,11 @@
     methods: {
       processFormData: function () {
         const projectStageMap = new Map()
-            .set('1', ['preparation', '准备阶段'])
-            .set('2', ['ongoing', '进行阶段'])
-            .set('3', ['ending', '收尾阶段'])
-            .set('4', ['supplementing', '补发阶段'])
-            .set('-1', ['', '全部']);
+            .set('1', '准备阶段')
+            .set('2', '进行阶段')
+            .set('3', '收尾阶段')
+            .set('4', '补发阶段')
+            .set('-1','全部');
         let projectNameKeywordDescription = this.projectNameKeyword;
         let sponsorNameKeywordDescription = this.sponsorNameKeyword;
         let investigatorNameKeywordDescription = this.investigatorNameKeyword;
@@ -116,7 +116,7 @@
         if (this.projectCreatedYearMonth === '') {
           projectCreatedYearMonthDescription = '不限';
         }
-        let filterDescription = `"项目名称关键字：${projectNameKeywordDescription}；申办方名称关键字：${sponsorNameKeywordDescription}；研究方名称关键字：${investigatorNameKeywordDescription}；项目参与人员姓名：${involvedUserRealNameKeywordDescription}；项目创建年月：${projectCreatedYearMonthDescription}；项目当前阶段：${projectStageMap.get(this.projectStage)[1]}"`;
+        let filterDescription = `"项目名称关键字：${projectNameKeywordDescription}；申办方名称关键字：${sponsorNameKeywordDescription}；研究方名称关键字：${investigatorNameKeywordDescription}；项目参与人员姓名：${involvedUserRealNameKeywordDescription}；项目创建年月：${projectCreatedYearMonthDescription}；项目当前阶段：${projectStageMap.get(this.projectStage)}"`;
         this.$store.dispatch('setProjectFilterDescriptionAction', {
           projectFilterDescription: filterDescription
         });
@@ -126,7 +126,7 @@
           projectInvestigatorNameKeyword: this.investigatorNameKeyword,
           projectInvolvedUserRealNameKeyword: this.involvedUserRealNameKeyword,
           projectCreatedYearMonth: this.projectCreatedYearMonth,
-          projectStage: projectStageMap.get(this.projectStage)[0],
+          projectStage: this.projectStage,
         };
       },
       // 生成一个对象，包括用户ID与一些检索条件，将该对象保存至vuex
@@ -137,7 +137,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

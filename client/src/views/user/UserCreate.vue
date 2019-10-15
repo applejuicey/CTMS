@@ -38,12 +38,5 @@
         },
       }
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
   }
 </script>

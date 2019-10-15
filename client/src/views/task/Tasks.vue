@@ -84,13 +84,6 @@
         deep: true
       },
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
     methods: {
       getTasksInfo: function (queryParamsObject) {
         this.$store.dispatch('setTaskFilterQueryResultAction', {
@@ -105,7 +98,7 @@
           params: {
             brief: false,
             taskName: queryParamsObject.taskNameKeyword,
-            projectName: queryParamsObject.projectNameKeyword,
+            taskBelongedToProjectName: queryParamsObject.projectNameKeyword,
             taskExecutorName: queryParamsObject.taskExecutorNameKeyword,
             taskReceivedStatus: queryParamsObject.taskReceivedStatus,
             taskCompletedStatus: queryParamsObject.taskCompletedStatus,

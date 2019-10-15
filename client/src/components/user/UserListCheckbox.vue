@@ -1,5 +1,5 @@
 <template>
-  <div class="user-list">
+  <div class="scroll-list">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
       <div class="col-12">
         <div class="alert alert-primary text-center mb-0">
@@ -24,8 +24,8 @@
       <div class="col-12">
         <template>
           <div class="form-check" v-for="(user, index) in userList">
-            <input class="form-check-input" type="checkbox" :id="user.userID" :value="user.userID" v-model="selectedUsersIDCurrent" @change="$emit('selectionChanged', selectedUsersIDCurrent)">
-            <label class="form-check-label" :for="user.userID">{{ user.username }}</label>
+            <input class="form-check-input" type="checkbox" :id="user.userID + uniqueNumber" :value="user.userID" v-model="selectedUsersIDCurrent" @change="$emit('selectionChanged', selectedUsersIDCurrent)">
+            <label class="form-check-label" :for="user.userID + uniqueNumber">{{ user.username }}</label>
           </div>
         </template>
       </div>
@@ -63,10 +63,12 @@
     data: function () {
       return {
         selectedUsersIDCurrent: [],
+        uniqueNumber: null,
       };
     },
     mounted: function () {
       this.selectedUsersIDCurrent = this.selectedUsersIDOriginal;
+      this.uniqueNumber = Math.floor(Math.random() * 1000000);
     },
     watch: {
       selectedUsersIDOriginal: {
@@ -78,7 +80,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

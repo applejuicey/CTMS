@@ -50,13 +50,6 @@
         modalButtonTarget: 'nowhere',
       }
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
     methods: {
       deleteUser: function () {
         this.deleteLoading = true;
@@ -84,7 +77,7 @@
           this.modalButtonTarget = 'nowhere';
         }).finally(() => {
           this.deleteLoading = false;
-          $('#errorModal').modal('show');
+          $('#customModal').modal('show');
         });
       },
     },

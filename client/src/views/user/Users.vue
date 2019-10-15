@@ -84,13 +84,6 @@
         deep: true
       },
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
     methods: {
       getUsersInfo: function (queryParamsObject) {
         this.$store.dispatch('setUserFilterQueryResultAction', {

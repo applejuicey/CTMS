@@ -138,7 +138,7 @@
             username: newVal.username,
             userRealName: newVal.userRealName,
             userEmail: newVal.userEmail,
-            userAccountStatus: newVal.userAccountStatus || '1',
+            userAccountStatus: newVal.userAccountStatus,
             userInvolvedProjectsID: newVal.userInvolvedProjectsID,
             userCanManageProjectsID: newVal.userCanManageProjectsID,
           };
@@ -207,15 +207,12 @@
         this.formValues.userInvolvedProjectsID = currentSelection;
       },
       submit: function () {
-        const accountStatusMap = new Map()
-            .set('1', ['normal'])
-            .set('2', ['frozen']);
         const submitInfo = {
           userEmail: this.formValues.userEmail,
           password: this.formValues.password,
           username: this.formValues.username,
           userRealName: this.formValues.userRealName,
-          userAccountStatus: accountStatusMap.get(this.formValues.userAccountStatus)[0],
+          userAccountStatus: this.formValues.userAccountStatus,
           isAdmin: false,
           userLastLoginTime: null,
           userCanManageProjectsID: this.formValues.userCanManageProjectsID,

@@ -21,6 +21,13 @@
         return noTopNavBarRoutes.includes(this.$route.path.split('/')[1]);
       },
     },
+    mounted: function () {
+      this.$nextTick(function () {
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+        })
+      });
+    },
   }
 </script>
 

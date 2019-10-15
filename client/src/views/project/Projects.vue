@@ -84,13 +84,6 @@
         deep: true
       },
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
     methods: {
       getProjectsInfo: function (queryParamsObject) {
         this.$store.dispatch('setProjectFilterQueryResultAction', {
@@ -147,7 +140,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>
