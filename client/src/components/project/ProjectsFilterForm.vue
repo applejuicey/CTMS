@@ -95,7 +95,7 @@
             .set('2', ['ongoing', '进行阶段'])
             .set('3', ['ending', '收尾阶段'])
             .set('4', ['supplementing', '补发阶段'])
-            .set('-1', ['all', '全部']);
+            .set('-1', ['', '全部']);
         let projectNameKeywordDescription = this.projectNameKeyword;
         let sponsorNameKeywordDescription = this.sponsorNameKeyword;
         let investigatorNameKeywordDescription = this.investigatorNameKeyword;
@@ -122,9 +122,8 @@
         });
         return {
           projectNameKeyword: this.projectNameKeyword,
-          sponsorNameKeyword: this.sponsorNameKeyword,
+          projectSponsorNameKeyword: this.sponsorNameKeyword,
           projectInvestigatorNameKeyword: this.investigatorNameKeyword,
-          projectSponsorNameKeyword: this.involvedUserRealNameKeyword,
           projectInvolvedUserRealNameKeyword: this.involvedUserRealNameKeyword,
           projectCreatedYearMonth: this.projectCreatedYearMonth,
           projectStage: projectStageMap.get(this.projectStage)[0],

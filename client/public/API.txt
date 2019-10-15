@@ -428,6 +428,7 @@ TODO:DELETE项目
 --------------------------------------------------
 User模块
 1.请求路径  /user
+  请求方法  GET
   请求参数  userRealName、brief
   参数说明  realName为用户真名的关键字，留空则默认所有
   参数举例  {
@@ -528,6 +529,60 @@ User模块
 TODO:CREATE用户
 3.请求路径  /user
   请求方法  POST
+  请求参数  如下例所示
+  参数说明  isAdmin默认false；userAccountStatus默认normal；userLastLoginTime默认null；userCanManageProjectsID为用户可管理项目的ID；userInvolvedProjectsID为用户参加项目的ID
+  参数举例  {
+            "userEmail": "useraasf@sb.com",
+            "password": "123456",
+            "username": "greenskin",
+            "userRealName": "BAG",
+            isAdmin: false,
+            userAccountStatus: 'normal',
+            userLastLoginTime: null,
+            userCanManageProjectsID: [],
+            userInvolvedProjectsID: []
+           }
+  请求描述  返回操作结果
+  响应举例  {
+              "user": [
+                "userID": "USER001",
+                "isAdmin": "true",
+                "username": "liupei",
+                "userRealName": "刘沛",
+                "userEmail": "s.mxaei@wcs.cc",
+                "userAccountStatus": "normal/frozen二选一",
+                "userLastLoginTime": "1987-08-02 02:26:00",
+                "userInvolvedProjectsID": [
+                  "PROJECT001",
+                  "PROJECT002",
+                  "PROJECT003",
+                  "PROJECT004",
+                  "PROJECT005"
+                ],
+                "userInvolvedProjectsName": [
+                  "狂犬1针",
+                  "狂犬2针",
+                  "狂犬3针",
+                  "狂犬4针",
+                  "狂犬5针"
+                ],
+                "userCanManageProjectsID": [
+                  "PROJECT001",
+                  "PROJECT002",
+                  "PROJECT003",
+                  "PROJECT004",
+                  "PROJECT005"
+                ],
+                "userCanManageProjectsName": [
+                  "狂犬1针",
+                  "狂犬2针",
+                  "狂犬3针",
+                  "狂犬4针",
+                  "狂犬5针"
+                ]
+              }
+             ],
+           }
 TODO:UPDATE用户
 4.请求路径  /user
   请求方法  PUT

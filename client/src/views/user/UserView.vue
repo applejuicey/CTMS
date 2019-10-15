@@ -2,12 +2,12 @@
   <div class="row" id="user_view">
     <div class="col-12">
       <div class="row mb-2">
-        <div class="col-12">
+        <div class="col-xl-6 offset-xl-3">
           <h1>查看用户-{{ $route.params.userID }}</h1>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 mb-2">
+        <div class="col-xl-6 offset-xl-3 mb-2">
           <bottom-card :cardHeaderText="userInfoHeaderText" :cardTooltipText="userInfoTooltipText">
             <template v-slot:card-body>
               <user-info-table :userInfoObject="userInfoObject" :statusObject="statusObject4User"></user-info-table>
@@ -58,17 +58,17 @@
             userID: this.$route.params.userID,
           }
         }).then((response) => {
-          if (response.data.response.statusCode === '1') {
-            this.userInfoObject = response.data.response.user;
+          if (response.data.statusCode === '1') {
+            this.userInfoObject = response.data.user[0];
             this.statusObject4User = {
               statusIndicator: 'loaded',
             };
-          } else if (response.data.response.statusCode === '0') {
-            console.error('UserView获取用户信息失败，错误：', response.data.response.error.message);
+          } else if (response.data.statusCode === '0') {
+            console.error('UserView获取用户信息失败，错误：', response.data.error.message);
             this.statusObject4User = {
               statusIndicator: 'error',
               alertHeader: '有错误发生',
-              feedbackMessage: `从服务器获取用户信息失败，错误原因：${response.data.response.error.message}`,
+              feedbackMessage: `从服务器获取用户信息失败，错误原因：${response.data.error.message}`,
             };
           } else {
             throw new Error('CLIENT未知错误');

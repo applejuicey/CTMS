@@ -108,7 +108,7 @@
             projectInvestigatorName: queryParamsObject.projectInvestigatorNameKeyword,
             projectSponsorName: queryParamsObject.projectSponsorNameKeyword,
             projectInvolvedUserRealName: queryParamsObject.projectInvolvedUserRealNameKeyword,
-            projectCreatedYearMonth: queryParamsObject.projectCreatedYearMonth,
+            projectCreatedTime: queryParamsObject.projectCreatedYearMonth,
             projectStage: queryParamsObject.projectStage,
           }
         }).then((response) => {

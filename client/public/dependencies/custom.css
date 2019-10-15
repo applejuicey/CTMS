@@ -20,14 +20,6 @@ b {
 .height-100-percentage {
   height: 100%;
 }
-.hover-vibrate {
-  transform: translate(0, -2px);
-}
-.obscure {
-  opacity: 0.85;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -43,26 +35,19 @@ b {
   border-width: 1px 1px 1px 0.25rem;
   border-style: dashed dashed dashed solid;
 }
-.list-card:hover {
-  transform: translate(0, -2px);
-  box-shadow:0 .5rem 1rem rgba(0,0,0,.15)
-}
 .scroll-list {
   padding: 1.25rem;
   overflow-y: scroll;
-  max-height: 400px;
+  max-height: 200px;
   border-radius: .25rem;
   border-color: #eee #eee #eee #ffc107;
   border-width: 1px 1px 1px 0.25rem;
   border-style: dashed dashed dashed solid;
 }
-.scroll-list:hover {
-  transform: translate(0, -2px);
-  box-shadow:0 .5rem 1rem rgba(0,0,0,.15)
-}
 .table-left-column {
   font-weight: 400;
   text-align: right;
+  width: 150px;
 }
 .table-right-column {
   text-align: left;

@@ -54,10 +54,10 @@
                 </td>
                 <td>{{ user.userID }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.realName }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.accountStatus }}</td>
-                <td>{{ user.lastLoginTime }}</td>
+                <td>{{ user.userRealName }}</td>
+                <td>{{ user.userEmail }}</td>
+                <td>{{ user.userAccountStatus }}</td>
+                <td>{{ user.userLastLoginTime }}</td>
               </tr>
             </template>
           </tbody>

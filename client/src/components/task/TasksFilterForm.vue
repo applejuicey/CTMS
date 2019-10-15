@@ -82,13 +82,13 @@
     methods: {
       processFormData: function () {
         const receivedStatusMap = new Map()
-            .set('1', ['received', '已接受'])
-            .set('0', ['not_received', '未接受'])
-            .set('-1', ['all', '全部']);
+            .set('1', ['yes', '已接受'])
+            .set('0', ['no', '未接受'])
+            .set('-1', ['', '全部']);
         const completeStatusMap = new Map()
-            .set('1', ['completed', '已完成'])
-            .set('0', ['not_completed', '未完成'])
-            .set('-1', ['all', '全部']);
+            .set('1', ['yes', '已完成'])
+            .set('0', ['no', '未完成'])
+            .set('-1', ['', '全部']);
         let taskNameKeywordDescription = this.taskNameKeyword;
         let projectNameKeywordDescription = this.projectNameKeyword;
         let taskExecutorNameKeywordDescription = this.taskExecutorNameKeyword;
