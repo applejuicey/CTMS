@@ -126,6 +126,7 @@
       taskInfoObject: {
         handler: function (newVal, oldVal) {
           this.formValues = {
+            taskID: newVal.taskID,
             taskBelongedToProjectID: newVal.taskBelongedToProjectID,
             taskBelongedToProjectName: newVal.taskBelongedToProjectName,
             taskName: newVal.taskName,
@@ -143,6 +144,7 @@
     },
     created: function () {
       this.formValues = {
+        taskID: this.taskInfoObject.taskID || '',
         taskBelongedToProjectID: this.taskInfoObject.taskBelongedToProjectID || null,
         taskName: this.taskInfoObject.taskName || '',
         taskDescription: this.taskInfoObject.taskDescription || '',
@@ -249,6 +251,7 @@
       },
       submit: function () {
         const submitInfo = {
+          taskID: this.formValues.taskID,
           taskBelongedToProjectID: this.formValues.taskBelongedToProjectID,
           taskName: this.formValues.taskName,
           taskDescription: this.formValues.taskDescription,

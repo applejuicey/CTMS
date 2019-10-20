@@ -41,11 +41,23 @@
             </label>
             <input v-model="formValues.projectExpectedStartTime" type="date" class="form-control" id="projectExpectedStartTime" placeholder="预计开始时间">
           </div>
+          <div class="form-group text-left" v-if="this.$route.path.split('/')[2] !== 'create'">
+            <label for="projectActualStartTime" class="font-weight-normal">
+              <span>实际开始时间：</span>
+            </label>
+            <input v-model="formValues.projectActualStartTime" type="date" class="form-control" id="projectActualStartTime" placeholder="实际开始时间">
+          </div>
           <div class="form-group text-left">
             <label for="projectExpectedEndTime" class="font-weight-normal">
               <span>预计结束时间：</span>
             </label>
             <input v-model="formValues.projectExpectedEndTime" type="date" class="form-control" id="projectExpectedEndTime" placeholder="预计结束时间">
+          </div>
+          <div class="form-group text-left" v-if="this.$route.path.split('/')[2] !== 'create'">
+            <label for="projectActualEndTime" class="font-weight-normal">
+              <span>实际结束时间：</span>
+            </label>
+            <input v-model="formValues.projectActualEndTime" type="date" class="form-control" id="projectActualEndTime" placeholder="实际结束时间">
           </div>
           <div class="form-group text-left">
             <label for="projectSponsor" class="font-weight-normal">
@@ -150,6 +162,7 @@
       projectInfoObject: {
         handler: function (newVal, oldVal) {
           this.formValues = {
+            projectID: newVal.projectID,
             projectName: newVal.projectName,
             projectBriefIntroduction: newVal.projectBriefIntroduction,
             projectExpectedStartTime: this.formatDate(newVal.projectExpectedStartTime),
@@ -159,6 +172,8 @@
             projectMonitor: newVal.projectMonitor,
             projectStatistician: newVal.projectStatistician,
             projectStage: newVal.projectStage,
+            projectActualStartTime: this.formatDate(newVal.projectActualStartTime),
+            projectActualEndTime: this.formatDate(newVal.projectActualEndTime),
           };
         },
         deep: true,
@@ -166,6 +181,7 @@
     },
     created: function () {
       this.formValues = {
+        projectID: this.projectInfoObject.projectID || '',
         projectName: this.projectInfoObject.projectName || '',
         projectBriefIntroduction: this.projectInfoObject.projectBriefIntroduction || '',
         projectExpectedStartTime: this.formatDate(this.projectInfoObject.projectExpectedStartTime || new Date()),
@@ -175,6 +191,8 @@
         projectMonitor: this.projectInfoObject.projectMonitor || '',
         projectStatistician: this.projectInfoObject.projectStatistician || '',
         projectStage: this.projectInfoObject.projectStage || '1',
+        projectActualStartTime: this.formatDate(this.projectInfoObject.projectActualStartTime || new Date()),
+        projectActualEndTime: this.formatDate(this.projectInfoObject.projectActualEndTime || new Date()),
       };
     },
     methods: {
@@ -189,6 +207,7 @@
       },
       submit: function () {
         const submitInfo = {
+          projectID: this.formValues.projectID,
           projectName: this.formValues.projectName,
           projectBriefIntroduction: this.formValues.projectBriefIntroduction,
           projectExpectedStartTime: this.formValues.projectExpectedStartTime,
@@ -198,6 +217,8 @@
           projectMonitor: this.formValues.projectMonitor,
           projectStatistician: this.formValues.projectStatistician,
           projectStage: this.formValues.projectStage,
+          projectActualStartTime: this.formValues.projectActualStartTime,
+          projectActualEndTime: this.formValues.projectActualEndTime,
         };
         this.submitLoading = true;
         const axiosMethod = this.$route.path.split('/')[2] === 'create'? 'post' : 'put';

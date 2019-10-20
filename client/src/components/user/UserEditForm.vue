@@ -1,7 +1,7 @@
 <template>
   <div class="list-card">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
-      <div class="col-12">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-primary text-center mb-0">
           <h4 class="alert-heading">{{ statusObject.alertHeader }}</h4>
           <p>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="row" v-else-if="statusObject.statusIndicator === 'error'">
-      <div class="col-12">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-danger text-center mb-0">
           <h4 class="alert-heading">{{ statusObject.alertHeader }}</h4>
           <p>
@@ -64,13 +64,13 @@
               </label>
             </div>
           </div>
-          <div class="form-group text-left" v-if="isAdmin">
+          <div class="form-group text-left" v-if="isAdmin && this.$route.path.split('/')[1] !== 'me'">
             <label class="font-weight-normal">参与的项目：</label>
             <project-list-checkbox :projectList="projectList" :statusObject="statusObject4ProjectListCheckbox"
                                    :selectedProjectsIDOriginal="formValues.userInvolvedProjectsID"
                                    @selectionChanged="changeFormInvolvedProjectsID"></project-list-checkbox>
           </div>
-          <div class="form-group text-left" v-if="isAdmin">
+          <div class="form-group text-left" v-if="isAdmin && this.$route.path.split('/')[1] !== 'me'">
             <label class="font-weight-normal">可管理的项目：</label>
             <project-list-checkbox :projectList="projectList" :statusObject="statusObject4ProjectListCheckbox"
                                    :selectedProjectsIDOriginal="formValues.userCanManageProjectsID"
@@ -83,7 +83,7 @@
       </div>
     </div>
     <div class="row" v-else>
-      <div class="col-12">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-info text-center mb-0">
           <h4 class="alert-heading">等待初始化</h4>
           <p>
@@ -135,6 +135,7 @@
       userInfoObject: {
         handler: function (newVal, oldVal) {
           this.formValues = {
+            userID: newVal.userID,
             username: newVal.username,
             password: newVal.password,
             userRealName: newVal.userRealName,
@@ -150,6 +151,7 @@
     },
     created: function () {
       this.formValues = {
+        userID: this.userInfoObject.userID || '',
         username: this.userInfoObject.username || '',
         password: this.userInfoObject.password || '',
         userRealName: this.userInfoObject.userRealName || '',
@@ -210,6 +212,7 @@
       },
       submit: function () {
         const submitInfo = {
+          userID: this.formValues.userID,
           userEmail: this.formValues.userEmail,
           password: this.formValues.password,
           username: this.formValues.username,

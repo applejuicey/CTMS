@@ -1,13 +1,13 @@
 <template>
-  <div class="row height-100-percentage" id="me">
-    <div class="col-12 height-100-percentage">
+  <div class="row" id="me">
+    <div class="col-12">
       <div class="row mb-2">
-        <div class="col-12">
+        <div class="col-xl-6 offset-xl-3">
           <h1>我的资料</h1>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 mb-2">
+        <div class="col-xl-6 offset-xl-3 mb-2">
           <bottom-card :cardHeaderText="meHeaderText" :cardTooltipText="meTooltipText">
             <template v-slot:card-body>
               <user-info-table :userInfoObject="userInfoObject" :statusObject="statusObject4User"></user-info-table>
@@ -40,20 +40,8 @@
         statusObject4User: {},
       }
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-    },
     created: function () {
       this.getUserInfo();
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
     },
     methods: {
       getUserInfo: function () {
@@ -94,8 +82,4 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>
 

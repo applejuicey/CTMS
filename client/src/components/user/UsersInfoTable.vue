@@ -1,7 +1,7 @@
 <template>
   <div class="list-card">
     <div class="row" v-if="statusObject.statusIndicator === 'loading'">
-      <div class="col-xl-6 offset-xl-3">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-primary text-center mb-0">
           <h4 class="alert-heading">{{ statusObject.alertHeader }}</h4>
           <p>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="row" v-else-if="statusObject.statusIndicator === 'error'">
-      <div class="col-xl-6 offset-xl-3">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-danger text-center mb-0">
           <h4 class="alert-heading">{{ statusObject.alertHeader }}</h4>
           <p>
@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
+    <div v-else-if="statusObject.statusIndicator === 'loaded'">
       <div class="d-flex mb-2" v-if="$route.path.split('/')[1] !== 'users'">
         <span class="font-weight-normal">
           <i class="fas fa-caret-right"></i>&nbsp;
@@ -65,7 +65,7 @@
       </div>
     </div>
     <div class="row" v-else>
-      <div class="col-xl-6 offset-xl-3">
+      <div class="col-xl-8 offset-xl-2">
         <div class="alert alert-info text-center mb-0">
           <h4 class="alert-heading">等待初始化</h4>
           <p>
