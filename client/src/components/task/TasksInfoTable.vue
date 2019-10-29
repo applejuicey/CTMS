@@ -46,20 +46,26 @@
           <template v-for="(taskInfo, index) in tasksInfoArray">
             <tr>
               <td>
+                <span>&ensp;</span>
                 <span class="cursor-pointer text-primary" @click="changeRoute(taskInfo.taskID, 'view')">
-                  <i class="fas fa-search"></i>&nbsp;
+                  <i class="fas fa-search"></i>
+                  <span>&ensp;</span>
                 </span>
                 <span class="cursor-pointer text-success" @click="changeRoute(taskInfo.taskID, 'edit')" v-if="isAdmin || taskInfo.taskCreatorID === currentUserID">
-                  <i class="fas fa-edit"></i>&nbsp;
+                  <i class="fas fa-edit"></i>
+                  <span>&ensp;</span>
                 </span>
                 <span class="cursor-pointer text-danger" @click="changeRoute(taskInfo.taskID, 'delete')" v-if="isAdmin || taskInfo.taskCreatorID === currentUserID">
-                  <i class="fas fa-trash"></i>&nbsp;
+                  <i class="fas fa-trash"></i>
+                  <span>&ensp;</span>
                 </span>
                 <span class="cursor-pointer text-success" @click="receiveTask(taskInfo.taskID)" v-if="taskInfo.taskExecutorID === currentUserID && taskInfo.taskReceivedStatus === false">
-                  <i class="fas fa-check"></i>&nbsp;
+                  <i class="fas fa-check"></i>
+                  <span>&ensp;</span>
                 </span>
                 <span class="cursor-pointer text-success" @click="completeTask(taskInfo.taskID)" v-if="taskInfo.taskExecutorID === currentUserID && taskInfo.taskReceivedStatus === true && taskInfo.taskCompletedStatus === false">
-                  <i class="fas fa-check-double"></i>&nbsp;
+                  <i class="fas fa-check-double"></i>
+                  <span>&ensp;</span>
                 </span>
               </td>
               <td>{{taskInfo.taskName}}</td>

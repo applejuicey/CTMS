@@ -182,7 +182,7 @@ Task模块
             taskBelongedToProjectName: 'PROJECT001',
             taskExecutorID: '',
             taskExecutorName: 'ass',
-            taskReceivedStatus: '-1',
+            taskReceivedStatus: '1',
             taskCompletedStatus: '',
            }
   请求描述  返回[上述参数查询出来的]任务的详细信息（数组）。
@@ -291,7 +291,7 @@ File模块
               "fileCreateDate": "2019-08-11",
               "fileCreatorID": "USER001",
               "fileCreatorName": "刘沛",
-              "fileStatus": "removed/deleted/normal三选一",
+              "fileStatus": "1",
               "fileRemoveDate": "2019-08-11",
               "fileRemoveExecutorID": "USER001",
               "fileRemoveExecutorName": "刘沛",
@@ -305,7 +305,7 @@ File模块
 2.请求路径  /file
   请求方法  GET
   请求参数  fileID
-  参数说明
+  参数说明  fileStatus为状态，字符串"1"或"2"，1代表normal、2代表removed（不再放3代表deleted，如果要彻底删除，就直接在数据库里删除该记录）
   参数举例  {
             fileID: 'FILE001',
            }
@@ -323,7 +323,7 @@ File模块
                 "fileCreateDate": "2019-08-11",
                 "fileCreatorID": "USER001",
                 "fileCreatorName": "刘沛",
-                "fileStatus": "removed/deleted/normal三选一",
+                "fileStatus": "2",
                 "fileRemoveDate": "2019-08-11",
                 "fileRemoveExecutorID": "USER001",
                 "fileRemoveExecutorName": "刘沛",
@@ -629,7 +629,7 @@ Template模块
 1.请求路径  /template
   请求方法  GET
   请求参数  templateName、templateCreatorName、brief
-  参数说明  templateName、templateCreatorName为空则代表查询所有
+  参数说明  templateName、templateCreatorName为空则代表查询所有；templateStatus为状态，字符串"1"或"2"，1代表normal、2代表removed（不再放3代表deleted，如果要彻底删除，就直接在数据库里删除该记录）
   参数举例  {
             brief: 'false',
             templateName: '',
@@ -646,7 +646,7 @@ Template模块
               "templateCreateDate": "2019-08-11",
               "templateCreatorID": "USER001",
               "templateCreatorName": "刘沛",
-              "templateStatus": "removed/deleted/normal三选一",
+              "templateStatus": "2",
               "templateRemoveDate": "2019-08-11",
               "templateRemoveExecutorID": "USER001",
               "templateRemoveExecutorName": "刘沛",
@@ -674,7 +674,7 @@ Template模块
                 "templateCreateDate": "2019-08-11",
                 "templateCreatorID": "USER001",
                 "templateCreatorName": "刘沛",
-                "templateStatus": "removed/deleted/normal三选一",
+                "templateStatus": "1",
                 "templateRemoveDate": "2019-08-11",
                 "templateRemoveExecutorID": "USER001",
                 "templateRemoveExecutorName": "刘沛",

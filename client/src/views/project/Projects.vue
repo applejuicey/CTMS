@@ -1,6 +1,6 @@
 <template>
-  <div class="row height-100-percentage" id="projects">
-    <div class="col-12 height-100-percentage">
+  <div class="row" id="projects">
+    <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
           <h1>
@@ -102,7 +102,7 @@
             projectSponsorName: queryParamsObject.projectSponsorNameKeyword,
             projectInvolvedUserRealName: queryParamsObject.projectInvolvedUserRealNameKeyword,
             projectCreatedTime: queryParamsObject.projectCreatedYearMonth,
-            projectStage: queryParamsObject.projectStage,
+            projectStage: queryParamsObject.projectStage === '-1'? '' : queryParamsObject.projectStage,
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

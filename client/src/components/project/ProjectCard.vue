@@ -1,5 +1,5 @@
 <template>
-  <div class="card mb-2" @mouseover="addHover($event)" @mouseout="removeHover($event)">
+  <div class="card mb-2">
     <div class="card-header bg-transparent d-flex">
       <b class="cursor-pointer text-primary text-ellipsis-sm" @click="toggleCollapse(projectID)" data-toggle="tooltip" data-placement="top" :title="projectNameTipText">
         <i class="fas fa-capsules"></i>&nbsp;
@@ -55,9 +55,6 @@
     },
     mounted: function () {
       this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        });
         // 绑定事件：展开时从服务器获取项目信息，传入子组件ProjectInfoTable
         // 绑定事件：展开时从服务器获取任务信息，传入子组件TaskInfoTable
         $(this.collapseID).on('shown.bs.collapse', () => {
@@ -67,12 +64,6 @@
       })
     },
     methods: {
-      addHover: function (event) {
-        event.currentTarget.className = 'card mb-2 shadow hover-vibrate';
-      },
-      removeHover: function (event) {
-        event.currentTarget.className = 'card mb-2';
-      },
       toggleCollapse: function (projectID) {
         const clickedCollapseID = `#collapse${projectID}`;
         $(clickedCollapseID).collapse('toggle');
@@ -165,7 +156,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

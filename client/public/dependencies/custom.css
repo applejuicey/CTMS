@@ -31,7 +31,8 @@ b {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
   border-radius: .25rem;
-  border-color: #eee #eee #eee #ffc107;
+  /*border-color: #eee #eee #eee #ffc107;*/
+  border-color: #eee #eee #eee #28a745;
   border-width: 1px 1px 1px 0.25rem;
   border-style: dashed dashed dashed solid;
 }
@@ -40,7 +41,8 @@ b {
   overflow-y: scroll;
   max-height: 200px;
   border-radius: .25rem;
-  border-color: #eee #eee #eee #ffc107;
+  /*border-color: #eee #eee #eee #ffc107;*/
+  border-color: #eee #eee #eee #28a745;
   border-width: 1px 1px 1px 0.25rem;
   border-style: dashed dashed dashed solid;
 }

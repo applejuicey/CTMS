@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-md sticky-top bg-warning">
+  <nav class="navbar navbar-expand-md sticky-top bg-success">
     <span class="navbar-brand cursor-default">
       <i class="fas fa-cog"></i>&nbsp;项目管理系统
     </span>

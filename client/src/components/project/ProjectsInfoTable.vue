@@ -45,16 +45,20 @@
             <td>统计方</td>
           </tr>
           <template v-for="(projectInfo, index) in projectsInfoArray">
-            <tr >
+            <tr>
               <td>
-                <span class="cursor-pointer text-primary" @click="changeRoute(projectInfo.projectID, 'view')">
-                  <i class="fas fa-search"></i>&nbsp;
+                <span>&ensp;</span>
+                <span class="cursor-pointer text-primary d-inline" @click="changeRoute(projectInfo.projectID, 'view')">
+                  <i class="fas fa-search"></i>
+                  <span>&ensp;</span>
                 </span>
-                <span class="cursor-pointer text-success" @click="changeRoute(projectInfo.projectID, 'edit')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
-                  <i class="fas fa-edit"></i>&nbsp;
+                <span class="cursor-pointer text-success d-inline" @click="changeRoute(projectInfo.projectID, 'edit')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
+                  <i class="fas fa-edit"></i>
+                  <span>&ensp;</span>
                 </span>
-                <span class="cursor-pointer text-danger" @click="changeRoute(projectInfo.projectID, 'delete')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
-                  <i class="fas fa-trash"></i>&nbsp;
+                <span class="cursor-pointer text-danger d-inline" @click="changeRoute(projectInfo.projectID, 'delete')" v-if="isAdmin || currentUserID === projectInfo.projectManagerID">
+                  <i class="fas fa-trash"></i>
+                  <span>&ensp;</span>
                 </span>
               </td>
               <td>{{projectInfo.projectName}}</td>

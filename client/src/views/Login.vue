@@ -1,8 +1,8 @@
 <template>
   <div class="row align-items-center height-100-percentage" id="login">
     <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-xs-10 offset-xs-1">
-      <div class="card shadow border-warning obscure" @mouseover="addHover($event)" @mouseout="removeHover($event)">
-        <div class="card-header bg-warning border-warning">
+      <div class="card shadow border-success">
+        <div class="card-header bg-success border-success">
           <div class="m-2 font-weight-light h4">
             <i class="fas fa-cog"></i>
             临床试验项目管理系统
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group row">
               <div class="col-12 text-center">
-                <button class="btn btn-warning" type="button" :disabled="loading" @click="login" v-html="buttonText">
+                <button class="btn btn-success" type="button" :disabled="loading" @click="login" v-html="buttonText">
                   <span class="spinner-border spinner-border-sm" v-if="loading"></span>
                 </button>
               </div>
@@ -43,7 +43,7 @@
               <div>{{ responseMessage }}</div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-warning" data-dismiss="modal">确定</button>
+              <button type="button" class="btn btn-success" data-dismiss="modal">确定</button>
             </div>
           </div>
         </div>
@@ -74,12 +74,6 @@
       }
     },
     methods: {
-      addHover: function (event) {
-        event.currentTarget.className = 'card shadow border-warning obscure hover-vibrate';
-      },
-      removeHover: function (event) {
-        event.currentTarget.className = 'card shadow border-warning obscure';
-      },
       login: function () {
         this.loading = true;
         this.buttonText = '登录中，请稍后';

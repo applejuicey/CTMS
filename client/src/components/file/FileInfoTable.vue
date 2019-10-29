@@ -27,23 +27,23 @@
           文件信息：
         </span>
         <div class="btn-group ml-auto">
-          <button type="button" class="btn btn-success" @click="downloadFile(fileInfoObject.fileID)" v-if="fileInfoObject.fileStatus === 'normal'">
+          <button type="button" class="btn btn-success" @click="downloadFile(fileInfoObject.fileID)" v-if="fileInfoObject.fileStatus === '1'">
             <i class="fas fa-download"></i>
             <span class="d-sm-inline d-none">&nbsp;下载文件</span>
           </button>
-          <button type="button" class="btn btn-success" @click="changeRoute(fileInfoObject.fileID, 'edit')" v-if="(fileInfoObject.fileStatus !== 'deleted') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+          <button type="button" class="btn btn-success" @click="changeRoute(fileInfoObject.fileID, 'edit')" v-if="isAdmin || currentUserID === fileInfoObject.fileCreatorID">
             <i class="fas fa-pen"></i>
             <span class="d-sm-inline d-none">&nbsp;编辑文件</span>
           </button>
-          <button type="button" class="btn btn-warning" @click="removeFile(fileInfoObject.fileID)" v-if="(fileInfoObject.fileStatus === 'normal') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+          <button type="button" class="btn btn-warning" @click="removeFile(fileInfoObject.fileID)" v-if="(fileInfoObject.fileStatus === '1') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
             <i class="fas fa-minus-circle"></i>
             <span class="d-sm-inline d-none">&nbsp;移除文件</span>
           </button>
-          <button type="button" class="btn btn-success" @click="recoverFile(fileInfoObject.fileID)" v-if="(fileInfoObject.fileStatus === 'removed') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+          <button type="button" class="btn btn-success" @click="recoverFile(fileInfoObject.fileID)" v-if="(fileInfoObject.fileStatus === '2') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
             <i class="fas fa-redo"></i>
             <span class="d-sm-inline d-none">&nbsp;恢复文件</span>
           </button>
-          <button type="button" class="btn btn-danger" @click="changeRoute(fileInfoObject.fileID, 'delete')" v-if="(fileInfoObject.fileStatus === 'removed') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+          <button type="button" class="btn btn-danger" @click="changeRoute(fileInfoObject.fileID, 'delete')" v-if="(fileInfoObject.fileStatus === '2') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
             <i class="fas fa-trash"></i>
             <span class="d-sm-inline d-none">&nbsp;彻底删除文件</span>
           </button>
@@ -87,14 +87,6 @@
           <tr>
             <td class="table-left-column">暂时移除者：</td>
             <td class="table-right-column">{{ fileInfoObject.fileRemoveExecutorName }}</td>
-          </tr>
-          <tr>
-            <td class="table-left-column">彻底删除时间：</td>
-            <td class="table-right-column">{{ fileInfoObject.fileDeleteDate }}</td>
-          </tr>
-          <tr>
-            <td class="table-left-column">彻底删除者：</td>
-            <td class="table-right-column">{{ fileInfoObject.fileDeleteExecutorName }}</td>
           </tr>
           </tbody>
         </table>
@@ -155,7 +147,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -218,7 +218,7 @@
           username: this.formValues.username,
           userRealName: this.formValues.userRealName,
           userAccountStatus: this.formValues.userAccountStatus,
-          isAdmin: false,
+          // isAdmin: false,
           userLastLoginTime: null,
           userCanManageProjectsID: this.formValues.userCanManageProjectsID,
           userInvolvedProjectsID: this.formValues.userInvolvedProjectsID

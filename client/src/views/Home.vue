@@ -1,6 +1,6 @@
 <template>
-  <div class="row height-100-percentage" id="home">
-    <div class="col-12 height-100-percentage">
+  <div class="row" id="home">
+    <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
           <h1>
@@ -13,27 +13,18 @@
           <bottom-card :cardHeaderText="controlPanelHeaderText" :cardTooltipText="controlPanelTooltipText" v-if="isAdmin">
             <template v-slot:card-body>
               <div>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-success" @click="createProject">
-                    <span class="d-xl-none">
-                      <i class="fas fa-plus"></i>&nbsp;
-                    <i class="fas fa-capsules"></i>
-                    </span>
-                    <span class="d-sm-inline d-none">&nbsp;新增项目</span>
+                <div class="btn-group-vertical">
+                  <button type="button" class="btn btn-outline-success" @click="navigate('project')">
+                    <i class="fas fa-plus"></i>&nbsp;<i class="fas fa-capsules"></i>&nbsp;新增项目
                   </button>
-                  <button type="button" class="btn btn-success" @click="createTask">
-                    <span class="d-xl-none">
-                      <i class="fas fa-plus"></i>&nbsp;
-                      <i class="fas fa-tasks"></i>
-                    </span>
-                    <span class="d-sm-inline d-none">&nbsp;新建任务</span>
+                  <button type="button" class="btn btn-outline-success" @click="navigate('task')">
+                    <i class="fas fa-plus"></i>&nbsp;<i class="fas fa-tasks"></i>&nbsp;新建任务
                   </button>
-                  <button type="button" class="btn btn-success" @click="createUser">
-                    <span class="d-xl-none">
-                      <i class="fas fa-plus"></i>&nbsp;
-                      <i class="fas fa-users-cog"></i>
-                    </span>
-                    <span class="d-sm-inline d-none">&nbsp;新增用户</span>
+                  <button type="button" class="btn btn-outline-success" @click="navigate('user')">
+                    <i class="fas fa-plus"></i>&nbsp;<i class="fas fa-users-cog"></i>&nbsp;新增用户
+                  </button>
+                  <button type="button" class="btn btn-outline-success" @click="navigate('template')">
+                    <i class="fas fa-plus"></i>&nbsp;<i class="fas fa-folder-open"></i>&nbsp;新增模板
                   </button>
                 </div>
               </div>
@@ -118,13 +109,6 @@
       this.getUserInvolvedProjects();
       this.getUnreceivedTasks();
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
     methods: {
       getUserInvolvedProjects: function () {
         this.$axios.get('/project', {
@@ -197,25 +181,15 @@
           };
         });
       },
-      createProject: function () {
-        this.$router.push({
-          name: 'project_create',
-        });
-      },
-      createTask: function () {
-        this.$router.push({
-          name: 'task_create',
-        });
-      },
-      createUser: function () {
-        this.$router.push({
-          name: 'user_create',
-        });
+      navigate: function (targetPage) {
+        const routeMap = new Map()
+            .set('task', 'task_create')
+            .set('project', 'project_create')
+            .set('user', 'user_create')
+            .set('template', 'template_create');
+        const destinationName = routeMap.get(targetPage);
+        this.$router.push({ name: destinationName});
       },
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,13 +1,13 @@
 <template>
-  <div class="row height-100-percentage" id="template_view">
-    <div class="col-12 height-100-percentage">
+  <div class="row" id="template_view">
+    <div class="col-12">
       <div class="row mb-2">
-        <div class="col-12">
+        <div class="col-xl-6 offset-xl-3">
           <h1>查看模板-{{ $route.params.templateID }}</h1>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 mb-2">
+        <div class="col-xl-6 offset-xl-3 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
               <template-info-table :templateInfoObject="templateInfoObject" :statusObject="statusObject4Template"></template-info-table>
@@ -36,23 +36,8 @@
         statusObject4Template: {},
       }
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
-    },
     created: function () {
       this.getTemplateInfo();
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
     },
     methods: {
       getTemplateInfo: function () {

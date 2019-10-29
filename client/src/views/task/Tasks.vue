@@ -100,8 +100,8 @@
             taskName: queryParamsObject.taskNameKeyword,
             taskBelongedToProjectName: queryParamsObject.projectNameKeyword,
             taskExecutorName: queryParamsObject.taskExecutorNameKeyword,
-            taskReceivedStatus: queryParamsObject.taskReceivedStatus,
-            taskCompletedStatus: queryParamsObject.taskCompletedStatus,
+            taskReceivedStatus: queryParamsObject.taskReceivedStatus === '-1'? '' : queryParamsObject.taskReceivedStatus,
+            taskCompletedStatus: queryParamsObject.taskCompletedStatus === '-1'? '' : queryParamsObject.taskCompletedStatus,
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

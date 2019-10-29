@@ -1,10 +1,10 @@
 <template>
-  <div class="row height-100-percentage" id="templates">
-    <div class="col-12 height-100-percentage">
+  <div class="row" id="templates">
+    <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
           <h1>
-            <i class="fas fa-capsules"></i>&nbsp;模板查询
+            <i class="fas fa-folder-open"></i>&nbsp;模板查询
           </h1>
         </div>
       </div>
@@ -23,7 +23,7 @@
                 <div class="col-xl-6 offset-xl-3">
                   <div class="alert alert-info text-center mb-0">
                     <h4 class="alert-heading">请提供检索条件</h4>
-                    <p>请在"文件筛选器"中提供检索条件，然后点击"按上述条件筛选"。</p>
+                    <p>请在"模板筛选器"中提供检索条件，然后点击"按上述条件筛选"。</p>
                   </div>
                 </div>
               </div>
@@ -82,13 +82,6 @@
         },
         deep: true
       },
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
     },
     methods: {
       getTemplatesInfo: function (queryParamsObject) {

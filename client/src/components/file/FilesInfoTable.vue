@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive" v-else-if="statusObject.statusIndicator === 'loaded'">
+    <div v-else-if="statusObject.statusIndicator === 'loaded'">
       <div class="d-flex mb-2" v-if="$route.path.split('/')[1] !== 'files'">
         <span class="font-weight-normal">
           <i class="fas fa-caret-right"></i>&nbsp;
@@ -47,32 +47,38 @@
           <template v-for="(fileInfo, index) in filesInfoArray">
             <tr>
               <td>
-                <!--任何人可以下载fileStatus为normal的文件-->
-                <span class="cursor-pointer text-success" @click="downloadFile(fileInfo.fileID)" v-if="fileInfo.fileStatus === 'normal'">
-                  <i class="fas fa-download"></i>&nbsp;
+                <!--任何人可以下载fileStatus为1的文件-->
+                <span>&ensp;</span>
+                <span class="cursor-pointer text-success" @click="downloadFile(fileInfo.fileID)" v-if="fileInfo.fileStatus === '1'">
+                  <i class="fas fa-download"></i>
+                  <span>&ensp;</span>
                 </span>
-                <!--任何人可以查看fileStatus为非deleted的文件-->
-                <span class="cursor-pointer text-primary" @click="changeRoute(fileInfo.fileID, 'view')" v-if="fileInfo.fileStatus !== 'deleted'">
-                  <i class="fas fa-search"></i>&nbsp;
+                <!--任何人可以查看任何文件-->
+                <span class="cursor-pointer text-primary" @click="changeRoute(fileInfo.fileID, 'view')">
+                  <i class="fas fa-search"></i>
+                  <span>&ensp;</span>
                 </span>
-                <!--admin或文件创建人可以编辑fileStatus为非deleted的文件-->
-                <span class="cursor-pointer text-success" @click="changeRoute(fileInfo.fileID, 'edit')" v-if="(fileInfo.fileStatus !== 'deleted') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
-                  <i class="fas fa-edit"></i>&nbsp;
+                <!--admin或文件创建人可以编辑自己创建的文件-->
+                <span class="cursor-pointer text-success" @click="changeRoute(fileInfo.fileID, 'edit')" v-if="isAdmin || currentUserID === fileInfo.fileCreatorID">
+                  <i class="fas fa-edit"></i>
+                  <span>&ensp;</span>
                 </span>
-                <!--admin或文件创建人可以暂时移除fileStatus为normal的文件-->
-                <!--暂时移除代表着将fileStatus标记为removed-->
-                <span class="cursor-pointer text-warning" @click="removeFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === 'normal') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
+                <!--admin或文件创建人可以暂时移除fileStatus为1的文件-->
+                <!--暂时移除代表着将fileStatus标记为2-->
+                <span class="cursor-pointer text-warning" @click="removeFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === '1') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
                   <i class="fas fa-minus-circle"></i>&nbsp;
                 </span>
-                <!--admin或文件创建人可以恢复fileStatus为removed的文件-->
-                <!--恢复代表着将fileStatus标记为normal-->
-                <span class="cursor-pointer text-success" @click="recoverFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === 'removed') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
-                  <i class="fas fa-redo"></i>&nbsp;
+                <!--admin或文件创建人可以恢复fileStatus为2的文件-->
+                <!--恢复代表着将fileStatus标记为1-->
+                <span class="cursor-pointer text-success" @click="recoverFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === '2') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
+                  <i class="fas fa-redo"></i>
+                  <span>&ensp;</span>
                 </span>
-                <!--admin或文件创建人可以彻底删除fileStatus为removed的文件-->
-                <!--彻底删除代表着将fileStatus标记为deleted且清除fileDownloadURL及具体文件-->
-                <span class="cursor-pointer text-danger" @click="changeRoute(fileInfo.fileID, 'delete')" v-if="(fileInfo.fileStatus === 'removed') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
-                  <i class="fas fa-trash"></i>&nbsp;
+                <!--admin或文件创建人可以彻底删除fileStatus为2的文件-->
+                <!--彻底删除直接在后端删除数据库中的记录-->
+                <span class="cursor-pointer text-danger" @click="changeRoute(fileInfo.fileID, 'delete')" v-if="(fileInfo.fileStatus === '2') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
+                  <i class="fas fa-trash"></i>
+                  <span>&ensp;</span>
                 </span>
               </td>
               <td>{{fileInfo.fileName}}</td>

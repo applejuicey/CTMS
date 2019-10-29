@@ -22,7 +22,7 @@
     </div>
     <div v-else-if="statusObject.statusIndicator === 'loaded'">
       <template v-for="(task, index) in unreceivedTasksArray">
-        <div class="card mb-2" @mouseover="addHover($event)" @mouseout="removeHover($event)">
+        <div class="card mb-2">
           <div class="card-header bg-transparent d-flex">
             <b class="text-warning text-ellipsis-sm">
               <i class="fas fa-tasks"></i>&nbsp;
@@ -113,12 +113,6 @@
       };
     },
     methods: {
-      addHover: function (event) {
-        event.currentTarget.className = 'card mb-2 shadow hover-vibrate';
-      },
-      removeHover: function (event) {
-        event.currentTarget.className = 'card mb-2';
-      },
       changeRoute: function (taskID, identifier) {
         this.$router.push({
           name: `task_${identifier}`,
@@ -134,7 +128,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -2,12 +2,12 @@
   <div class="row" id="file_view">
     <div class="col-12">
       <div class="row mb-2">
-        <div class="col-12">
+        <div class="col-xl-6 offset-xl-3">
           <h1>查看文件-{{ $route.params.fileID }}</h1>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 mb-2">
+        <div class="col-xl-6 offset-xl-3 mb-2">
           <bottom-card :cardHeaderText="headerText" :cardTooltipText="tooltipText">
             <template v-slot:card-body>
               <file-info-table :fileInfoObject="fileInfoObject" :statusObject="statusObject4File"></file-info-table>
@@ -36,23 +36,8 @@
         statusObject4File: {},
       }
     },
-    computed: {
-      currentUserID: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).userID;
-      },
-      isAdmin: function () {
-        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
-      },
-    },
     created: function () {
       this.getFileInfo();
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
     },
     methods: {
       getFileInfo: function () {
@@ -66,7 +51,6 @@
             fileID: this.$route.params.fileID,
           }
         }).then((response) => {
-          console.log('aa',response)
           if (response.data.statusCode === '1') {
             this.fileInfoObject = response.data.file[0];
             this.statusObject4File = {
@@ -94,7 +78,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

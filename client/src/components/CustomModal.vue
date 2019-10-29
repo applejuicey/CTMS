@@ -11,7 +11,7 @@
         </div>
         <div class="modal-footer">
           <slot name="modal-additional-button"></slot>
-          <button type="button" class="btn btn-warning" @click="closeModal">
+          <button type="button" class="btn btn-success" @click="closeModal">
             <i class="fas fa-check"></i>&nbsp;确定
           </button>
         </div>

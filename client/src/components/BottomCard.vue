@@ -1,6 +1,6 @@
 <template>
-  <div class="card border-warning shadow obscure">
-    <div class="card-header border-warning bg-transparent d-flex">
+  <div class="card border-success shadow obscure">
+    <div class="card-header border-success bg-transparent d-flex">
       <b class="ml-auto">
         {{cardHeaderText}}
       </b>

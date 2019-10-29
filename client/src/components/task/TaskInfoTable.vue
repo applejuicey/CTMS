@@ -27,6 +27,10 @@
           任务资料：
         </span>
         <div class="btn-group ml-auto">
+          <button type="button" class="btn btn-success" @click="createFile(taskInfoObject.taskID, taskInfoObject.taskName)" v-if="isAdmin || taskInfoObject.taskCreatorID === currentUserID">
+            <i class="fas fa-plus"></i>
+            <span class="d-sm-inline d-none">&nbsp;新建文件</span>
+          </button>
           <button type="button" class="btn btn-success" @click="receiveTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === false">
             <i class="fas fa-check"></i>
             <span class="d-sm-inline d-none">&nbsp;接受任务</span>
@@ -115,11 +119,23 @@
       },
     },
     computed: {
+      isAdmin: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
+      },
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
       },
     },
     methods: {
+      createFile: function (taskID, taskName) {
+        this.$router.push({
+          name: 'file_create',
+          params: {
+            taskID: taskID,
+            taskName: taskName,
+          },
+        });
+      },
       receiveTask: function (taskID) {
         alert(`received${taskID}`)
         // TODO:提供taskID和userID，标记receivedStatus为true

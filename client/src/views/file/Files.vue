@@ -1,10 +1,10 @@
 <template>
-  <div class="row height-100-percentage" id="files">
-    <div class="col-12 height-100-percentage">
+  <div class="row" id="files">
+    <div class="col-12">
       <div class="row mb-2">
         <div class="col-12">
           <h1>
-            <i class="fas fa-capsules"></i>&nbsp;文件查询
+            <i class="fas fa-file-alt"></i>&nbsp;文件查询
           </h1>
         </div>
       </div>
@@ -83,13 +83,6 @@
         deep: true
       },
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-      });
-    },
     methods: {
       getFilesInfo: function (queryParamsObject) {
         this.$store.dispatch('setFileFilterQueryResultAction', {
@@ -145,7 +138,3 @@
     },
   }
 </script>
-
-<style scoped>
-
-</style>

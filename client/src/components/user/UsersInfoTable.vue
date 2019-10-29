@@ -42,14 +42,18 @@
             <template v-for="(user, index) in usersInfoArray">
               <tr>
                 <td>
+                  <span>&ensp;</span>
                   <span class="cursor-pointer text-primary" @click="changeRoute(user.userID, 'view')">
-                    <i class="fas fa-search"></i>&nbsp;
+                    <i class="fas fa-search"></i>
+                    <span>&ensp;</span>
                   </span>
                   <span class="cursor-pointer text-success" @click="changeRoute(user.userID, 'edit')" v-if="isAdmin || currentUserID === user.userID">
-                    <i class="fas fa-edit"></i>&nbsp;
+                    <i class="fas fa-edit"></i>
+                    <span>&ensp;</span>
                   </span>
                   <span class="cursor-pointer text-danger" @click="changeRoute(user.userID, 'delete')" v-if="isAdmin">
-                    <i class="fas fa-trash"></i>&nbsp;
+                    <i class="fas fa-trash"></i>
+                    <span>&ensp;</span>
                   </span>
                 </td>
                 <td>{{ user.userID }}</td>

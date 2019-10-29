@@ -55,7 +55,7 @@
         this.deleteLoading = true;
         this.$axios.delete('/project', {
           params: {
-            userID: this.$route.params.projectID
+            projectID: this.$route.params.projectID
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

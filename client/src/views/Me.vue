@@ -11,7 +11,7 @@
           <bottom-card :cardHeaderText="meHeaderText" :cardTooltipText="meTooltipText">
             <template v-slot:card-body>
               <user-info-table :userInfoObject="userInfoObject" :statusObject="statusObject4User"></user-info-table>
-              <hr class="bg-warning"/>
+              <hr class="bg-success"/>
               <user-edit-form :userInfoObject="userInfoObject" :statusObject="statusObject4User"></user-edit-form>
             </template>
           </bottom-card>
