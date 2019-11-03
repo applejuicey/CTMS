@@ -59,11 +59,11 @@
                   <i class="fas fa-trash"></i>
                   <span>&ensp;</span>
                 </span>
-                <span class="cursor-pointer text-success" @click="receiveTask(taskInfo.taskID)" v-if="taskInfo.taskExecutorID === currentUserID && taskInfo.taskReceivedStatus === false">
+                <span class="cursor-pointer text-success" @click="receiveTask(taskInfo.taskID)" v-if="taskInfo.taskExecutorID === currentUserID && taskInfo.taskReceivedStatus === '0'">
                   <i class="fas fa-check"></i>
                   <span>&ensp;</span>
                 </span>
-                <span class="cursor-pointer text-success" @click="completeTask(taskInfo.taskID)" v-if="taskInfo.taskExecutorID === currentUserID && taskInfo.taskReceivedStatus === true && taskInfo.taskCompletedStatus === false">
+                <span class="cursor-pointer text-success" @click="completeTask(taskInfo.taskID)" v-if="taskInfo.taskExecutorID === currentUserID && taskInfo.taskReceivedStatus === '1' && taskInfo.taskCompletedStatus === '0'">
                   <i class="fas fa-check-double"></i>
                   <span>&ensp;</span>
                 </span>
@@ -94,12 +94,17 @@
         </div>
       </div>
     </div>
+    <custom-modal :modalHeader="modalHeader" :responseMessage="responseMessage" :modalButtonTarget="modalButtonTarget"></custom-modal>
   </div>
 </template>
 
 <script>
+  import CustomModal from '@/components/CustomModal.vue';
   export default {
     name: 'tasks_info_table',
+    components: {
+      CustomModal,
+    },
     props: {
       tasksInfoArray: {
         type: Array,
@@ -118,6 +123,13 @@
         return JSON.parse(localStorage.getItem('userInfo')).userID;
       },
     },
+    data: () => {
+      return {
+        modalHeader: '',
+        responseMessage: '',
+        modalButtonTarget: 'nowhere',
+      };
+    },
     methods: {
       changeRoute: function (taskID, identifier) {
         this.$router.push({
@@ -128,12 +140,66 @@
         });
       },
       receiveTask: function (taskID) {
-        alert(`received${taskID}`)
-        // TODO:提供taskID和userID，标记receivedStatus为true
+        const submitInfo = {
+          taskID: taskID,
+          taskReceivedStatus: '1',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/task',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('TasksInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('TasksInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
       completeTask: function (taskID) {
-        alert(`completed${taskID}`)
-        // TODO:提供taskID和userID，标记taskCompletedStatus为true
+        const submitInfo = {
+          taskID: taskID,
+          taskCompletedStatus: '1',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/task',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('TasksInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('TasksInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
     },
   }

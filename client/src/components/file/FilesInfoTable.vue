@@ -49,7 +49,7 @@
               <td>
                 <!--任何人可以下载fileStatus为1的文件-->
                 <span>&ensp;</span>
-                <span class="cursor-pointer text-success" @click="downloadFile(fileInfo.fileID)" v-if="fileInfo.fileStatus === '1'">
+                <span class="cursor-pointer text-success" @click="downloadFile(fileInfo.fileDownloadURL)" v-if="fileInfo.fileStatus === '1'">
                   <i class="fas fa-download"></i>
                   <span>&ensp;</span>
                 </span>
@@ -66,7 +66,8 @@
                 <!--admin或文件创建人可以暂时移除fileStatus为1的文件-->
                 <!--暂时移除代表着将fileStatus标记为2-->
                 <span class="cursor-pointer text-warning" @click="removeFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === '1') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
-                  <i class="fas fa-minus-circle"></i>&nbsp;
+                  <i class="fas fa-minus-circle"></i>
+                  <span>&ensp;</span>
                 </span>
                 <!--admin或文件创建人可以恢复fileStatus为2的文件-->
                 <!--恢复代表着将fileStatus标记为1-->
@@ -108,12 +109,17 @@
         </div>
       </div>
     </div>
+    <custom-modal :modalHeader="modalHeader" :responseMessage="responseMessage" :modalButtonTarget="modalButtonTarget"></custom-modal>
   </div>
 </template>
 
 <script>
+  import CustomModal from '@/components/CustomModal.vue';
   export default {
     name: 'files_info_table',
+    components: {
+      CustomModal,
+    },
     props: {
       filesInfoArray: {
         type: Array,
@@ -132,6 +138,13 @@
         return JSON.parse(localStorage.getItem('userInfo')).userID;
       },
     },
+    data: () => {
+      return {
+        modalHeader: '',
+        responseMessage: '',
+        modalButtonTarget: 'nowhere',
+      };
+    },
     methods: {
       changeRoute: function (fileID, identifier) {
         this.$router.push({
@@ -142,13 +155,69 @@
         });
       },
       removeFile: function (fileID) {
-        alert(`remove${fileID}`)
+        const submitInfo = {
+          fileID: fileID,
+          fileStatus: '2',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/file',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('FilesInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('FilesInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
       recoverFile: function (fileID) {
-        alert(`recover${fileID}`)
+        const submitInfo = {
+          fileID: fileID,
+          fileStatus: '1',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/file',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('FilesInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('FilesInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
-      downloadFile: function (fileID) {
-        alert(`download${fileID}`)
+      downloadFile: function (fileDownloadURL) {
+        window.open(`http://47.100.168.127:5000${fileDownloadURL}`, '_blank');
       },
     },
   }

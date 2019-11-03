@@ -43,8 +43,8 @@
             <ul class="list-unstyled mb-0">
               <li>
                 <i class="fas fa-caret-right"></i>&nbsp;
-                <span class="font-weight-normal">试验名称：</span>
-                <span>{{task.belongedToTrialName}}</span>
+                <span class="font-weight-normal">项目名称：</span>
+                <span>{{task.taskBelongedToProjectName}}</span>
               </li>
               <li>
                 <i class="fas fa-caret-right"></i>&nbsp;
@@ -86,12 +86,17 @@
         </div>
       </div>
     </div>
+    <custom-modal :modalHeader="modalHeader" :responseMessage="responseMessage" :modalButtonTarget="modalButtonTarget"></custom-modal>
   </div>
 </template>
 
 <script>
+  import CustomModal from '@/components/CustomModal.vue';
   export default {
     name: 'tasks_inbox_cards',
+    components: {
+      CustomModal,
+    },
     props: {
       unreceivedTasksArray: {
         type: Array,
@@ -109,7 +114,9 @@
     },
     data: () => {
       return {
-
+        modalHeader: '',
+        responseMessage: '',
+        modalButtonTarget: 'nowhere',
       };
     },
     methods: {
@@ -122,8 +129,35 @@
         });
       },
       receiveTask: function (taskID) {
-        alert(`received${taskID}`)
-        // TODO:提供taskID和userID，标记receivedStatus为true
+        const submitInfo = {
+          taskID: taskID,
+          taskReceivedStatus: '1',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/task',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('TasksInboxCards操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('TasksInboxCards操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
     },
   }

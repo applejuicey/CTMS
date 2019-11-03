@@ -140,7 +140,6 @@
           this.feedbackMessage = `从服务器获取项目信息失败，错误原因：${error}`;
         });
       },
-      // 根据userID从服务器获取该用户所有未接受的任务
       getUnreceivedTasks: function () {
         this.statusObject4UnreceivedTasks = {
           statusIndicator: 'loading',
@@ -151,12 +150,10 @@
           params: {
             brief: false,
             taskName: '',
-            projectName: '',
-            projectID: '',
+            taskBelongedToProjectName: '',
             taskExecutorName: '',
-            taskExecutorID: this.currentUserID,
             taskReceivedStatus: 'not_received',
-            taskCompletedStatus: 'all',
+            taskCompletedStatus: '',
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

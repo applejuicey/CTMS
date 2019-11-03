@@ -47,7 +47,7 @@
               <td>
                 <!--任何人可以下载templateStatus为1的模板-->
                 <span>&ensp;</span>
-                <span class="cursor-pointer text-success" @click="downloadTemplate(templateInfo.templateID)" v-if="templateInfo.templateStatus === '1'">
+                <span class="cursor-pointer text-success" @click="downloadTemplate(templateInfo.templateDownloadURL)" v-if="templateInfo.templateStatus === '1'">
                   <i class="fas fa-download"></i>
                   <span>&ensp;</span>
                 </span>
@@ -105,12 +105,17 @@
         </div>
       </div>
     </div>
+    <custom-modal :modalHeader="modalHeader" :responseMessage="responseMessage" :modalButtonTarget="modalButtonTarget"></custom-modal>
   </div>
 </template>
 
 <script>
+  import CustomModal from '@/components/CustomModal.vue';
   export default {
     name: 'templates_info_table',
+    components: {
+      CustomModal,
+    },
     props: {
       templatesInfoArray: {
         type: Array,
@@ -129,6 +134,13 @@
         return JSON.parse(localStorage.getItem('userInfo')).userID;
       },
     },
+    data: () => {
+      return {
+        modalHeader: '',
+        responseMessage: '',
+        modalButtonTarget: 'nowhere',
+      };
+    },
     methods: {
       changeRoute: function (templateID, identifier) {
         this.$router.push({
@@ -139,13 +151,69 @@
         });
       },
       removeTemplate: function (templateID) {
-        alert(`remove${templateID}`)
+        const submitInfo = {
+          templateID: templateID,
+          templateStatus: '1',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/template',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('TemplatesInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('TemplatesInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
       recoverTemplate: function (templateID) {
-        alert(`recover${templateID}`)
+        const submitInfo = {
+          templateID: templateID,
+          templateStatus: '1',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/template',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('TemplatesInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('TemplatesInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
-      downloadTemplate: function (templateID) {
-        alert(`download${templateID}`)
+      downloadTemplate: function (templateDownloadURL) {
+        window.open(`http://47.100.168.127:5000${templateDownloadURL}`, '_blank');
       },
     },
   }

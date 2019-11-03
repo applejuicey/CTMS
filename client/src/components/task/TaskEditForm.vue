@@ -63,6 +63,40 @@
             </label>
             <input v-model="formValues.taskDueTime" type="date" class="form-control" id="taskDueTime" placeholder="截止时间">
           </div>
+          <div class="form-group text-left">
+            <label class="font-weight-normal">
+              <span>任务接受状态：</span>
+            </label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="taskReceivedStatus1" value="1" v-model="formValues.taskReceivedStatus">
+              <label class="form-check-label" for="taskReceivedStatus1">
+                已接受
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="taskReceivedStatus2" value="0" v-model="formValues.taskReceivedStatus">
+              <label class="form-check-label" for="taskReceivedStatus2">
+                未接受
+              </label>
+            </div>
+          </div>
+          <div class="form-group text-left">
+            <label class="font-weight-normal">
+              <span>任务完成状态：</span>
+            </label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="taskCompletedStatus1" value="1" v-model="formValues.taskCompletedStatus">
+              <label class="form-check-label" for="taskCompletedStatus1">
+                已完成
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="taskCompletedStatus2" value="0" v-model="formValues.taskCompletedStatus">
+              <label class="form-check-label" for="taskCompletedStatus2">
+                未完成
+              </label>
+            </div>
+          </div>
           <button type="button" class="btn btn-success" @click="submit" :disabled="submitLoading">
             <i class="fas fa-check"></i>&nbsp;提交
           </button>
@@ -135,6 +169,8 @@
             taskExecutorName: newVal.taskExecutorName,
             taskDueTime: this.formatDate(newVal.taskDueTime),
             taskProgress: newVal.taskProgress,
+            taskReceivedStatus: newVal.taskReceivedStatus,
+            taskCompletedStatus: newVal.taskCompletedStatus,
           };
           this.getProjectList();
           this.getUserList();
@@ -151,6 +187,8 @@
         taskExecutorID: this.taskInfoObject.taskExecutorID || null,
         taskDueTime: this.formatDate(this.taskInfoObject.taskDueTime || new Date()),
         taskProgress:  this.taskInfoObject.taskProgress || 0,
+        taskReceivedStatus: this.taskInfoObject.taskReceivedStatus || '0',
+        taskCompletedStatus: this.taskInfoObject.taskCompletedStatus || '0',
       };
       this.getProjectList();
       this.getUserList();
@@ -258,6 +296,8 @@
           taskExecutorID: this.formValues.taskExecutorID,
           taskDueTime: this.formValues.taskDueTime,
           taskProgress: this.formValues.taskProgress,
+          taskReceivedStatus: this.formValues.taskReceivedStatus,
+          taskCompletedStatus: this.formValues.taskCompletedStatus,
         };
         this.submitLoading = true;
         const axiosMethod = this.$route.path.split('/')[2] === 'create'? 'post' : 'put';
