@@ -116,8 +116,8 @@
             projectID: this.projectID,
             projectName: '',
             taskExecutorName: '',
-            taskReceivedStatus: 'all',
-            taskCompletedStatus: 'all',
+            taskReceivedStatus: '',
+            taskCompletedStatus: '',
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

@@ -43,6 +43,11 @@
     created: function () {
       this.getUserInfo();
     },
+    computed: {
+      currentUserID: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+    },
     methods: {
       getUserInfo: function () {
         this.statusObject4User = {
@@ -56,7 +61,7 @@
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {
-            this.userInfoObject = response.data.users[0];
+            this.userInfoObject = response.data.user[0];
             this.statusObject4User = {
               statusIndicator: 'loaded',
             };

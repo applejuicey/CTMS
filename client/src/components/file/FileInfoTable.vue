@@ -27,7 +27,7 @@
           文件信息：
         </span>
         <div class="btn-group ml-auto">
-          <button type="button" class="btn btn-success" @click="downloadFile(fileInfoObject.fileID)" v-if="fileInfoObject.fileStatus === '1'">
+          <button type="button" class="btn btn-success" @click="downloadFile(fileInfoObject.fileDownloadURL)" v-if="fileInfoObject.fileStatus === '1'">
             <i class="fas fa-download"></i>
             <span class="d-sm-inline d-none">&nbsp;下载文件</span>
           </button>
@@ -39,11 +39,11 @@
             <i class="fas fa-minus-circle"></i>
             <span class="d-sm-inline d-none">&nbsp;移除文件</span>
           </button>
-          <button type="button" class="btn btn-success" @click="recoverFile(fileInfoObject.fileID)" v-if="(fileInfoObject.fileStatus === '2') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+          <button type="button" class="btn btn-success" @click="recoverFile(fileInfoObject.fileID)" v-if="(fileInfoObject.fileStatus === '0') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
             <i class="fas fa-redo"></i>
             <span class="d-sm-inline d-none">&nbsp;恢复文件</span>
           </button>
-          <button type="button" class="btn btn-danger" @click="changeRoute(fileInfoObject.fileID, 'delete')" v-if="(fileInfoObject.fileStatus === '2') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
+          <button type="button" class="btn btn-danger" @click="changeRoute(fileInfoObject.fileID, 'delete')" v-if="(fileInfoObject.fileStatus === '0') && (isAdmin || currentUserID === fileInfoObject.fileCreatorID)">
             <i class="fas fa-trash"></i>
             <span class="d-sm-inline d-none">&nbsp;彻底删除文件</span>
           </button>
@@ -78,7 +78,7 @@
           </tr>
           <tr>
             <td class="table-left-column">文件状态：</td>
-            <td class="table-right-column">{{ fileInfoObject.fileStatus }}</td>
+            <td class="table-right-column">{{ fileInfoObject.fileStatus|fileStatusFilter }}</td>
           </tr>
           <tr>
             <td class="table-left-column">暂时移除时间：</td>
@@ -102,12 +102,17 @@
         </div>
       </div>
     </div>
+    <custom-modal :modalHeader="modalHeader" :responseMessage="responseMessage" :modalButtonTarget="modalButtonTarget"></custom-modal>
   </div>
 </template>
 
 <script>
+  import CustomModal from '@/components/CustomModal.vue';
   export default {
     name: 'file_info_table',
+    components: {
+      CustomModal,
+    },
     props: {
       fileInfoObject: {
         type: Object,
@@ -118,12 +123,27 @@
         required: true,
       },
     },
+    data: () => {
+      return {
+        modalHeader: '',
+        responseMessage: '',
+        modalButtonTarget: 'nowhere',
+      };
+    },
     computed: {
       isAdmin: function () {
         return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
       },
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+    },
+    filters: {
+      fileStatusFilter: function (fileStatus) {
+        const fileStatusMap = new Map();
+        fileStatusMap.set('0', '被移除')
+            .set('1', '正常');
+        return fileStatusMap.get(fileStatus);
       },
     },
     methods: {
@@ -136,13 +156,69 @@
         });
       },
       removeFile: function (fileID) {
-        alert(`remove${fileID}`)
+        let formData = new FormData();
+        formData.append('fileID', fileID);
+        formData.append('fileStatus', '0');
+        this.$axios({
+          method: 'put',
+          url: '/file',
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('FilesInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('FilesInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
       recoverFile: function (fileID) {
-        alert(`recover${fileID}`)
+        let formData = new FormData();
+        formData.append('fileID', fileID);
+        formData.append('fileStatus', '1');
+        this.$axios({
+          method: 'put',
+          url: '/file',
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('FilesInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('FilesInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
-      downloadFile: function (fileID) {
-        alert(`download${fileID}`)
+      downloadFile: function (fileDownloadURL) {
+        window.open(`http://47.100.168.127:5000${fileDownloadURL}`, '_blank');
       },
     },
   }

@@ -46,7 +46,7 @@
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" id="templateStatus2" value="2" v-model="formValues.templateStatus">
+              <input class="form-check-input" type="radio" id="templateStatus2" value="0" v-model="formValues.templateStatus">
               <label class="form-check-label" for="templateStatus2">
                 被移除
               </label>

@@ -60,7 +60,7 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.userRealName }}</td>
                 <td>{{ user.userEmail }}</td>
-                <td>{{ user.userAccountStatus }}</td>
+                <td>{{ user.userAccountStatus|userAccountStatusFilter }}</td>
                 <td>{{ user.userLastLoginTime }}</td>
               </tr>
             </template>
@@ -100,6 +100,14 @@
       },
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+    },
+    filters: {
+      userAccountStatusFilter: function (userAccountStatus) {
+        const userAccountStatusMap = new Map();
+        userAccountStatusMap.set('2', '冻结')
+            .set('1', '正常');
+        return userAccountStatusMap.get(userAccountStatus);
       },
     },
     methods: {

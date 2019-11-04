@@ -27,15 +27,15 @@
           任务资料：
         </span>
         <div class="btn-group ml-auto">
-          <button type="button" class="btn btn-success" @click="createFile(taskInfoObject.taskID, taskInfoObject.taskName)" v-if="isAdmin || taskInfoObject.taskCreatorID === currentUserID">
+          <button type="button" class="btn btn-success" @click="createFile(taskInfoObject.taskID, taskInfoObject.taskName)" v-if="isAdmin || taskInfoObject.taskExecutorID === currentUserID">
             <i class="fas fa-plus"></i>
             <span class="d-sm-inline d-none">&nbsp;新建文件</span>
           </button>
-          <button type="button" class="btn btn-success" @click="receiveTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === false">
+          <button type="button" class="btn btn-success" @click="receiveTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === '0'">
             <i class="fas fa-check"></i>
             <span class="d-sm-inline d-none">&nbsp;接受任务</span>
           </button>
-          <button type="button" class="btn btn-success" @click="completeTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === true && taskInfoObject.taskCompletedStatus === false">
+          <button type="button" class="btn btn-success" @click="completeTask(taskInfoObject.taskID)" v-if="taskInfoObject.taskExecutorID === currentUserID && taskInfoObject.taskReceivedStatus === '1' && taskInfoObject.taskCompletedStatus === '0'">
             <i class="fas fa-check-double"></i>
             <span class="d-sm-inline d-none">&nbsp;完成任务</span>
           </button>
@@ -70,7 +70,7 @@
           </tr>
           <tr>
             <td class="table-left-column">接受状态：</td>
-            <td class="table-right-column">{{ taskInfoObject.taskReceivedStatus }}</td>
+            <td class="table-right-column">{{ taskInfoObject.taskReceivedStatus|taskReceivedStatusFilter }}</td>
           </tr>
           <tr>
             <td class="table-left-column">截止时间：</td>
@@ -82,7 +82,7 @@
           </tr>
           <tr>
             <td class="table-left-column">完成状态：</td>
-            <td class="table-right-column">{{ taskInfoObject.taskCompletedStatus }}</td>
+            <td class="table-right-column">{{ taskInfoObject.taskCompletedStatus|taskCompletedStatusFilter }}</td>
           </tr>
           <tr>
             <td class="table-left-column">实际完成时间：</td>
@@ -102,12 +102,17 @@
         </div>
       </div>
     </div>
+    <custom-modal :modalHeader="modalHeader" :responseMessage="responseMessage" :modalButtonTarget="modalButtonTarget"></custom-modal>
   </div>
 </template>
 
 <script>
+  import CustomModal from '@/components/CustomModal.vue';
   export default {
     name: 'task_info_table',
+    components: {
+      CustomModal,
+    },
     props: {
       taskInfoObject: {
         type: Object,
@@ -118,12 +123,33 @@
         required: true,
       },
     },
+    data: () => {
+      return {
+        modalHeader: '',
+        responseMessage: '',
+        modalButtonTarget: 'nowhere',
+      };
+    },
     computed: {
       isAdmin: function () {
         return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
       },
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+    },
+    filters: {
+      taskReceivedStatusFilter: function (taskReceivedStatus) {
+        const taskReceivedStatusMap = new Map();
+        taskReceivedStatusMap.set('0', '未接受')
+            .set('1', '已接受');
+        return taskReceivedStatusMap.get(taskReceivedStatus);
+      },
+      taskCompletedStatusFilter: function (taskCompletedStatus) {
+        const taskCompletedStatusMap = new Map();
+        taskCompletedStatusMap.set('0', '未完成')
+            .set('1', '已完成');
+        return taskCompletedStatusMap.get(taskCompletedStatus);
       },
     },
     methods: {
@@ -137,12 +163,66 @@
         });
       },
       receiveTask: function (taskID) {
-        alert(`received${taskID}`)
-        // TODO:提供taskID和userID，标记receivedStatus为true
+        const submitInfo = {
+          taskID: taskID,
+          taskReceivedStatus: '1',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/task',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('TaskInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('TaskInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
       completeTask: function (taskID) {
-        alert(`completed${taskID}`)
-        // TODO:提供taskID和userID，标记taskCompletedStatus为true
+        const submitInfo = {
+          taskID: taskID,
+          taskCompletedStatus: '1',
+        };
+        this.$axios({
+          method: 'put',
+          url: '/task',
+          data: submitInfo
+        }).then((response) => {
+          if (response.data.statusCode === '1') {
+            this.modalHeader = '提示';
+            this.responseMessage = '操作成功！';
+            this.modalButtonTarget = 'nowhere';
+          } else if (response.data.statusCode === '0') {
+            console.error('TaskInfoTable操作失败，错误：', response.data.error.message);
+            this.modalHeader = '错误';
+            this.responseMessage = `操作失败！原因：${response.data.error.message}`;
+            this.modalButtonTarget = 'nowhere';
+          } else {
+            throw new Error('CLIENT未知错误');
+          }
+        }).catch((error) => {
+          console.error('TaskInfoTable操作失败，错误：', error);
+          this.modalHeader = '错误';
+          this.responseMessage = `操作失败！原因：${error}`;
+          this.modalButtonTarget = 'nowhere';
+        }).finally(() => {
+          $('#customModal').modal('show');
+        });
       },
     },
   }

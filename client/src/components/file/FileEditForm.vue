@@ -52,7 +52,7 @@
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" id="fileStatus2" value="2" v-model="formValues.fileStatus">
+              <input class="form-check-input" type="radio" id="fileStatus2" value="0" v-model="formValues.fileStatus">
               <label class="form-check-label" for="fileStatus2">
                 被移除
               </label>
@@ -158,12 +158,13 @@
         this.$axios({
           method: axiosMethod,
           url: '/file',
-          data: formData
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' },
         }).then((response) => {
           if (response.data.statusCode === '1') {
             this.modalHeader = '提示';
             this.responseMessage = '操作成功！';
-            this.modalButtonTarget = 'tasks';
+            this.modalButtonTarget = 'nowhere';
           } else if (response.data.statusCode === '0') {
             console.error('FileEditForm操作失败，错误：', response.data.error.message);
             this.modalHeader = '错误';

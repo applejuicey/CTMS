@@ -33,14 +33,14 @@
           <tr>
             <td>操作</td>
             <td>任务名称</td>
+            <td>接受状态</td>
+            <td>完成状态</td>
             <td>隶属于</td>
             <td>创建者</td>
             <td>创建时间</td>
             <td>接受者</td>
-            <td>接受状态</td>
             <td>截止时间</td>
             <td>任务进度</td>
-            <td>完成状态</td>
             <td>实际完成时间</td>
           </tr>
           <template v-for="(taskInfo, index) in tasksInfoArray">
@@ -69,14 +69,14 @@
                 </span>
               </td>
               <td>{{taskInfo.taskName}}</td>
+              <td>{{taskInfo.taskReceivedStatus|taskReceivedStatusFilter}}</td>
+              <td>{{taskInfo.taskCompletedStatus|taskCompletedStatusFilter}}</td>
               <td>{{taskInfo.taskBelongedToProjectName}}</td>
               <td>{{taskInfo.taskCreatorName}}</td>
               <td>{{taskInfo.taskCreatedTime}}</td>
               <td>{{taskInfo.taskExecutorName}}</td>
-              <td>{{taskInfo.taskReceivedStatus}}</td>
               <td>{{taskInfo.taskDueTime}}</td>
               <td>{{taskInfo.taskProgress}}</td>
-              <td>{{taskInfo.taskCompletedStatus}}</td>
               <td>{{taskInfo.taskActualCompletedTime}}</td>
             </tr>
           </template>
@@ -129,6 +129,20 @@
         responseMessage: '',
         modalButtonTarget: 'nowhere',
       };
+    },
+    filters: {
+      taskReceivedStatusFilter: function (taskReceivedStatus) {
+        const taskReceivedStatusMap = new Map();
+        taskReceivedStatusMap.set('0', '未接受')
+            .set('1', '已接受');
+        return taskReceivedStatusMap.get(taskReceivedStatus);
+      },
+      taskCompletedStatusFilter: function (taskCompletedStatus) {
+        const taskCompletedStatusMap = new Map();
+        taskCompletedStatusMap.set('0', '未完成')
+            .set('1', '已完成');
+        return taskCompletedStatusMap.get(taskCompletedStatus);
+      },
     },
     methods: {
       changeRoute: function (taskID, identifier) {

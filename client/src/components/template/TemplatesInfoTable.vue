@@ -33,14 +33,12 @@
           <tr>
             <td>操作</td>
             <td>模板名称</td>
+            <td>模板状态</td>
             <td>模板描述</td>
             <td>创建时间</td>
             <td>创建者姓名</td>
-            <td>文件状态</td>
             <td>暂时移除时间</td>
             <td>暂时移除者姓名</td>
-            <td>彻底删除时间</td>
-            <td>彻底删除者姓名</td>
           </tr>
           <template v-for="(templateInfo, index) in templatesInfoArray">
             <tr>
@@ -69,26 +67,24 @@
                 </span>
                 <!--admin或文件创建人可以恢复templateStatus为2的文件-->
                 <!--恢复代表着将templateStatus标记为1-->
-                <span class="cursor-pointer text-success" @click="recoverTemplate(templateInfo.templateID)" v-if="(templateInfo.templateStatus === '2') && (isAdmin || currentUserID === templateInfo.templateCreatorID)">
+                <span class="cursor-pointer text-success" @click="recoverTemplate(templateInfo.templateID)" v-if="(templateInfo.templateStatus === '0') && (isAdmin || currentUserID === templateInfo.templateCreatorID)">
                   <i class="fas fa-redo"></i>
                   <span>&ensp;</span>
                 </span>
                 <!--admin或文件创建人可以彻底删除templateStatus为2的文件-->
                 <!--彻底删除直接在后端清除数据库中该条记录-->
-                <span class="cursor-pointer text-danger" @click="changeRoute(templateInfo.templateID, 'delete')" v-if="(templateInfo.templateStatus === '2') && (isAdmin || currentUserID === templateInfo.templateCreatorID)">
+                <span class="cursor-pointer text-danger" @click="changeRoute(templateInfo.templateID, 'delete')" v-if="(templateInfo.templateStatus === '0') && (isAdmin || currentUserID === templateInfo.templateCreatorID)">
                   <i class="fas fa-trash"></i>
                   <span>&ensp;</span>
                 </span>
               </td>
               <td>{{templateInfo.templateName}}</td>
+              <td>{{templateInfo.templateStatus|templateStatusFilter}}</td>
               <td>{{templateInfo.templateDescription}}</td>
               <td>{{templateInfo.templateCreateDate}}</td>
               <td>{{templateInfo.templateCreatorName}}</td>
-              <td>{{templateInfo.templateStatus}}</td>
               <td>{{templateInfo.templateRemoveDate}}</td>
               <td>{{templateInfo.templateRemoveExecutorName}}</td>
-              <td>{{templateInfo.templateDeleteDate}}</td>
-              <td>{{templateInfo.templateDeleteExecutorName}}</td>
             </tr>
           </template>
           </tbody>
@@ -141,6 +137,14 @@
         modalButtonTarget: 'nowhere',
       };
     },
+    filters: {
+      templateStatusFilter: function (templateStatus) {
+        const templateStatusMap = new Map();
+        templateStatusMap.set('0', '被移除')
+            .set('1', '正常');
+        return templateStatusMap.get(templateStatus);
+      },
+    },
     methods: {
       changeRoute: function (templateID, identifier) {
         this.$router.push({
@@ -151,14 +155,14 @@
         });
       },
       removeTemplate: function (templateID) {
-        const submitInfo = {
-          templateID: templateID,
-          templateStatus: '1',
-        };
+        let formData = new FormData();
+        formData.append('templateID', templateID);
+        formData.append('templateStatus', '0');
         this.$axios({
           method: 'put',
           url: '/template',
-          data: submitInfo
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' },
         }).then((response) => {
           if (response.data.statusCode === '1') {
             this.modalHeader = '提示';
@@ -182,14 +186,14 @@
         });
       },
       recoverTemplate: function (templateID) {
-        const submitInfo = {
-          templateID: templateID,
-          templateStatus: '1',
-        };
+        let formData = new FormData();
+        formData.append('templateID', templateID);
+        formData.append('templateStatus', '1');
         this.$axios({
           method: 'put',
           url: '/template',
-          data: submitInfo
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' },
         }).then((response) => {
           if (response.data.statusCode === '1') {
             this.modalHeader = '提示';

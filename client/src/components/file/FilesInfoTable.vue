@@ -33,16 +33,14 @@
           <tr>
             <td>操作</td>
             <td>文件名称</td>
+            <td>文件状态</td>
             <td>文件描述</td>
             <td>所属任务名称</td>
             <td>所属项目名称</td>
             <td>创建时间</td>
             <td>创建者姓名</td>
-            <td>文件状态</td>
             <td>暂时移除时间</td>
             <td>暂时移除者姓名</td>
-            <td>彻底删除时间</td>
-            <td>彻底删除者姓名</td>
           </tr>
           <template v-for="(fileInfo, index) in filesInfoArray">
             <tr>
@@ -71,28 +69,26 @@
                 </span>
                 <!--admin或文件创建人可以恢复fileStatus为2的文件-->
                 <!--恢复代表着将fileStatus标记为1-->
-                <span class="cursor-pointer text-success" @click="recoverFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === '2') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
+                <span class="cursor-pointer text-success" @click="recoverFile(fileInfo.fileID)" v-if="(fileInfo.fileStatus === '0') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
                   <i class="fas fa-redo"></i>
                   <span>&ensp;</span>
                 </span>
                 <!--admin或文件创建人可以彻底删除fileStatus为2的文件-->
                 <!--彻底删除直接在后端删除数据库中的记录-->
-                <span class="cursor-pointer text-danger" @click="changeRoute(fileInfo.fileID, 'delete')" v-if="(fileInfo.fileStatus === '2') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
+                <span class="cursor-pointer text-danger" @click="changeRoute(fileInfo.fileID, 'delete')" v-if="(fileInfo.fileStatus === '0') && (isAdmin || currentUserID === fileInfo.fileCreatorID)">
                   <i class="fas fa-trash"></i>
                   <span>&ensp;</span>
                 </span>
               </td>
               <td>{{fileInfo.fileName}}</td>
+              <td>{{fileInfo.fileStatus|fileStatusFilter}}</td>
               <td>{{fileInfo.fileDescription}}</td>
               <td>{{fileInfo.fileBelongedToTaskName}}</td>
               <td>{{fileInfo.fileBelongedToProjectName}}</td>
               <td>{{fileInfo.fileCreateDate}}</td>
               <td>{{fileInfo.fileCreatorName}}</td>
-              <td>{{fileInfo.fileStatus}}</td>
               <td>{{fileInfo.fileRemoveDate}}</td>
               <td>{{fileInfo.fileRemoveExecutorName}}</td>
-              <td>{{fileInfo.fileDeleteDate}}</td>
-              <td>{{fileInfo.fileDeleteExecutorName}}</td>
             </tr>
           </template>
           </tbody>
@@ -145,6 +141,14 @@
         modalButtonTarget: 'nowhere',
       };
     },
+    filters: {
+      fileStatusFilter: function (fileStatus) {
+        const fileStatusMap = new Map();
+        fileStatusMap.set('0', '被移除')
+            .set('1', '正常');
+        return fileStatusMap.get(fileStatus);
+      },
+    },
     methods: {
       changeRoute: function (fileID, identifier) {
         this.$router.push({
@@ -155,14 +159,14 @@
         });
       },
       removeFile: function (fileID) {
-        const submitInfo = {
-          fileID: fileID,
-          fileStatus: '2',
-        };
+        let formData = new FormData();
+        formData.append('fileID', fileID);
+        formData.append('fileStatus', '0');
         this.$axios({
           method: 'put',
           url: '/file',
-          data: submitInfo
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' },
         }).then((response) => {
           if (response.data.statusCode === '1') {
             this.modalHeader = '提示';
@@ -186,14 +190,14 @@
         });
       },
       recoverFile: function (fileID) {
-        const submitInfo = {
-          fileID: fileID,
-          fileStatus: '1',
-        };
+        let formData = new FormData();
+        formData.append('fileID', fileID);
+        formData.append('fileStatus', '1');
         this.$axios({
           method: 'put',
           url: '/file',
-          data: submitInfo
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' },
         }).then((response) => {
           if (response.data.statusCode === '1') {
             this.modalHeader = '提示';

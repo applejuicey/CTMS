@@ -9,8 +9,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xl-3 mb-2">
-          <bottom-card :cardHeaderText="controlPanelHeaderText" :cardTooltipText="controlPanelTooltipText" v-if="isAdmin">
+        <div class="col-xl-3">
+          <bottom-card class="mb-2" :cardHeaderText="controlPanelHeaderText" :cardTooltipText="controlPanelTooltipText" v-if="isAdmin">
             <template v-slot:card-body>
               <div>
                 <div class="btn-group-vertical">
@@ -30,7 +30,7 @@
               </div>
             </template>
           </bottom-card>
-          <bottom-card :cardHeaderText="taskInboxHeaderText" :cardTooltipText="taskInboxTooltipText" v-if="!isAdmin">
+          <bottom-card class="mb-2" :cardHeaderText="taskInboxHeaderText" :cardTooltipText="taskInboxTooltipText">
             <template v-slot:card-body>
               <tasks-inbox-cards :unreceivedTasksArray="unreceivedTasksArray" :statusObject="statusObject4UnreceivedTasks"></tasks-inbox-cards>
             </template>
@@ -152,7 +152,7 @@
             taskName: '',
             taskBelongedToProjectName: '',
             taskExecutorName: '',
-            taskReceivedStatus: 'not_received',
+            taskReceivedStatus: '0',
             taskCompletedStatus: '',
           }
         }).then((response) => {

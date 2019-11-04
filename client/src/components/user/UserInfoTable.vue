@@ -54,7 +54,7 @@
             </tr>
             <tr>
               <td class="table-left-column">用户状态：</td>
-              <td class="table-right-column">{{ userInfoObject.userAccountStatus }}</td>
+              <td class="table-right-column">{{ userInfoObject.userAccountStatus|userAccountStatusFilter }}</td>
             </tr>
             <tr>
               <td class="table-left-column">参与项目：</td>
@@ -104,6 +104,14 @@
       },
       isAdmin: function () {
         return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
+      },
+    },
+    filters: {
+      userAccountStatusFilter: function (userAccountStatus) {
+        const userAccountStatusMap = new Map();
+        userAccountStatusMap.set('2', '冻结')
+            .set('1', '正常');
+        return userAccountStatusMap.get(userAccountStatus);
       },
     },
     methods: {

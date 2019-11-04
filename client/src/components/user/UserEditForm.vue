@@ -218,7 +218,6 @@
           username: this.formValues.username,
           userRealName: this.formValues.userRealName,
           userAccountStatus: this.formValues.userAccountStatus,
-          // isAdmin: false,
           userLastLoginTime: null,
           userCanManageProjectsID: this.formValues.userCanManageProjectsID,
           userInvolvedProjectsID: this.formValues.userInvolvedProjectsID
@@ -233,7 +232,7 @@
           if (response.data.statusCode === '1') {
             this.modalHeader = '提示';
             this.responseMessage = '操作成功！';
-            this.modalButtonTarget = 'users';
+            this.modalButtonTarget = 'nowhere';
           } else if (response.data.statusCode === '0') {
             console.error('UserEditForm操作失败，错误：', response.data.error.message);
             this.modalHeader = '错误';

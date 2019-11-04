@@ -62,7 +62,7 @@
                 </span>
               </td>
               <td>{{projectInfo.projectName}}</td>
-              <td>{{projectInfo.projectStage}}</td>
+              <td>{{projectInfo.projectStage|projectStageFilter}}</td>
               <td>{{projectInfo.projectCreatedTime}}</td>
               <td>{{projectInfo.projectExpectedStartTime}}</td>
               <td>{{projectInfo.projectActualStartTime}}</td>
@@ -110,6 +110,16 @@
       },
       currentUserID: function () {
         return JSON.parse(localStorage.getItem('userInfo')).userID;
+      },
+    },
+    filters: {
+      projectStageFilter: function (projectStage) {
+        const projectStageMap = new Map();
+        projectStageMap.set('1', '准备阶段')
+            .set('2', '进行阶段')
+            .set('3', '收尾阶段')
+            .set('4', '补发阶段');
+        return projectStageMap.get(projectStage);
       },
     },
     methods: {

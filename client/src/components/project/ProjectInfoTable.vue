@@ -50,7 +50,7 @@
           </tr>
           <tr>
             <td class="table-left-column">项目当前阶段：</td>
-            <td class="table-right-column">{{ projectInfoObject.projectStage }}</td>
+            <td class="table-right-column">{{ projectInfoObject.projectStage|projectStageFilter }}</td>
           </tr>
           <tr>
             <td class="table-left-column">项目经理：</td>
@@ -128,6 +128,16 @@
       },
       isAdmin: function () {
         return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
+      },
+    },
+    filters: {
+      projectStageFilter: function (projectStage) {
+        const projectStageMap = new Map();
+        projectStageMap.set('1', '准备阶段')
+            .set('2', '进行阶段')
+            .set('3', '收尾阶段')
+            .set('4', '补发阶段');
+        return projectStageMap.get(projectStage);
       },
     },
     methods: {
