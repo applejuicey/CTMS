@@ -27,6 +27,10 @@
           任务资料：
         </span>
         <div class="btn-group ml-auto">
+          <button type="button" class="btn btn-success"  @click="changeRoute(taskInfoObject.taskID, 'edit')" v-if="isAdmin || taskInfoObject.taskCreatorID === currentUserID">
+            <i class="fas fa-edit"></i>
+            <span class="d-sm-inline d-none">&nbsp;编辑任务</span>
+          </button>
           <button type="button" class="btn btn-success" @click="createFile(taskInfoObject.taskID, taskInfoObject.taskName)" v-if="isAdmin || taskInfoObject.taskExecutorID === currentUserID">
             <i class="fas fa-plus"></i>
             <span class="d-sm-inline d-none">&nbsp;新建文件</span>
@@ -58,7 +62,7 @@
           </tr>
           <tr>
             <td class="table-left-column">创建者：</td>
-            <td class="table-right-column">{{ taskInfoObject.taskCreatorName }}</td>
+            <td class="table-right-column">{{ taskInfoObject.taskCreatorRealName }}（{{ taskInfoObject.taskCreatorName }}）</td>
           </tr>
           <tr>
             <td class="table-left-column">创建时间：</td>
@@ -66,7 +70,7 @@
           </tr>
           <tr>
             <td class="table-left-column">接受者：</td>
-            <td class="table-right-column">{{ taskInfoObject.taskExecutorName }}</td>
+            <td class="table-right-column">{{ taskInfoObject.taskExecutorRealName }}（{{ taskInfoObject.taskExecutorName }}）</td>
           </tr>
           <tr>
             <td class="table-left-column">接受状态：</td>
@@ -153,6 +157,14 @@
       },
     },
     methods: {
+      changeRoute: function (taskID, identifier) {
+        this.$router.push({
+          name: `task_${identifier}`,
+          params: {
+            taskID: taskID,
+          },
+        });
+      },
       createFile: function (taskID, taskName) {
         this.$router.push({
           name: 'file_create',

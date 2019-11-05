@@ -86,9 +86,9 @@
               <td>{{fileInfo.fileBelongedToTaskName}}</td>
               <td>{{fileInfo.fileBelongedToProjectName}}</td>
               <td>{{fileInfo.fileCreateDate}}</td>
-              <td>{{fileInfo.fileCreatorName}}</td>
+              <td>{{fileInfo.fileCreatorRealName}}（{{fileInfo.fileCreatorName}}）</td>
               <td>{{fileInfo.fileRemoveDate}}</td>
-              <td>{{fileInfo.fileRemoveExecutorName}}</td>
+              <td>{{fileInfo.fileRemoveExecutorRealName}}（{{fileInfo.fileRemoveExecutorName}}）</td>
             </tr>
           </template>
           </tbody>

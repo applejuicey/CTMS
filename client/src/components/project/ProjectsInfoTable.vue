@@ -43,6 +43,10 @@
             <td>研究方</td>
             <td>监查方</td>
             <td>统计方</td>
+            <td v-if="isAdmin">备注1</td>
+            <td v-if="isAdmin">备注2</td>
+            <td v-if="isAdmin">备注3</td>
+            <td v-if="isAdmin">备注4</td>
           </tr>
           <template v-for="(projectInfo, index) in projectsInfoArray">
             <tr>
@@ -72,6 +76,10 @@
               <td>{{projectInfo.projectInvestigator}}</td>
               <td>{{projectInfo.projectMonitor}}</td>
               <td>{{projectInfo.projectStatistician}}</td>
+              <td v-if="isAdmin">{{projectInfo.projectComment1}}</td>
+              <td v-if="isAdmin">{{projectInfo.projectComment2}}</td>
+              <td v-if="isAdmin">{{projectInfo.projectComment3}}</td>
+              <td v-if="isAdmin">{{projectInfo.projectComment4}}</td>
             </tr>
           </template>
           </tbody>
@@ -118,7 +126,7 @@
         projectStageMap.set('1', '准备阶段')
             .set('2', '进行阶段')
             .set('3', '收尾阶段')
-            .set('4', '补发阶段');
+            .set('4', '发补阶段');
         return projectStageMap.get(projectStage);
       },
     },

@@ -33,7 +33,7 @@
             <label for="projectBriefIntroduction" class="font-weight-normal">
               <span>项目简要描述：</span>
             </label>
-            <input v-model="formValues.projectBriefIntroduction" type="text" class="form-control" id="projectBriefIntroduction" placeholder="项目简要描述">
+            <textarea class="form-control" id="projectBriefIntroduction" rows="5" v-model="formValues.projectBriefIntroduction" placeholder="项目简要描述"></textarea>
           </div>
           <div class="form-group text-left">
             <label for="projectExpectedStartTime" class="font-weight-normal">
@@ -108,9 +108,33 @@
             <div class="form-check">
               <input class="form-check-input" type="radio" id="projectStage4" value="4" v-model="formValues.projectStage">
               <label class="form-check-label" for="projectStage4">
-                补发阶段
+                发补阶段
               </label>
             </div>
+          </div>
+          <div class="form-group text-left" v-if="isAdmin">
+            <label for="projectComment1" class="font-weight-normal">
+              <span>项目备注1：</span>
+            </label>
+            <textarea class="form-control" id="projectComment1" rows="5" v-model="formValues.projectComment1" placeholder="项目备注1"></textarea>
+          </div>
+          <div class="form-group text-left" v-if="isAdmin">
+            <label for="projectComment2" class="font-weight-normal">
+              <span>项目备注2：</span>
+            </label>
+            <textarea class="form-control" id="projectComment2" rows="5" v-model="formValues.projectComment2" placeholder="项目备注2"></textarea>
+          </div>
+          <div class="form-group text-left" v-if="isAdmin">
+            <label for="projectComment3" class="font-weight-normal">
+              <span>项目备注3：</span>
+            </label>
+            <textarea class="form-control" id="projectComment3" rows="5" v-model="formValues.projectComment3" placeholder="项目备注3"></textarea>
+          </div>
+          <div class="form-group text-left" v-if="isAdmin">
+            <label for="projectComment4" class="font-weight-normal">
+              <span>项目备注4：</span>
+            </label>
+            <textarea class="form-control" id="projectComment4" rows="5" v-model="formValues.projectComment4" placeholder="项目备注4"></textarea>
           </div>
           <button type="button" class="btn btn-success" @click="submit" :disabled="submitLoading">
             <i class="fas fa-check"></i>&nbsp;提交
@@ -158,6 +182,11 @@
         modalButtonTarget: 'nowhere',
       };
     },
+    computed: {
+      isAdmin: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
+      },
+    },
     watch: {
       projectInfoObject: {
         handler: function (newVal, oldVal) {
@@ -174,6 +203,10 @@
             projectStage: newVal.projectStage,
             projectActualStartTime: this.formatDate(newVal.projectActualStartTime),
             projectActualEndTime: this.formatDate(newVal.projectActualEndTime),
+            projectComment1: newVal.projectComment1,
+            projectComment2: newVal.projectComment2,
+            projectComment3: newVal.projectComment3,
+            projectComment4: newVal.projectComment4,
           };
         },
         deep: true,
@@ -193,6 +226,10 @@
         projectStage: this.projectInfoObject.projectStage || '1',
         projectActualStartTime: this.formatDate(this.projectInfoObject.projectActualStartTime || new Date()),
         projectActualEndTime: this.formatDate(this.projectInfoObject.projectActualEndTime || new Date()),
+        projectComment1: this.projectInfoObject.projectComment1,
+        projectComment2: this.projectInfoObject.projectComment2,
+        projectComment3: this.projectInfoObject.projectComment3,
+        projectComment4: this.projectInfoObject.projectComment4,
       };
     },
     methods: {
@@ -219,6 +256,10 @@
           projectStage: this.formValues.projectStage,
           projectActualStartTime: this.formValues.projectActualStartTime,
           projectActualEndTime: this.formValues.projectActualEndTime,
+          projectComment1: this.formValues.projectComment1,
+          projectComment2: this.formValues.projectComment2,
+          projectComment3: this.formValues.projectComment3,
+          projectComment4: this.formValues.projectComment4,
         };
         this.submitLoading = true;
         const axiosMethod = this.$route.path.split('/')[2] === 'create'? 'post' : 'put';

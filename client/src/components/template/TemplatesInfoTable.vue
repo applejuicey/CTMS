@@ -82,9 +82,9 @@
               <td>{{templateInfo.templateStatus|templateStatusFilter}}</td>
               <td>{{templateInfo.templateDescription}}</td>
               <td>{{templateInfo.templateCreateDate}}</td>
-              <td>{{templateInfo.templateCreatorName}}</td>
+              <td>{{templateInfo.templateCreatorRealName}}（{{templateInfo.templateCreatorName}}）</td>
               <td>{{templateInfo.templateRemoveDate}}</td>
-              <td>{{templateInfo.templateRemoveExecutorName}}</td>
+              <td>{{templateInfo.templateRemoveExecutorRealName}}（{{templateInfo.templateRemoveExecutorName}}）</td>
             </tr>
           </template>
           </tbody>

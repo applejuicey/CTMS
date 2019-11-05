@@ -28,7 +28,7 @@
         </span>
         <div class="btn-group ml-auto">
           <button type="button" class="btn btn-success" @click="changeRoute(projectInfoObject.projectID, 'edit')" v-if="isAdmin || projectInfoObject.projectManagerID === currentUserID">
-            <i class="fas fa-pen"></i>
+            <i class="fas fa-edit"></i>
             <span class="d-sm-inline d-none">&nbsp;编辑项目</span>
           </button>
           <button type="button" class="btn btn-success" @click="createTask(projectInfoObject.projectID)" v-if="isAdmin || projectInfoObject.projectManagerID === currentUserID">
@@ -54,7 +54,7 @@
           </tr>
           <tr>
             <td class="table-left-column">项目经理：</td>
-            <td class="table-right-column">{{ projectInfoObject.projectManagerName }}</td>
+            <td class="table-right-column">{{ projectInfoObject.projectManagerRealName }}（{{ projectInfoObject.projectManagerName }}）</td>
           </tr>
           <tr>
             <td class="table-left-column">创建时间：</td>
@@ -91,6 +91,22 @@
           <tr>
             <td class="table-left-column">统计方：</td>
             <td class="table-right-column">{{ projectInfoObject.projectStatistician }}</td>
+          </tr>
+          <tr v-if="isAdmin">
+            <td class="table-left-column">备注1：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectComment1 }}</td>
+          </tr>
+          <tr v-if="isAdmin">
+            <td class="table-left-column">备注2：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectComment2 }}</td>
+          </tr>
+          <tr v-if="isAdmin">
+            <td class="table-left-column">备注3：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectComment3 }}</td>
+          </tr>
+          <tr v-if="isAdmin">
+            <td class="table-left-column">备注4：</td>
+            <td class="table-right-column">{{ projectInfoObject.projectComment4 }}</td>
           </tr>
           </tbody>
         </table>
@@ -136,7 +152,7 @@
         projectStageMap.set('1', '准备阶段')
             .set('2', '进行阶段')
             .set('3', '收尾阶段')
-            .set('4', '补发阶段');
+            .set('4', '发补阶段');
         return projectStageMap.get(projectStage);
       },
     },

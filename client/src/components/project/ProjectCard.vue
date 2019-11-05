@@ -1,7 +1,7 @@
 <template>
   <div class="card mb-2">
     <div class="card-header bg-transparent d-flex">
-      <b class="cursor-pointer text-primary text-ellipsis-sm" @click="toggleCollapse(projectID)" data-toggle="tooltip" data-placement="top" :title="projectNameTipText">
+      <b class="cursor-pointer text-success text-ellipsis-sm" @click="toggleCollapse(projectID)" data-toggle="tooltip" data-placement="top" :title="projectNameTipText">
         <i class="fas fa-capsules"></i>&nbsp;
         {{ projectName }}&nbsp;
         <i class="fas fa-hand-point-left"></i>&nbsp;

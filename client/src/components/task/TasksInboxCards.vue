@@ -24,7 +24,7 @@
       <template v-for="(task, index) in unreceivedTasksArray">
         <div class="card mb-2">
           <div class="card-header bg-transparent d-flex">
-            <b class="text-warning text-ellipsis-sm">
+            <b class="text-success text-ellipsis-sm">
               <i class="fas fa-tasks"></i>&nbsp;
               {{task.taskName}}
             </b>
@@ -64,12 +64,12 @@
               <li>
                 <i class="fas fa-caret-right"></i>&nbsp;
                 <span class="font-weight-normal">创建用户：</span>
-                <span>{{task.taskCreatorName}}</span>
+                <span>{{task.taskCreatorRealName}}（{{task.taskCreatorName}}）</span>
               </li>
               <li>
                 <i class="fas fa-caret-right"></i>&nbsp;
                 <span class="font-weight-normal">指定用户：</span>
-                <span>{{task.taskExecutorName}}</span>
+                <span>{{task.taskExecutorRealName}}（{{task.taskExecutorName}}）</span>
               </li>
             </ul>
           </div>

@@ -57,7 +57,7 @@
           <option value="1">准备阶段</option>
           <option value="2">进行阶段</option>
           <option value="3">收尾阶段</option>
-          <option value="4">补发阶段</option>
+          <option value="4">发补阶段</option>
           <option value="-1">全部</option>
         </select>
       </div>
@@ -94,7 +94,7 @@
             .set('1', '准备阶段')
             .set('2', '进行阶段')
             .set('3', '收尾阶段')
-            .set('4', '补发阶段')
+            .set('4', '发补阶段')
             .set('-1','全部');
         let projectNameKeywordDescription = this.projectNameKeyword;
         let sponsorNameKeywordDescription = this.sponsorNameKeyword;

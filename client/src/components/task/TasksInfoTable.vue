@@ -72,9 +72,9 @@
               <td>{{taskInfo.taskReceivedStatus|taskReceivedStatusFilter}}</td>
               <td>{{taskInfo.taskCompletedStatus|taskCompletedStatusFilter}}</td>
               <td>{{taskInfo.taskBelongedToProjectName}}</td>
-              <td>{{taskInfo.taskCreatorName}}</td>
+              <td>{{taskInfo.taskCreatorRealName}}（{{taskInfo.taskCreatorName}}）</td>
               <td>{{taskInfo.taskCreatedTime}}</td>
-              <td>{{taskInfo.taskExecutorName}}</td>
+              <td>{{taskInfo.taskExecutorRealName}}（{{taskInfo.taskExecutorName}}）</td>
               <td>{{taskInfo.taskDueTime}}</td>
               <td>{{taskInfo.taskProgress}}</td>
               <td>{{taskInfo.taskActualCompletedTime}}</td>

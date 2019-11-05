@@ -58,7 +58,7 @@
         filterToolboxHeaderText: '模板筛选器',
         filterToolboxTooltipText: '请在这里设定筛选内容，然后点击"筛选"按钮获得命中条目。',
         resultCardHeaderText: '模板查询结果',
-        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击"放大镜"按钮以查看模板详细资料；点击"铅笔"按钮以编辑模板信息；点击""按钮可以暂时移除模板；点击""按钮可以恢复暂时移除的模板；点击""按钮可以永久删除模板。',
+        resultCardTooltipText: '根据筛选器规则的查询结果如下所示。点击"蓝色放大镜"按钮以查看模板详细资料；点击"绿色铅笔"按钮以编辑模板信息；点击"黄色减号"按钮可以暂时移除模板；点击"绿色刷新"按钮可以恢复暂时移除的模板；点击"红色垃圾桶"按钮可以永久删除模板。',
       };
     },
     computed: {
@@ -97,7 +97,7 @@
           params: {
             brief: false,
             templateName: queryParamsObject.templateNameKeyword,
-            templateCreatorName: queryParamsObject.templateCreatorNameKeyword,
+            templateCreatorRealName: queryParamsObject.templateCreatorNameKeyword,
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

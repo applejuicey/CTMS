@@ -39,7 +39,7 @@
             <label for="fileDescription" class="font-weight-normal">
               <span>文件描述：</span>
             </label>
-            <input v-model="formValues.fileDescription" type="text" class="form-control" id="fileDescription" placeholder="文件描述">
+            <textarea class="form-control" id="fileDescription" rows="5" v-model="formValues.fileDescription" placeholder="文件描述"></textarea>
           </div>
           <div class="form-group text-left">
             <label class="font-weight-normal">

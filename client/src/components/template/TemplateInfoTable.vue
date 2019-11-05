@@ -66,7 +66,7 @@
           </tr>
           <tr>
             <td class="table-left-column">创建者：</td>
-            <td class="table-right-column">{{ templateInfoObject.templateCreatorName }}</td>
+            <td class="table-right-column">{{ templateInfoObject.templateCreatorRealName }}（{{ templateInfoObject.templateCreatorName }}）</td>
           </tr>
           <tr>
             <td class="table-left-column">模板状态：</td>
@@ -78,7 +78,7 @@
           </tr>
           <tr>
             <td class="table-left-column">暂时移除者：</td>
-            <td class="table-right-column">{{ templateInfoObject.templateRemoveExecutorName }}</td>
+            <td class="table-right-column">{{ templateInfoObject.templateRemoveExecutorRealName }}（{{ templateInfoObject.templateRemoveExecutorName }}）</td>
           </tr>
           </tbody>
         </table>

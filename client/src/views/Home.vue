@@ -4,7 +4,11 @@
       <div class="row mb-2">
         <div class="col-12">
           <h1>
-            <i class="fas fa-cog"></i>&nbsp;{{ currentUsername }}-工作面板
+            <i class="fas fa-cog"></i>
+            <span>&ensp;</span>
+            <span class="text-success" v-if="isAdmin">{{ currentUsername }}</span>
+            <span v-if="!isAdmin">{{ currentUsername }}</span>
+            <span>的工作面板</span>
           </h1>
         </div>
       </div>
@@ -84,11 +88,11 @@
     data: function () {
       return {
         controlPanelHeaderText: '管理员控制台',
-        controlPanelTooltipText: '作为管理员，您可以在这里新增项目、任务、用户等。',
+        controlPanelTooltipText: '作为管理员，您可以在这里新增项目、任务、用户、模板等。',
         taskInboxHeaderText: '尚未接受的任务',
-        taskInboxTooltipText: '这里列出所有尚未接受的任务。',
-        involvedProjectsHeaderText: '参与的临床试验项目及项目内任务',
-        involvedProjectsTooltipText: '这里列出您当前参加的所有临床试验项目及项目内任务。',
+        taskInboxTooltipText: '这里列出您所有尚未接受的任务。',
+        involvedProjectsHeaderText: '参与的项目及项目内任务',
+        involvedProjectsTooltipText: '这里列出您当前参加的所有项目及项目内任务。',
         involvedProjects: [],
         statusIndicator: 'loading',
         alertHeader: '加载中',
@@ -151,7 +155,7 @@
             brief: false,
             taskName: '',
             taskBelongedToProjectName: '',
-            taskExecutorName: '',
+            taskExecutorRealName: '',
             taskReceivedStatus: '0',
             taskCompletedStatus: '',
           }

@@ -58,7 +58,7 @@
         filterToolboxHeaderText: '任务筛选器',
         filterToolboxTooltipText: '请在这里设定筛选内容，然后点击"筛选"按钮获得命中条目。',
         resultCardHeaderText: '任务查询结果',
-        resultCardTooltipText: '根据筛选器规则的查询结果如下所示，点击"放大镜"按钮以查看任务详细资料；点击"铅笔"按钮以编辑任务信息；点击"对号"按钮以接受任务；点击"双对号"按钮将标记任务完成。',
+        resultCardTooltipText: '根据筛选器规则的查询结果如下所示。点击"蓝色放大镜"按钮以查看任务详细资料；点击"绿色铅笔"按钮以编辑任务信息；点击"绿色单钩"按钮以接受任务；点击"绿色双钩号"按钮以标记任务完成。',
       };
     },
     computed: {
@@ -72,6 +72,9 @@
       },
       statusObject4Tasks: function () {
         return this.$store.state.taskFilterQueryResult.statusObject4Tasks;
+      },
+      isAdmin: function () {
+        return JSON.parse(localStorage.getItem('userInfo')).isAdmin;
       },
     },
     watch: {
@@ -99,9 +102,10 @@
             brief: false,
             taskName: queryParamsObject.taskNameKeyword,
             taskBelongedToProjectName: queryParamsObject.projectNameKeyword,
-            taskExecutorName: queryParamsObject.taskExecutorNameKeyword,
+            taskExecutorRealName: queryParamsObject.taskExecutorNameKeyword,
             taskReceivedStatus: queryParamsObject.taskReceivedStatus === '-1'? '' : queryParamsObject.taskReceivedStatus,
             taskCompletedStatus: queryParamsObject.taskCompletedStatus === '-1'? '' : queryParamsObject.taskCompletedStatus,
+            isAdminMode: this.isAdmin
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

@@ -25,7 +25,7 @@
         <template>
           <div class="form-check" v-for="(user, index) in userList">
             <input class="form-check-input" type="radio" :id="user.userID + uniqueNumber" :value="user.userID" v-model="selectedUserIDCurrent" @change="$emit('selectionChanged', selectedUserIDCurrent)">
-            <label class="form-check-label" :for="user.userID + uniqueNumber">{{ user.username }}</label>
+            <label class="form-check-label" :for="user.userID + uniqueNumber">{{ user.userRealName }}（{{ user.username }}）</label>
           </div>
         </template>
       </div>

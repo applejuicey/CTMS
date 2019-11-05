@@ -41,7 +41,7 @@
             <label for="taskDescription" class="font-weight-normal">
               <span>任务描述：</span>
             </label>
-            <input v-model="formValues.taskDescription" type="text" class="form-control" id="taskDescription" placeholder="任务描述">
+            <textarea class="form-control" id="taskDescription" rows="5" v-model="formValues.taskDescription" placeholder="任务描述"></textarea>
           </div>
           <div class="form-group text-left">
             <label for="taskProgress" class="font-weight-normal">

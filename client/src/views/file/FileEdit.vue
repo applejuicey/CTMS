@@ -30,8 +30,8 @@
     },
     data: function () {
       return {
-        headerText: '编辑项目',
-        tooltipText: '您可以在下方修改该项目并提交至服务器。',
+        headerText: '编辑文件',
+        tooltipText: '您可以在下方修改该文件并提交至服务器。',
         fileInfoObject: {},
         statusObject4File: {},
       }

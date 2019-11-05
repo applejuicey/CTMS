@@ -74,7 +74,7 @@
           </tr>
           <tr>
             <td class="table-left-column">创建者：</td>
-            <td class="table-right-column">{{ fileInfoObject.fileCreatorName }}</td>
+            <td class="table-right-column">{{ fileInfoObject.fileCreatorRealName }}（{{ fileInfoObject.fileCreatorName }}）</td>
           </tr>
           <tr>
             <td class="table-left-column">文件状态：</td>
@@ -86,7 +86,7 @@
           </tr>
           <tr>
             <td class="table-left-column">暂时移除者：</td>
-            <td class="table-right-column">{{ fileInfoObject.fileRemoveExecutorName }}</td>
+            <td class="table-right-column">{{ fileInfoObject.fileRemoveExecutorRealName }}（{{ fileInfoObject.fileRemoveExecutorName }}）</td>
           </tr>
           </tbody>
         </table>
