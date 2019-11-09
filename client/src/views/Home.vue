@@ -123,7 +123,7 @@
             projectSponsorName: '',
             projectInvolvedUserRealName: '',
             projectCreatedYearMonth: '',
-            projectStage: 'all',
+            projectStage: '',
           }
         }).then((response) => {
           if (response.data.statusCode === '1') {

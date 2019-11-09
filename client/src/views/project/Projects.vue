@@ -98,9 +98,9 @@
           params: {
             brief: false,
             projectName: queryParamsObject.projectNameKeyword,
-            projectInvestigatorName: queryParamsObject.projectInvestigatorNameKeyword,
-            projectSponsorName: queryParamsObject.projectSponsorNameKeyword,
-            projectInvolvedUserRealName: queryParamsObject.projectInvolvedUserRealNameKeyword,
+            projectInvestigator: queryParamsObject.projectInvestigatorNameKeyword,
+            projectSponsor: queryParamsObject.projectSponsorNameKeyword,
+            // projectInvolvedUserRealName: queryParamsObject.projectInvolvedUserRealNameKeyword,
             projectCreatedTime: queryParamsObject.projectCreatedYearMonth,
             projectStage: queryParamsObject.projectStage === '-1'? '' : queryParamsObject.projectStage,
           }
