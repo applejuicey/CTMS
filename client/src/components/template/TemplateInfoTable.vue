@@ -33,19 +33,19 @@
           </button>
           <button type="button" class="btn btn-success" @click="changeRoute(templateInfoObject.templateID, 'edit')" v-if="isAdmin || currentUserID === templateInfoObject.templateCreatorID">
             <i class="fas fa-pen"></i>
-            <span class="d-sm-inline d-none">&nbsp;编辑文件</span>
+            <span class="d-sm-inline d-none">&nbsp;编辑模板</span>
           </button>
           <button type="button" class="btn btn-warning" @click="removeTemplate(templateInfoObject.templateID)" v-if="(templateInfoObject.templateStatus === '1') && (isAdmin || currentUserID === templateInfoObject.templateCreatorID)">
             <i class="fas fa-minus-circle"></i>
-            <span class="d-sm-inline d-none">&nbsp;移除文件</span>
+            <span class="d-sm-inline d-none">&nbsp;移除模板</span>
           </button>
           <button type="button" class="btn btn-success" @click="recoverTemplate(templateInfoObject.templateID)" v-if="(templateInfoObject.templateStatus === '0') && (isAdmin || currentUserID === templateInfoObject.templateCreatorID)">
             <i class="fas fa-redo"></i>
-            <span class="d-sm-inline d-none">&nbsp;恢复文件</span>
+            <span class="d-sm-inline d-none">&nbsp;恢复模板</span>
           </button>
           <button type="button" class="btn btn-danger" @click="changeRoute(templateInfoObject.templateID, 'delete')" v-if="(templateInfoObject.templateStatus === '0') && (isAdmin || currentUserID === templateInfoObject.templateCreatorID)">
             <i class="fas fa-trash"></i>
-            <span class="d-sm-inline d-none">&nbsp;彻底删除文件</span>
+            <span class="d-sm-inline d-none">&nbsp;彻底删除模板</span>
           </button>
         </div>
       </div>
